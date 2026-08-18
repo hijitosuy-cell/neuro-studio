@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://neurostudio.ai";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://neuro-studio-l6lj.vercel.app";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [

@@ -26,7 +26,7 @@ const mono = JetBrains_Mono({
   display: "swap",
 });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://neurostudio.uy";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://neuro-studio-l6lj.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
