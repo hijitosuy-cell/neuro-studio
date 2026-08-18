@@ -1,6 +1,6 @@
 import Script from "next/script";
 import { site, fases, serviciosWeb } from "@/lib/site";
-import { WhatsappMock } from "@/components/brand-mark";
+import { WhatsappMock, SaasMock } from "@/components/brand-mark";
 import { Reveal } from "@/components/reveal";
 import { Spotlight } from "@/components/spotlight";
 import { HeroVideo } from "@/components/hero-video";
@@ -10,13 +10,13 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <div className="fade-to-light" aria-hidden />
+      <div className="horizon horizon-light" aria-hidden />
       <Diagnostico />
-      <div className="fade-to-dark" aria-hidden />
-      <Servicios />
-      <div className="fade-to-light" aria-hidden />
+      <div className="horizon horizon-dark" aria-hidden />
       <Metodo />
-      <div className="fade-to-dark" aria-hidden />
+      <div className="horizon horizon-light" aria-hidden />
+      <Servicios />
+      <div className="horizon horizon-dark" aria-hidden />
       <FAQ />
       <CTA />
       <Script
@@ -29,38 +29,33 @@ export default function Home() {
   );
 }
 
-/* ─── 1. Hero (oscuro, video parallax) ─── */
+/* ─── 1. Hero (oscuro, video parallax, limpio) ─── */
 function Hero() {
   return (
     <section className="relative overflow-hidden" style={{ background: "var(--page)" }}>
       <HeroVideo />
       <div aria-hidden className="glow-blob glow-blob--brand animate-blob" style={{ width: 480, height: 480, top: -160, left: -120 }} />
-      <div aria-hidden className="glow-blob glow-blob--hi animate-blob" style={{ width: 380, height: 380, top: -60, right: -80, animationDelay: "3s" }} />
+      <div aria-hidden className="glow-blob glow-blob--hi animate-blob" style={{ width: 380, height: 380, top: -40, right: -80, animationDelay: "3s" }} />
 
-      <div className="wrap relative flex min-h-[88vh] flex-col items-center justify-center py-20 text-center">
+      <div className="wrap relative flex min-h-[86vh] flex-col items-center justify-center py-24 text-center">
         <Reveal className="max-w-3xl">
-          <h1 className="font-display font-semibold text-paper" style={{ fontSize: "clamp(2rem, 4.6vw, 3.75rem)", lineHeight: 1.05 }}>
+          <span className="chip chip-on-dark">Método Neuro Studio</span>
+          <h1 className="font-display font-semibold mt-6 text-paper" style={{ fontSize: "clamp(2rem, 4.6vw, 3.75rem)", lineHeight: 1.05 }}>
             Tu automotora pierde ventas todos los días.
             <br />
             <span className="accent-gradient">Nosotros encontramos dónde.</span>
           </h1>
           <p className="mx-auto mt-6 max-w-xl text-base md:text-lg" style={{ color: "var(--paper-dim)" }}>
-            Hacé el diagnóstico gratis y en minutos sabés en qué porcentaje trabaja tu
-            concesionaria. Después construimos el sistema para recuperar lo que se escapa.
+            No es otro CRM ni otro chatbot. Es un método: diagnosticamos tu concesionaria,
+            encontramos las fugas y construimos el sistema para cerrarlas.
           </p>
           <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <a href="#diagnostico" className="btn btn-shiny" style={{ borderRadius: "999px", height: 52, padding: "0 1.9rem" }}>
               Hacer el diagnóstico gratis
             </a>
-            <a href={site.bookingUrl} target="_blank" rel="noopener noreferrer" className="btn btn-on-dark" style={{ borderRadius: "999px", height: 52 }}>
-              Agendar reunión
+            <a href="#metodo" className="btn btn-on-dark" style={{ borderRadius: "999px", height: 52 }}>
+              Ver el método
             </a>
-          </div>
-        </Reveal>
-
-        <Reveal className="reveal-scale mt-14 w-full max-w-sm" delay={150}>
-          <div className="glass p-2.5">
-            <WhatsappMock />
           </div>
         </Reveal>
       </div>
@@ -71,10 +66,10 @@ function Hero() {
 /* ─── 2. Diagnóstico (CLARO) ─── */
 function Diagnostico() {
   return (
-    <section id="diagnostico" className="scroll-mt-20 border-b rule" style={{ background: "#fff" }}>
+    <section id="diagnostico" className="scroll-mt-20" style={{ background: "#fff" }}>
       <div className="wrap py-24 md:py-28">
         <Reveal className="mx-auto max-w-3xl text-center">
-          <div className="label" style={{ color: "var(--brand-accent)" }}>Diagnóstico gratis</div>
+          <div className="label" style={{ color: "var(--brand-accent)" }}>Paso 1 · Gratis</div>
           <h2 className="font-display font-semibold mt-4" style={{ fontSize: "clamp(2rem, 4.4vw, 3.25rem)", color: "var(--brand)" }}>
             ¿En qué porcentaje trabaja tu automotora?
           </h2>
@@ -91,44 +86,97 @@ function Diagnostico() {
   );
 }
 
-/* ─── 3. Servicios (OSCURO, spotlight) ─── */
-function Servicios() {
+/* ─── 3. Método (OSCURO, centro de todo) ─── */
+function Metodo() {
   return (
-    <section id="servicios" className="relative overflow-hidden" style={{ background: "var(--page)" }}>
+    <section id="metodo" className="relative overflow-hidden" style={{ background: "var(--page)" }}>
       <div aria-hidden className="bg-grid absolute inset-0" />
-      <div aria-hidden className="glow-blob glow-blob--hi animate-blob" style={{ width: 440, height: 440, top: 120, right: -140 }} />
+      <div aria-hidden className="glow-blob glow-blob--brand animate-blob" style={{ width: 460, height: 460, top: 60, left: -140 }} />
       <div className="wrap relative py-24 md:py-28">
         <Reveal className="max-w-2xl">
-          <div className="label" style={{ color: "#8fb0ff" }}>Qué construimos</div>
-          <h2 className="font-display font-semibold mt-4 text-paper" style={{ fontSize: "clamp(1.9rem, 4vw, 3rem)" }}>
-            Todo tu negocio, conectado.
+          <div className="label" style={{ color: "#8fb0ff" }}>El método</div>
+          <h2 className="font-display font-semibold mt-4 text-paper" style={{ fontSize: "clamp(2rem, 4.2vw, 3.25rem)" }}>
+            Un sistema, no una lista de servicios.
           </h2>
           <p className="mt-5 text-lg" style={{ color: "var(--paper-dim)" }}>
-            Cinco piezas que se combinan distinto en cada automotora. El diagnóstico
-            decide cuáles necesitás: capaz una, capaz las cinco.
+            Cada automotora pasa por los mismos cinco pasos. Lo que cambia es qué se
+            construye en el medio. El método es lo que hace que todo tenga sentido.
+          </p>
+        </Reveal>
+
+        <ol className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {fases.map((f, i) => (
+            <Spotlight as="li" key={f.n} tone="dark" className="glass p-7" style={{ transitionDelay: `${i * 60}ms` }}>
+              <div className="grid h-11 w-11 place-items-center rounded-full font-display font-semibold text-lg text-white" style={{ background: "var(--brand-accent)", boxShadow: "0 0 22px -4px rgba(47,95,214,0.7)" }}>
+                {f.n}
+              </div>
+              <h3 className="font-display font-semibold mt-5 text-xl text-paper">{f.title}</h3>
+              <p className="mt-3 text-sm" style={{ color: "var(--paper-dim)" }}>{f.body}</p>
+            </Spotlight>
+          ))}
+        </ol>
+
+        {/* Producto en acción — lo que queda funcionando */}
+        <Reveal className="mt-16">
+          <div className="label" style={{ color: "#8fb0ff" }}>Lo que queda funcionando</div>
+          <h3 className="font-display font-semibold mt-3 text-2xl md:text-3xl text-paper">
+            Tu automotora, corriendo sola todos los días.
+          </h3>
+        </Reveal>
+        <div className="mt-8 grid gap-6 lg:grid-cols-2">
+          <Spotlight tone="dark" className="glass p-4" reveal>
+            <SaasMock />
+            <p className="mt-3 px-2 text-sm" style={{ color: "var(--paper-dim)" }}>
+              El panel donde ves stock, leads, ventas y ganancia en tiempo real.
+            </p>
+          </Spotlight>
+          <Spotlight tone="dark" className="glass p-4" reveal>
+            <WhatsappMock />
+            <p className="mt-3 px-2 text-sm" style={{ color: "var(--paper-dim)" }}>
+              El asistente que responde, califica y agenda mientras dormís.
+            </p>
+          </Spotlight>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── 4. Servicios (CLARO, piezas del sistema) ─── */
+function Servicios() {
+  return (
+    <section id="servicios" style={{ background: "#fff" }}>
+      <div className="wrap py-24 md:py-28">
+        <Reveal className="max-w-2xl">
+          <div className="label" style={{ color: "var(--brand-accent)" }}>Las piezas</div>
+          <h2 className="font-display font-semibold mt-4" style={{ fontSize: "clamp(1.9rem, 4vw, 3rem)", color: "var(--brand)" }}>
+            Qué construimos, según lo que necesites.
+          </h2>
+          <p className="mt-5 text-lg" style={{ color: "var(--fg-muted)" }}>
+            El diagnóstico decide cuáles de estas piezas van en tu sistema. Capaz una, capaz las cinco.
           </p>
         </Reveal>
 
         <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {serviciosWeb.map((s, i) => (
-            <Spotlight as="article" key={s.n} tone="dark" className="glass reveal reveal-scale p-7" style={{ transitionDelay: `${i * 70}ms` }}>
-              <div className="num-xl" style={{ color: "rgba(143,176,255,0.22)" }}>{s.n}</div>
-              <h3 className="font-display font-semibold mt-3 text-xl text-paper">{s.name}</h3>
-              <p className="mt-3 text-sm" style={{ color: "var(--paper-dim)" }}>{s.body}</p>
+            <Spotlight as="article" key={s.n} tone="light" className="card-light p-7" style={{ transitionDelay: `${i * 60}ms` }}>
+              <div className="num-xl" style={{ color: "rgba(47,95,214,0.16)" }}>{s.n}</div>
+              <h3 className="font-display font-semibold mt-3 text-xl" style={{ color: "var(--brand)" }}>{s.name}</h3>
+              <p className="mt-3 text-sm" style={{ color: "var(--fg-muted)" }}>{s.body}</p>
               <div className="mt-5 flex flex-wrap gap-2">
                 {s.canales.map((c) => (
-                  <span key={c} className="chip chip-on-dark">{c}</span>
+                  <span key={c} className="chip">{c}</span>
                 ))}
               </div>
             </Spotlight>
           ))}
 
-          <Reveal as="article" delay={serviciosWeb.length * 70} className="reveal-scale flex flex-col justify-between rounded-2xl p-7" style={{ background: "linear-gradient(150deg, var(--brand-accent), #16306b)", border: "1px solid rgba(143,176,255,0.35)", boxShadow: "0 20px 60px -20px rgba(47,95,214,0.6)" }}>
+          <Reveal as="article" delay={serviciosWeb.length * 60} className="flex flex-col justify-between rounded-2xl p-7" style={{ background: "linear-gradient(150deg, var(--brand-accent), #16306b)", boxShadow: "0 20px 60px -20px rgba(47,95,214,0.5)" }}>
             <div>
               <span className="chip" style={{ background: "rgba(255,255,255,0.15)", color: "#fff", borderColor: "rgba(255,255,255,0.25)" }}>Precio a medida</span>
               <h3 className="font-display font-semibold mt-4 text-xl text-white">No vendemos paquetes cerrados.</h3>
-              <p className="mt-3 text-sm" style={{ color: "rgba(255,255,255,0.88)" }}>
-                Armamos un plan según tu diagnóstico y tu presupuesto. Pagás por lo que
+              <p className="mt-3 text-sm" style={{ color: "rgba(255,255,255,0.9)" }}>
+                Armamos el plan según tu diagnóstico y tu presupuesto. Pagás por lo que
                 necesitás. El diagnóstico es gratis.
               </p>
             </div>
@@ -137,34 +185,6 @@ function Servicios() {
             </a>
           </Reveal>
         </div>
-      </div>
-    </section>
-  );
-}
-
-/* ─── 4. Método (CLARO, spotlight) ─── */
-function Metodo() {
-  return (
-    <section id="metodo" className="border-b rule" style={{ background: "#fff" }}>
-      <div className="wrap py-24 md:py-28">
-        <Reveal className="max-w-2xl">
-          <div className="label" style={{ color: "var(--brand-accent)" }}>Cómo trabajamos</div>
-          <h2 className="font-display font-semibold mt-4" style={{ fontSize: "clamp(1.9rem, 4vw, 3rem)", color: "var(--brand)" }}>
-            Cinco pasos. Siempre los mismos.
-          </h2>
-        </Reveal>
-
-        <ol className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {fases.map((f, i) => (
-            <Spotlight as="li" key={f.n} tone="light" className="card-light reveal reveal-scale p-7" style={{ transitionDelay: `${i * 70}ms` }}>
-              <div className="grid h-11 w-11 place-items-center rounded-full font-display font-semibold text-lg text-white" style={{ background: "var(--brand-accent)", boxShadow: "0 0 22px -4px rgba(47,95,214,0.6)" }}>
-                {f.n}
-              </div>
-              <h3 className="font-display font-semibold mt-5 text-xl" style={{ color: "var(--brand)" }}>{f.title}</h3>
-              <p className="mt-3 text-sm" style={{ color: "var(--fg-muted)" }}>{f.body}</p>
-            </Spotlight>
-          ))}
-        </ol>
       </div>
     </section>
   );

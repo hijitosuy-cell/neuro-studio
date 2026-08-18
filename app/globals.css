@@ -72,13 +72,43 @@ body {
 .group:hover .logo-hover { transform: rotate(-6deg) scale(1.08); filter: drop-shadow(0 0 10px rgba(47,95,214,0.6)); }
 @media (prefers-reduced-motion: reduce) { .group:hover .logo-hover { transform: none; } }
 
-/* Transición de degradado entre secciones oscuras y claras */
-.fade-to-light { background: linear-gradient(to bottom, var(--page), #ffffff); height: 120px; }
-.fade-to-dark { background: linear-gradient(to bottom, #ffffff, var(--page)); height: 120px; }
-.fade-glow-light { position: relative; }
-.fade-glow-light::before {
-  content: ""; position: absolute; inset: 0; pointer-events: none;
-  background: radial-gradient(60% 100% at 50% 0%, rgba(47,95,214,0.22), transparent 70%);
+/* ═══ Transición tipo horizonte de planeta ═══
+   Curva amplia con glow azul y puntos, no un corte recto. */
+
+.horizon {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+}
+.horizon::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(143,176,255,0.35) 1px, transparent 1px);
+  background-size: 22px 22px;
+  opacity: 0.5;
+}
+
+/* Oscuro (arriba) → claro (abajo): domo blanco que sube con halo azul */
+.horizon-light { background: var(--page); }
+.horizon-light::after {
+  content: "";
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(150% 92% at 50% 128%, #ffffff 44%, rgba(120,160,255,0.55) 55%, rgba(47,95,214,0.22) 64%, transparent 78%);
+}
+.horizon-light::before { mask-image: linear-gradient(to bottom, #000 55%, transparent 78%); }
+
+/* Claro (arriba) → oscuro (abajo): domo oscuro que sube con rim azul */
+.horizon-dark { background: #ffffff; }
+.horizon-dark::after {
+  content: "";
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(150% 92% at 50% 128%, var(--page) 44%, rgba(47,95,214,0.5) 55%, rgba(120,160,255,0.18) 64%, transparent 80%);
+}
+.horizon-dark::before {
+  background-image: radial-gradient(rgba(47,95,214,0.35) 1px, transparent 1px);
+  mask-image: linear-gradient(to top, #000 55%, transparent 82%);
 }
 
 /* Two fonts only: Poppins (display) + Inter Tight (everything else) */
