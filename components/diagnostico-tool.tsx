@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import {
   camposDe,
@@ -11,6 +11,7 @@ import {
   objecionesDe,
   interpretar,
   calificacion,
+  analisisCliente,
   presupuestoInterno,
   tamanoAutomotora,
   nombresDeServicios,
@@ -19,7 +20,7 @@ import {
   CALENDAR_URL,
   type Campo,
 } from "@/lib/diagnostico";
-import { RadarAreas, generarInformePNG } from "@/components/diagnostico-informe";
+import { RadarAreas, DonutAreas, generarInformePNG } from "@/components/diagnostico-informe";
 
 type Modo = "express" | "completo";
 type Paso = "inicio" | "form" | "resultado";
@@ -33,7 +34,10 @@ export function DiagnosticoTool() {
   const [errores, setErrores] = useState<Record<string, string>>({});
   const [elegidos, setElegidos] = useState<string[]>([]);
   const [descargando, setDescargando] = useState(false);
+  const [enviado, setEnviado] = useState(false);
+  const [enviando, setEnviando] = useState(false);
   const guardadoRef = useRef(false);
+  const docIdRef = useRef<string | null>(null);
 
   const bloques = useMemo(() => camposDe(modo), [modo]);
   const bloque = bloques[seccionIdx];
@@ -77,7 +81,7 @@ export function DiagnosticoTool() {
       setSeccionIdx(seccionIdx + 1);
       scrollTop();
     } else {
-      setElegidos(recomendados.slice(0, 3).map((s) => s.id));
+      setElegidos([]);
       setPaso("resultado");
       guardarEnSaaS();
       scrollTop();
@@ -88,12 +92,12 @@ export function DiagnosticoTool() {
     if (guardadoRef.current) return;
     guardadoRef.current = true;
     try {
-      // servicios de interés: los que el cliente marcó; si no marcó, los recomendados
-      const idsInteres = (elegidos.length ? elegidos : recomendados.map((s) => s.id));
+      // al llegar al resultado guardamos con los recomendados (aún no eligió)
+      const idsInteres = recomendados.map((s) => s.id);
       const nombresInteres = nombresDeServicios(idsInteres);
       const presupuesto = presupuestoInterno(r, idsInteres, resultado.total);
 
-      await addDoc(collection(db, "diagnosticos_web"), {
+      const ref = await addDoc(collection(db, "diagnosticos_web"), {
         tipo: modo,
         negocio: r.empresa ?? "",
         contacto: r.contacto ?? "",
@@ -128,12 +132,36 @@ export function DiagnosticoTool() {
         serviciosInteres: nombresInteres,
         // Presupuesto interno — solo para el equipo, no se muestra al cliente
         presupuestoInterno: presupuesto,
+        contactoSolicitado: false,
         creadoEnMs: Date.now(),
         creadoEnISO: new Date().toISOString(),
         visto: false,
       });
+      docIdRef.current = ref.id;
     } catch {
       /* silencioso */
+    }
+  }
+
+  /** Guarda la selección final del cliente y marca que pidió contacto. */
+  async function confirmarContacto() {
+    setEnviando(true);
+    try {
+      const ids = elegidos.length ? elegidos : recomendados.map((s) => s.id);
+      const presupuesto = presupuestoInterno(r, ids, resultado.total);
+      if (docIdRef.current) {
+        await updateDoc(doc(db, "diagnosticos_web", docIdRef.current), {
+          serviciosIds: ids,
+          serviciosInteres: nombresDeServicios(ids),
+          presupuestoInterno: presupuesto,
+          contactoSolicitado: true,
+        });
+      }
+      setEnviado(true);
+    } catch {
+      setEnviado(true); // igual mostramos confirmación; el lead ya se guardó al llegar
+    } finally {
+      setEnviando(false);
     }
   }
 
@@ -262,6 +290,7 @@ export function DiagnosticoTool() {
 
   /* ── Resultado ── */
   const lectura = interpretar(resultado.total);
+  const analisis = analisisCliente(r, resultado.total, resultado.criticas, recomendados.map((s) => s.nombre));
   return (
     <div className="mx-auto max-w-4xl">
       {/* Panel puntaje + radar */}
@@ -270,34 +299,36 @@ export function DiagnosticoTool() {
           Resultado · {String(r.empresa || "tu automotora")}
         </div>
 
-        <div className="mt-6 grid gap-10 md:grid-cols-[1fr_320px] md:gap-12 md:items-center">
+        <div className="mt-6 grid gap-10 md:grid-cols-[300px_1fr] md:gap-12 md:items-center">
+          {/* Circular */}
+          <DonutAreas total={resultado.total} areas={resultado.porArea.map((a) => ({ label: a.corto, score: a.respondidas ? a.score : 0 }))} />
           <div>
-            <div className="flex items-baseline gap-2">
-              <span className="font-display font-semibold text-paper leading-none" style={{ fontSize: "5.5rem" }}>
-                {resultado.total}
-              </span>
-              <span style={{ color: "var(--paper-dim)", fontSize: "2rem" }}>/100</span>
-            </div>
-            <div className="font-display font-semibold mt-3 text-2xl text-paper">{lectura.titulo}</div>
-            <p className="mt-2 max-w-md text-sm" style={{ color: "var(--paper-dim)" }}>{lectura.texto}</p>
-
-            <ul className="mt-8 grid gap-3">
-              {resultado.porArea.map((a) => (
-                <li key={a.id} className="text-sm">
-                  <div className="flex items-baseline justify-between text-paper">
-                    <span style={{ opacity: a.respondidas ? 1 : 0.4 }}>{a.nombre}</span>
-                    <span style={{ color: "var(--paper-dim)" }}>{a.respondidas ? a.score : "—"}</span>
-                  </div>
-                  <div className="score-bar-track mt-1.5">
-                    <div className="score-bar-fill" style={{ width: `${a.score}%`, transition: "width 900ms cubic-bezier(0.22,1,0.36,1)" }} />
-                  </div>
-                </li>
-              ))}
-            </ul>
+            <div className="font-display font-semibold text-2xl text-paper">{lectura.titulo}</div>
+            <p className="mt-3 text-body" style={{ color: "var(--paper-dim)" }}>{analisis.resumen}</p>
+            {analisis.porQue && <p className="mt-3 text-body" style={{ color: "var(--paper-dim)" }}>{analisis.porQue}</p>}
           </div>
-
-          <RadarAreas areas={resultado.porArea.map((a) => ({ label: a.corto, score: a.respondidas ? a.score : 0 }))} />
         </div>
+
+        {/* Barras por área */}
+        <ul className="mt-10 grid gap-3 sm:grid-cols-2 md:gap-x-10">
+          {resultado.porArea.map((a) => (
+            <li key={a.id} className="text-sm">
+              <div className="flex items-baseline justify-between text-paper">
+                <span style={{ opacity: a.respondidas ? 1 : 0.4 }}>{a.nombre}</span>
+                <span style={{ color: "var(--paper-dim)" }}>{a.respondidas ? a.score : "—"}</span>
+              </div>
+              <div className="score-bar-track mt-1.5">
+                <div className="score-bar-fill" style={{ width: `${a.score}%`, transition: "width 900ms cubic-bezier(0.22,1,0.36,1)" }} />
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* ¿Podemos ayudarte? (honesto, Sandler) */}
+      <div className="mt-8 rounded-2xl p-6 md:p-8" style={{ background: analisis.fit === "bajo" ? "var(--bg-2)" : "rgba(47,95,214,0.06)", border: `1px solid ${analisis.fit === "bajo" ? "var(--rule)" : "rgba(47,95,214,0.25)"}` }}>
+        <div className="label" style={{ color: "var(--brand-accent)" }}>¿Podemos ayudarte?</div>
+        <p className="mt-3 text-body" style={{ color: "var(--fg)" }}>{analisis.fitTexto}</p>
       </div>
 
       {/* Lo que perdés hoy (Sandler: inacción) */}
@@ -321,8 +352,8 @@ export function DiagnosticoTool() {
       {/* Servicios recomendados */}
       {recomendados.length > 0 && (
         <div className="mt-10">
-          <h3 className="font-display font-semibold text-2xl" style={{ color: "var(--brand)" }}>Lo que te recomendamos</h3>
-          <p className="mt-2 text-sm" style={{ color: "var(--fg-muted)" }}>Elegí lo que te interesa y lo incluimos en la propuesta.</p>
+          <h3 className="font-display font-semibold text-2xl" style={{ color: "var(--brand)" }}>Lo que más te ayudaría</h3>
+          <p className="mt-2 text-sm" style={{ color: "var(--fg-muted)" }}>Estas son las piezas que más moverían la aguja en tu caso. Marcá las que te interesan (ninguna viene marcada) y las sumamos a tu propuesta.</p>
           <ul className="mt-6 grid gap-4">
             {recomendados.map((s) => {
               const activo = elegidos.includes(s.id);
@@ -378,32 +409,41 @@ export function DiagnosticoTool() {
         </div>
       )}
 
-      {/* CTA final */}
+      {/* CTA final: guardar + contacto */}
       <div className="mt-10 rounded-2xl p-8 text-center" style={{ background: "var(--ink)" }}>
-        <h3 className="font-display font-semibold text-2xl text-paper">Coordinemos la reunión</h3>
-        <p className="mt-2 text-sm" style={{ color: "var(--paper-dim)" }}>
-          Llevamos este resultado analizado y una propuesta concreta. 30 minutos, sin costo.
-        </p>
-        <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="btn btn-solid-on-dark">
-            Elegir día y hora
-          </a>
-          <a href={`https://wa.me/${WHATSAPP}?text=${mensaje}`} target="_blank" rel="noopener noreferrer" className="btn btn-on-dark">
-            Enviar resultado por WhatsApp
-          </a>
-        </div>
-        <button
-          onClick={descargarInforme}
-          disabled={descargando}
-          className="mt-5 text-sm underline"
-          style={{ color: "var(--paper-dim)" }}
-        >
+        {enviado ? (
+          <>
+            <div className="mx-auto grid h-14 w-14 place-items-center rounded-full text-2xl" style={{ background: "rgba(16,185,129,0.15)", color: "#7cff9e" }}>✓</div>
+            <h3 className="font-display font-semibold mt-5 text-2xl text-paper">Listo, ya lo tenemos.</h3>
+            <p className="mx-auto mt-2 max-w-md text-sm" style={{ color: "var(--paper-dim)" }}>
+              Tu diagnóstico nos llegó. Te contactamos en menos de 24 horas hábiles con el análisis y una propuesta para tu automotora. Si querés adelantar, agendá o escribinos:
+            </p>
+            <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="btn btn-solid-on-dark">Agendar la reunión</a>
+              <a href={`https://wa.me/${WHATSAPP}?text=${mensaje}`} target="_blank" rel="noopener noreferrer" className="btn btn-on-dark">Escribinos por WhatsApp</a>
+            </div>
+          </>
+        ) : (
+          <>
+            <h3 className="font-display font-semibold text-2xl text-paper">Guardá tu diagnóstico y te contactamos</h3>
+            <p className="mx-auto mt-2 max-w-md text-sm" style={{ color: "var(--paper-dim)" }}>
+              Lo revisamos nosotros y te llegamos con el análisis y una propuesta concreta. No hace falta que hagas nada más.
+            </p>
+            <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <button onClick={confirmarContacto} disabled={enviando} className="btn btn-solid-on-dark">
+                {enviando ? "Guardando…" : "Guardar y que me contacten"}
+              </button>
+              <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="btn btn-on-dark">Prefiero agendar ahora</a>
+            </div>
+          </>
+        )}
+        <button onClick={descargarInforme} disabled={descargando} className="mt-5 text-sm underline" style={{ color: "var(--paper-dim)" }}>
           {descargando ? "Generando…" : "Descargar informe en imagen"}
         </button>
       </div>
 
       <div className="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm">
-        <button onClick={() => { setR({}); setElegidos([]); setSeccionIdx(0); guardadoRef.current = false; setPaso("inicio"); }} style={{ color: "var(--fg-muted)" }}>
+        <button onClick={() => { setR({}); setElegidos([]); setSeccionIdx(0); guardadoRef.current = false; docIdRef.current = null; setEnviado(false); setPaso("inicio"); }} style={{ color: "var(--fg-muted)" }}>
           Volver a empezar
         </button>
         {modo === "express" && (

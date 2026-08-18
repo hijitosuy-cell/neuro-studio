@@ -57,6 +57,35 @@ export function RadarAreas({ areas }: { areas: { label: string; score: number }[
   );
 }
 
+/* Donut: puntaje general al centro, aros por área alrededor */
+export function DonutAreas({ total, areas }: { total: number; areas: { label: string; score: number }[] }) {
+  const size = 200;
+  const cx = size / 2;
+  const cy = size / 2;
+  const anillos = areas.slice(0, 6);
+  const color = (s: number) => (s >= 60 ? "#7cff9e" : s >= 35 ? "#ffbf47" : "#ff6b6b");
+
+  return (
+    <svg viewBox={`0 0 ${size} ${size}`} className="mx-auto w-full max-w-[220px]" role="img" aria-label="Puntaje general">
+      {anillos.map((a, i) => {
+        const radius = 88 - i * 13;
+        const c = 2 * Math.PI * radius;
+        return (
+          <g key={a.label}>
+            <circle cx={cx} cy={cy} r={radius} fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth="8" />
+            <circle
+              cx={cx} cy={cy} r={radius} fill="none" stroke={color(a.score)} strokeWidth="8" strokeLinecap="round"
+              strokeDasharray={`${(a.score / 100) * c} ${c}`} transform={`rotate(-90 ${cx} ${cy})`}
+            />
+          </g>
+        );
+      })}
+      <text x={cx} y={cy - 4} textAnchor="middle" fontSize="40" fontWeight="700" fill="#fff">{total}</text>
+      <text x={cx} y={cy + 18} textAnchor="middle" fontSize="12" fill="rgba(255,255,255,0.55)">/ 100</text>
+    </svg>
+  );
+}
+
 /* ─── Informe descargable como PNG (canvas) ─── */
 
 type InformeData = {

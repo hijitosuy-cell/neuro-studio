@@ -793,6 +793,61 @@ export function presupuestoInterno(
   };
 }
 
+/**
+ * Análisis en texto para el cliente: qué le conviene priorizar y si es
+ * un buen momento para trabajar con nosotros (honesto, estilo Sandler).
+ */
+export function analisisCliente(
+  r: Record<string, unknown>,
+  total: number,
+  criticas: { nombre: string; score: number }[],
+  recomendadosNombres: string[]
+) {
+  const nombres = criticas.map((c) => c.nombre);
+  const listado =
+    nombres.length >= 2
+      ? `${nombres.slice(0, -1).join(", ")} y ${nombres[nombres.length - 1]}`
+      : nombres[0] ?? "varias áreas";
+
+  const resumen =
+    total >= 70
+      ? `Tu automotora ya trabaja bastante ordenada (${total}/100). Lo que queda es afinar ${listado}, que es donde todavía se escapan algunas ventas.`
+      : total >= 45
+      ? `Tu automotora trabaja al ${total}% de su potencial. Lo más flojo está en ${listado}: ahí es donde más rápido se recupera plata.`
+      : `Tu automotora trabaja al ${total}% de su potencial. Hay bastante desorden en ${listado}, y eso hoy te está costando ventas todos los meses.`;
+
+  const porQue =
+    recomendadosNombres.length > 0
+      ? `Por eso, de lo que hacemos, lo que primero movería la aguja en tu caso es ${
+          recomendadosNombres.length >= 2
+            ? `${recomendadosNombres.slice(0, -1).join(", ")} y ${recomendadosNombres[recomendadosNombres.length - 1]}`
+            : recomendadosNombres[0]
+        }. El resto se puede sumar después, cuando esa base esté funcionando.`
+      : "";
+
+  const cal = calificacion(r);
+  const sinPresupuesto = r.presupuesto === "No hay presupuesto por ahora";
+  const explorando = r.prioridad === "Estoy explorando nomás";
+
+  let fit: "alto" | "medio" | "bajo";
+  let fitTexto: string;
+  if (sinPresupuesto || (explorando && cal < 30)) {
+    fit = "bajo";
+    fitTexto =
+      "Siendo honestos: por lo que respondiste, todavía no sería el momento de invertir en esto. Igual el diagnóstico te sirve para saber dónde estás parado. Cuando resolver esto sea prioridad, con gusto lo vemos.";
+  } else if (cal >= 55) {
+    fit = "alto";
+    fitTexto =
+      "Por lo que respondiste, tenemos con qué ayudarte y parece un buen momento para hacerlo. Si querés, coordinamos una llamada y te llevamos un plan concreto para tu caso.";
+  } else {
+    fit = "medio";
+    fitTexto =
+      "Por lo que respondiste, hay varias cosas que podríamos ordenar. En una llamada corta te decimos con qué empezaríamos y si tiene sentido avanzar ahora o más adelante.";
+  }
+
+  return { resumen, porQue, fit, fitTexto };
+}
+
 /** Señal de calificación interna (Sandler): dolor + presupuesto + decisión + compromiso */
 export function calificacion(r: Record<string, unknown>) {
   let p = 0;
