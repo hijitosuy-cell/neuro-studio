@@ -2,7 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { collection, getDocs, query, orderBy, limit, doc, updateDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { db, auth } from "@/lib/firebase";
 
 type Diag = {
   id: string;
@@ -35,39 +36,67 @@ type Diag = {
 // Gate simple del lado del cliente. La seguridad REAL la dan las reglas de
 // Firestore (deben exigir auth para leer). La clave sale de una variable de
 // entorno para no quedar fija en el código.
-const PASS = process.env.NEXT_PUBLIC_PANEL_PASS || "neuro2026";
-
 export default function Panel() {
-  const [ok, setOk] = useState(false);
+  const [user, setUser] = useState<string | null>(null);
+  const [checking, setChecking] = useState(true);
+  const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [err, setErr] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && sessionStorage.getItem("ns-panel") === "1") setOk(true);
+    const unsub = onAuthStateChanged(auth, (u) => {
+      setUser(u ? u.email : null);
+      setChecking(false);
+    });
+    return () => unsub();
   }, []);
 
-  if (!ok) {
+  async function entrar() {
+    setErr("");
+    setLoading(true);
+    try {
+      await signInWithEmailAndPassword(auth, email.trim(), pass);
+    } catch {
+      setErr("Email o contraseña incorrectos.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  if (checking) {
+    return <main style={{ background: "var(--page)", minHeight: "80vh" }} />;
+  }
+
+  if (!user) {
     return (
       <main style={{ background: "var(--page)", minHeight: "80vh" }}>
         <div className="wrap flex min-h-[70vh] items-center justify-center">
           <div className="w-full max-w-sm rounded-2xl p-8" style={{ background: "var(--bg)" }}>
             <h1 className="font-display text-2xl font-semibold" style={{ color: "var(--brand)" }}>Panel interno</h1>
-            <p className="mt-2 text-sm" style={{ color: "var(--fg-muted)" }}>Diagnósticos guardados de la web.</p>
+            <p className="mt-2 text-sm" style={{ color: "var(--fg-muted)" }}>Acceso solo para el equipo de Neuro Studio.</p>
+            <input
+              type="email"
+              autoComplete="username"
+              value={email}
+              onChange={(e) => { setEmail(e.target.value); setErr(""); }}
+              placeholder="Email"
+              className="mt-6 h-12 w-full rounded-lg border px-4"
+              style={{ borderColor: "var(--rule-strong)", background: "#fff", color: "var(--fg)" }}
+            />
             <input
               type="password"
+              autoComplete="current-password"
               value={pass}
               onChange={(e) => { setPass(e.target.value); setErr(""); }}
-              onKeyDown={(e) => e.key === "Enter" && (pass === PASS ? (sessionStorage.setItem("ns-panel", "1"), setOk(true)) : setErr("Clave incorrecta"))}
-              placeholder="Clave de acceso"
-              className="mt-6 h-12 w-full rounded-lg border px-4"
-              style={{ borderColor: "var(--rule-strong)", background: "#fff" }}
+              onKeyDown={(e) => e.key === "Enter" && entrar()}
+              placeholder="Contraseña"
+              className="mt-3 h-12 w-full rounded-lg border px-4"
+              style={{ borderColor: "var(--rule-strong)", background: "#fff", color: "var(--fg)" }}
             />
             {err && <p className="mt-2 text-sm" style={{ color: "#dc2626" }}>{err}</p>}
-            <button
-              onClick={() => (pass === PASS ? (sessionStorage.setItem("ns-panel", "1"), setOk(true)) : setErr("Clave incorrecta"))}
-              className="btn btn-brand mt-4 w-full"
-            >
-              Entrar
+            <button onClick={entrar} disabled={loading} className="btn btn-brand mt-4 w-full">
+              {loading ? "Entrando…" : "Entrar"}
             </button>
           </div>
         </div>
@@ -75,10 +104,10 @@ export default function Panel() {
     );
   }
 
-  return <PanelContent />;
+  return <PanelContent email={user} onSalir={() => signOut(auth)} />;
 }
 
-function PanelContent() {
+function PanelContent({ email, onSalir }: { email: string; onSalir: () => void }) {
   const [items, setItems] = useState<Diag[]>([]);
   const [loading, setLoading] = useState(true);
   const [sel, setSel] = useState<Diag | null>(null);
@@ -128,7 +157,11 @@ function PanelContent() {
             <h1 className="font-display text-3xl font-semibold text-paper">Diagnósticos</h1>
             <p className="text-sm" style={{ color: "var(--paper-dim)" }}>{filtrados.length} de {items.length} · sin ver: {items.filter((i) => !i.visto).length}</p>
           </div>
-          <button onClick={cargar} className="btn btn-on-dark" style={{ height: 40 }}>Actualizar</button>
+          <div className="flex items-center gap-3">
+            <span className="hidden text-xs sm:inline" style={{ color: "var(--paper-dim)" }}>{email}</span>
+            <button onClick={cargar} className="btn btn-on-dark" style={{ height: 40 }}>Actualizar</button>
+            <button onClick={onSalir} className="btn btn-on-dark" style={{ height: 40 }}>Salir</button>
+          </div>
         </div>
 
         <div className="mt-6 flex flex-wrap gap-3">
