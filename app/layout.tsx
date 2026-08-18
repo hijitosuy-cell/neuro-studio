@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Poppins, Inter_Tight, JetBrains_Mono } from "next/font/google";
+import { Poppins, Inter_Tight } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
@@ -19,23 +19,16 @@ const sans = Inter_Tight({
   display: "swap",
 });
 
-const mono = JetBrains_Mono({
-  variable: "--font-mono",
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  display: "swap",
-});
-
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://neuro-studio-l6lj.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Neuro Studio · Método de transformación comercial para automotoras",
+    default: "Neuro Studio · Sistemas para automotoras en Uruguay",
     template: "%s · Neuro Studio",
   },
-  description:
-    "Método Neuro Studio: detectamos dónde tu automotora pierde ventas, tiempo y rentabilidad, y construimos el sistema para recuperarlas. Diagnóstico, blueprint, build, launch, scale.",
+    description:
+    "Detectamos dónde tu automotora pierde ventas y construimos el sistema para recuperarlas. Diagnóstico gratuito para concesionarias uruguayas.",
   keywords: [
     "Método Neuro Studio",
     "software para automotoras Uruguay",
@@ -96,7 +89,7 @@ const jsonLd = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="es-UY" className={`${sans.variable} ${display.variable} ${mono.variable}`}>
+    <html lang="es-UY" className={`${sans.variable} ${display.variable}`}>
       <body className="min-h-screen antialiased">
         <Script
           id="ld-org"
