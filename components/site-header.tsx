@@ -15,7 +15,7 @@ export function SiteHeader() {
   return (
     <header
       className="sticky top-0 z-40 border-b"
-      style={{ background: "rgba(6,10,22,0.75)", backdropFilter: "blur(12px)", borderColor: "var(--rule-d)" }}
+      style={{ background: "rgba(6,10,22,0.92)", backdropFilter: "blur(12px)", borderColor: "var(--rule-d)" }}
     >
       <div className="wrap flex h-20 items-center justify-between">
         <Link href="/" className="group flex items-center gap-2.5" aria-label="Neuro Studio">
@@ -29,7 +29,7 @@ export function SiteHeader() {
         </nav>
         <div className="flex items-center gap-3">
           <LangToggle onDark />
-          <a href="#diagnostico" className="btn btn-shiny" style={{ minHeight: "42px", padding: "0.55rem 1.2rem", fontSize: "0.88rem", borderRadius: "999px" }}>
+          <a href="#agendar" className="btn btn-shiny" style={{ minHeight: "42px", padding: "0.55rem 1.2rem", fontSize: "0.88rem", borderRadius: "999px" }}>
             {t.ctaHeader}
           </a>
         </div>

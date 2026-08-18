@@ -3,7 +3,7 @@ export type Lang = "es" | "en";
 export const dict = {
   es: {
     nav: { diagnostico: "Diagnóstico", servicios: "Servicios", metodo: "Método", preguntas: "Preguntas" },
-    ctaHeader: "Diagnóstico gratis",
+    ctaHeader: "Agendar reunión",
     hero: {
       chip: "Método Neuro Studio",
       title1: "Tu automotora pierde ventas todos los días.",
@@ -63,7 +63,7 @@ export const dict = {
   },
   en: {
     nav: { diagnostico: "Diagnosis", servicios: "Services", metodo: "Method", preguntas: "FAQ" },
-    ctaHeader: "Free diagnosis",
+    ctaHeader: "Book a call",
     hero: {
       chip: "Neuro Studio Method",
       title1: "Your dealership loses sales every single day.",

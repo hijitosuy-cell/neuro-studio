@@ -43,16 +43,16 @@ function Hero() {
       <HeroVideo />
       <div aria-hidden className="glow-blob glow-blob--brand animate-blob" style={{ width: 480, height: 480, top: -160, left: -120 }} />
       <div aria-hidden className="glow-blob glow-blob--hi animate-blob" style={{ width: 380, height: 380, top: -40, right: -80, animationDelay: "3s" }} />
-      <div className="wrap relative flex min-h-[86vh] flex-col items-center justify-center py-24 text-center">
+      <div className="wrap relative flex min-h-[78vh] flex-col items-center justify-center py-16 text-center md:min-h-[86vh] md:py-24">
         <Reveal className="max-w-4xl">
           <span className="chip chip-on-dark">{t.hero.chip}</span>
-          <h1 className="font-display font-semibold mt-6 text-paper" style={{ fontSize: "clamp(2rem, 4.4vw, 3.4rem)", lineHeight: 1.08 }}>
+          <h1 className="font-display font-semibold mt-5 text-paper md:mt-6" style={{ fontSize: "clamp(1.6rem, 6vw, 3.4rem)", lineHeight: 1.1 }}>
             {t.hero.title1}
             <br />
             <span className="accent-gradient md:whitespace-nowrap">{t.hero.title2}</span>
           </h1>
-          <p className="mx-auto mt-6 max-w-xl text-base md:text-lg" style={{ color: "var(--paper-dim)" }}>{t.hero.sub}</p>
-          <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <p className="mx-auto mt-5 max-w-xl text-[0.95rem] md:mt-6 md:text-lg" style={{ color: "var(--paper-dim)" }}>{t.hero.sub}</p>
+          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row md:mt-9">
             <a href="#diagnostico" className="btn btn-shiny" style={{ borderRadius: "999px", height: 52, padding: "0 1.9rem" }}>{t.hero.cta1}</a>
             <a href="#metodo" className="btn btn-on-dark" style={{ borderRadius: "999px", height: 52 }}>{t.hero.cta2}</a>
           </div>
@@ -124,7 +124,17 @@ function Producto() {
           <p className="mt-5 text-lg" style={{ color: "var(--fg-muted)" }}>{t.metodo.showSub}</p>
         </Reveal>
 
-        <div className="mt-12 grid gap-6 lg:grid-cols-[1.15fr_1fr] lg:items-start">
+        <Reveal className="reveal-scale mt-10 overflow-hidden rounded-2xl" style={{ border: "1px solid var(--rule)" }}>
+          <img
+            src="/showroom.jpg"
+            alt="Autos en exposición dentro de un showroom moderno"
+            className="h-[220px] w-full object-cover md:h-[300px]"
+            loading="lazy"
+            decoding="async"
+          />
+        </Reveal>
+
+        <div className="mt-6 grid gap-6 lg:grid-cols-[1.15fr_1fr] lg:items-start">
           <Reveal className="rounded-2xl p-2" style={{ background: "var(--bg-2)" }}>
             <NeuroPanelMock />
           </Reveal>
@@ -186,11 +196,22 @@ function Agendar() {
   return (
     <section id="agendar" className="relative overflow-hidden" style={{ background: "var(--page)" }}>
       <div className="wrap relative py-24 md:py-28">
-        <Reveal className="mx-auto max-w-3xl text-center">
-          <span className="chip chip-on-dark">{t.agendar.kicker}</span>
-          <h2 className="font-display font-semibold mt-5 text-paper" style={{ fontSize: "clamp(2rem, 4.4vw, 3.25rem)" }}>{t.agendar.title}</h2>
-          <p className="mx-auto mt-5 max-w-2xl text-lg" style={{ color: "var(--paper-dim)" }}>{t.agendar.sub}</p>
-        </Reveal>
+        <div className="grid items-center gap-10 lg:grid-cols-[1fr_0.85fr]">
+          <Reveal>
+            <span className="chip chip-on-dark">{t.agendar.kicker}</span>
+            <h2 className="font-display font-semibold mt-5 text-paper" style={{ fontSize: "clamp(2rem, 4.4vw, 3.25rem)" }}>{t.agendar.title}</h2>
+            <p className="mt-5 max-w-2xl text-lg" style={{ color: "var(--paper-dim)" }}>{t.agendar.sub}</p>
+          </Reveal>
+          <Reveal delay={120} className="reveal-scale overflow-hidden rounded-2xl" style={{ border: "1px solid var(--rule-d)" }}>
+            <img
+              src="/asesor.jpg"
+              alt="Un asesor repasa un auto junto a una clienta en el showroom"
+              className="h-[240px] w-full object-cover lg:h-[300px]"
+              loading="lazy"
+              decoding="async"
+            />
+          </Reveal>
+        </div>
 
         <div className="mt-12 grid gap-4 md:grid-cols-3">
           {cards.map((c, i) => (
