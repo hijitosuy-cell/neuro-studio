@@ -40,8 +40,18 @@ export const secciones: Seccion[] = [
       { tipo: "texto", id: "empresa", label: "Nombre de la automotora", placeholder: "Auto Sur", requerido: true, express: true },
       { tipo: "texto", id: "contacto", label: "Tu nombre", placeholder: "Marcos", requerido: true, express: true },
       { tipo: "texto", id: "telefono", label: "WhatsApp", placeholder: "099 123 456", express: true },
+      {
+        tipo: "select", id: "pais", label: "País", express: true,
+        opciones: [
+          { label: "Uruguay" }, { label: "Argentina" }, { label: "Chile" },
+          { label: "Paraguay" }, { label: "Brasil" }, { label: "México" },
+          { label: "Colombia" }, { label: "Otro" },
+        ],
+      },
       { tipo: "texto", id: "ciudad", label: "Ciudad", placeholder: "Salto", express: true },
       { tipo: "numero", id: "vendedores", label: "¿Cuántos vendedores trabajan?", placeholder: "4", express: true },
+      { tipo: "numero", id: "sucursales", label: "¿Cuántas sucursales tienen?", placeholder: "1" },
+      { tipo: "numero", id: "stock_aprox", label: "¿Cuántos vehículos tienen en stock, aprox.?", placeholder: "40" },
       {
         tipo: "textarea", id: "motivo", requerido: true, express: true,
         label: "¿Qué te hizo querer hacer este diagnóstico justo ahora?",
@@ -621,6 +631,11 @@ export function calcular(respuestas: Record<string, unknown>) {
   return { porArea, total, criticas };
 }
 
+/** Nombres legibles a partir de ids de servicio. */
+export function nombresDeServicios(ids: string[]): string[] {
+  return ids.map((id) => servicios.find((s) => s.id === id)?.nombre ?? id);
+}
+
 export function recomendar(respuestas: Record<string, unknown>) {
   return servicios
     .map((s) => ({ ...s, razones: s.motivos(respuestas) }))
@@ -658,6 +673,127 @@ export function interpretar(score: number) {
   if (score >= 55) return { titulo: "Bien encaminados", texto: "Hay sistema, pero conviven partes manuales que cuestan tiempo y ventas." };
   if (score >= 35) return { titulo: "Varias fugas abiertas", texto: "Buena parte de la operación depende de personas y planillas. Hay bastante para recuperar." };
   return { titulo: "Operación muy manual", texto: "Casi todo depende de memoria, WhatsApp y Excel. El margen de mejora es grande." };
+}
+
+/* ─────────── Presupuesto interno (solo para el equipo) ───────────
+   NO se muestra al cliente. Se calcula con la lógica del diagnóstico:
+   servicios recomendados × tamaño de la automotora × severidad del área.
+   Todos los precios en USD, pensados para el mercado automotor uruguayo/LatAm.
+------------------------------------------------------------------- */
+
+type RangoPrecio = { impl: [number, number]; mensual: [number, number] };
+
+/** Precio base por servicio, antes de ajustar por tamaño y severidad. */
+const PRECIO_BASE: Record<string, RangoPrecio> = {
+  saas: { impl: [2500, 6000], mensual: [150, 400] },
+  chatbot: { impl: [900, 1800], mensual: [120, 250] },
+  web: { impl: [1200, 2500], mensual: [40, 90] },
+  ads: { impl: [500, 1000], mensual: [300, 800] },
+  contenido: { impl: [400, 900], mensual: [250, 600] },
+};
+
+const NOMBRE_SERVICIO: Record<string, string> = {
+  saas: "Sistema de gestión (SaaS)",
+  chatbot: "Asistente de WhatsApp con IA",
+  web: "Sitio web con catálogo",
+  ads: "Publicidad con seguimiento",
+  contenido: "Contenido y redes",
+};
+
+function num(v: unknown, def = 0) {
+  const n = parseInt(String(v ?? "").replace(/[^\d]/g, ""), 10);
+  return Number.isFinite(n) ? n : def;
+}
+
+/** Multiplicador de tamaño según vendedores, sucursales y stock. */
+function factorTamano(r: Record<string, unknown>) {
+  const vend = num(r.vendedores, 3);
+  const suc = Math.max(1, num(r.sucursales, 1));
+  const stock = num(r.stock_aprox, 0);
+  let f = 1;
+  if (vend >= 16) f = 1.6;
+  else if (vend >= 9) f = 1.35;
+  else if (vend >= 4) f = 1.15;
+  if (suc >= 3) f += 0.25;
+  else if (suc === 2) f += 0.1;
+  if (stock >= 150) f += 0.15;
+  else if (stock >= 60) f += 0.07;
+  return Math.round(f * 100) / 100;
+}
+
+/** Etiqueta de tamaño para el dashboard. */
+export function tamanoAutomotora(r: Record<string, unknown>) {
+  const f = factorTamano(r);
+  if (f >= 1.5) return "grande";
+  if (f >= 1.2) return "mediana";
+  return "chica";
+}
+
+export type Presupuesto = {
+  moneda: "USD";
+  tamano: string;
+  factor: number;
+  diagnostico: [number, number];
+  items: { servicio: string; impl: [number, number]; mensual: [number, number] }[];
+  implTotal: [number, number];
+  mensualTotal: [number, number];
+  notas: string[];
+};
+
+/**
+ * Arma el presupuesto interno a partir de los servicios recomendados y el
+ * tamaño/severidad. Si el cliente marcó servicios de interés, usa esos;
+ * si no, usa los recomendados por el diagnóstico.
+ */
+export function presupuestoInterno(
+  r: Record<string, unknown>,
+  serviciosIds: string[],
+  totalScore: number
+): Presupuesto {
+  const factor = factorTamano(r);
+  const ids = serviciosIds.length ? serviciosIds : servicios.map((s) => s.id);
+
+  // Severidad: score bajo empuja al extremo alto del rango (más trabajo).
+  const sev = totalScore <= 30 ? 1 : totalScore <= 55 ? 0.7 : totalScore <= 75 ? 0.4 : 0.2;
+
+  const items = ids
+    .filter((id) => PRECIO_BASE[id])
+    .map((id) => {
+      const base = PRECIO_BASE[id];
+      const ajusta = ([min, max]: [number, number]): [number, number] => {
+        const lo = Math.round((min * factor) / 50) * 50;
+        // el piso sube según severidad, acercándose al techo
+        const piso = Math.round((min + (max - min) * sev * 0.5) * factor / 50) * 50;
+        const hi = Math.round((max * factor) / 50) * 50;
+        return [Math.max(lo, piso), hi];
+      };
+      return { servicio: NOMBRE_SERVICIO[id] ?? id, impl: ajusta(base.impl), mensual: ajusta(base.mensual) };
+    });
+
+  const sum = (sel: (i: (typeof items)[number]) => [number, number]): [number, number] =>
+    items.reduce<[number, number]>((acc, i) => [acc[0] + sel(i)[0], acc[1] + sel(i)[1]], [0, 0]);
+
+  const vend = num(r.vendedores, 3);
+  const diagBase: [number, number] = vend >= 9 ? [250, 500] : vend >= 4 ? [180, 350] : [120, 250];
+
+  const notas: string[] = [];
+  notas.push(`Automotora ${tamanoAutomotora(r)} · factor ${factor} · ${vend} vendedores`);
+  if (totalScore <= 40) notas.push("Score bajo: mucho por implementar, presupuestar cerca del techo.");
+  if (r.presupuesto === "No hay presupuesto por ahora") notas.push("⚠ Dijo que no hay presupuesto: calificar antes de cotizar.");
+  if (r.inversion_inicial) notas.push(`Inversión inicial que declaró: ${r.inversion_inicial}`);
+  if (r.inversion_mensual) notas.push(`Inversión mensual que declaró: ${r.inversion_mensual}`);
+  if (r.como_definen) notas.push(`Cómo deciden: ${r.como_definen}`);
+
+  return {
+    moneda: "USD",
+    tamano: tamanoAutomotora(r),
+    factor,
+    diagnostico: diagBase,
+    items,
+    implTotal: sum((i) => i.impl),
+    mensualTotal: sum((i) => i.mensual),
+    notas,
+  };
 }
 
 /** Señal de calificación interna (Sandler): dolor + presupuesto + decisión + compromiso */

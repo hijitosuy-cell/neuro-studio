@@ -11,6 +11,9 @@ import {
   objecionesDe,
   interpretar,
   calificacion,
+  presupuestoInterno,
+  tamanoAutomotora,
+  nombresDeServicios,
   detalleRespuestas,
   WHATSAPP,
   CALENDAR_URL,
@@ -85,19 +88,28 @@ export function DiagnosticoTool() {
     if (guardadoRef.current) return;
     guardadoRef.current = true;
     try {
+      // servicios de interés: los que el cliente marcó; si no marcó, los recomendados
+      const idsInteres = (elegidos.length ? elegidos : recomendados.map((s) => s.id));
+      const nombresInteres = nombresDeServicios(idsInteres);
+      const presupuesto = presupuestoInterno(r, idsInteres, resultado.total);
+
       await addDoc(collection(db, "diagnosticos_web"), {
         tipo: modo,
         negocio: r.empresa ?? "",
         contacto: r.contacto ?? "",
+        pais: r.pais ?? "",
         ciudad: r.ciudad ?? "",
         telefono: r.telefono ?? "",
         vendedores: r.vendedores ?? "",
+        sucursales: r.sucursales ?? "",
+        stockAprox: r.stock_aprox ?? "",
+        tamano: tamanoAutomotora(r),
         puntajeGeneral: resultado.total,
         areas: resultado.porArea
           .filter((a) => a.respondidas > 0)
           .map((a) => ({ nombre: a.nombre, puntaje: a.score })),
         respuestas: detalleRespuestas(modo, r),
-        // Campos Sandler (nuevos; el SaaS puede ignorarlos sin romperse)
+        // Sandler
         motivo: r.motivo ?? "",
         dolorPrincipal: r.dolor_principal ?? "",
         costoEstimado: r.dolor_costo ?? "",
@@ -110,8 +122,14 @@ export function DiagnosticoTool() {
         compromiso: r.compromiso ?? "",
         obstaculos: Array.isArray(r.obstaculos) ? r.obstaculos : [],
         calificacion: calificacion(r),
+        // Servicios: nombres (mostrar) + ids (filtrar "todos los que quieren chatbot")
         recomendados: recomendados.map((s) => s.nombre),
+        serviciosIds: idsInteres,
+        serviciosInteres: nombresInteres,
+        // Presupuesto interno — solo para el equipo, no se muestra al cliente
+        presupuestoInterno: presupuesto,
         creadoEnMs: Date.now(),
+        creadoEnISO: new Date().toISOString(),
         visto: false,
       });
     } catch {
