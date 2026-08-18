@@ -84,9 +84,8 @@ a:hover .logo-hover,
   transition: border-color 300ms, transform 300ms, box-shadow 300ms;
 }
 .step-card:hover {
-  border-color: rgba(143,176,255,0.4);
+  border-color: rgba(143,176,255,0.45);
   transform: translateY(-4px);
-  box-shadow: 0 18px 50px -24px rgba(47,95,214,0.6);
 }
 @media (prefers-reduced-motion: reduce) { .step-card:hover { transform: none; } }
 
@@ -132,8 +131,8 @@ a:hover .logo-hover,
 /* Two fonts only: Poppins (display) + Inter Tight (everything else) */
 .font-display {
   font-family: var(--font-display), sans-serif;
-  letter-spacing: -0.025em;
-  line-height: 1.02;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
   overflow-wrap: break-word;
 }
 
@@ -244,12 +243,8 @@ a:hover .logo-hover,
   color: rgba(47,95,214,0.18);
 }
 
-/* Gradiente de acento para destacar */
-.accent-gradient {
-  background: linear-gradient(135deg, #2f5fd6, #8fb0ff);
-  -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
+/* Acento sólido para destacar (sin gradiente de texto) */
+.accent-gradient { color: #8fb0ff; }
 
 /* Glow suave de fondo */
 .glow-top {
@@ -352,8 +347,7 @@ a:hover .logo-hover,
   transition: border-color 300ms, box-shadow 300ms, transform 300ms;
 }
 .card-light:hover {
-  border-color: rgba(47,95,214,0.35);
-  box-shadow: 0 16px 50px -24px rgba(47,95,214,0.4);
+  border-color: rgba(47,95,214,0.45);
   transform: translateY(-4px);
 }
 @media (prefers-reduced-motion: reduce) { .card-light:hover { transform: none; } }

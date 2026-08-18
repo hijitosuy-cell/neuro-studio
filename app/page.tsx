@@ -85,7 +85,6 @@ function Metodo() {
   const { t, fases } = useLang();
   return (
     <section id="metodo" className="relative overflow-hidden" style={{ background: "var(--page)" }}>
-      <div aria-hidden className="glow-blob glow-blob--brand animate-blob" style={{ width: 460, height: 460, top: 40, left: -160 }} />
       <div className="wrap relative py-24 md:py-28">
         <Reveal className="max-w-2xl">
           <div className="label" style={{ color: "#8fb0ff" }}>{t.metodo.kicker}</div>
@@ -190,7 +189,6 @@ function Agendar() {
   ];
   return (
     <section id="agendar" className="relative overflow-hidden" style={{ background: "var(--page)" }}>
-      <div aria-hidden className="glow-blob glow-blob--hi animate-blob" style={{ width: 460, height: 460, top: -120, left: "50%", transform: "translateX(-50%)" }} />
       <div className="wrap relative py-24 md:py-28">
         <Reveal className="mx-auto max-w-3xl text-center">
           <span className="chip chip-on-dark">{t.agendar.kicker}</span>
