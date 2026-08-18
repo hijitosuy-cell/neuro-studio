@@ -43,12 +43,12 @@ function Hero() {
       <div aria-hidden className="glow-blob glow-blob--brand animate-blob" style={{ width: 480, height: 480, top: -160, left: -120 }} />
       <div aria-hidden className="glow-blob glow-blob--hi animate-blob" style={{ width: 380, height: 380, top: -40, right: -80, animationDelay: "3s" }} />
       <div className="wrap relative flex min-h-[86vh] flex-col items-center justify-center py-24 text-center">
-        <Reveal className="max-w-3xl">
+        <Reveal className="max-w-4xl">
           <span className="chip chip-on-dark">{t.hero.chip}</span>
-          <h1 className="font-display font-semibold mt-6 text-paper" style={{ fontSize: "clamp(2rem, 4.6vw, 3.75rem)", lineHeight: 1.05 }}>
+          <h1 className="font-display font-semibold mt-6 text-paper" style={{ fontSize: "clamp(2rem, 4.4vw, 3.4rem)", lineHeight: 1.08 }}>
             {t.hero.title1}
             <br />
-            <span className="accent-gradient">{t.hero.title2}</span>
+            <span className="accent-gradient md:whitespace-nowrap">{t.hero.title2}</span>
           </h1>
           <p className="mx-auto mt-6 max-w-xl text-base md:text-lg" style={{ color: "var(--paper-dim)" }}>{t.hero.sub}</p>
           <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
@@ -258,7 +258,7 @@ function CTA() {
       <div aria-hidden className="glow-blob glow-blob--brand" style={{ width: 620, height: 320, bottom: -140, left: "50%", transform: "translateX(-50%)" }} />
       <div className="wrap relative border-t py-20 text-center" style={{ borderColor: "var(--rule-d)" }}>
         <Reveal>
-          <p className="font-display font-semibold mx-auto max-w-2xl text-paper" style={{ fontSize: "clamp(1.6rem, 3.4vw, 2.5rem)", lineHeight: 1.15 }}>
+          <p className="font-display font-semibold mx-auto max-w-4xl text-paper md:whitespace-nowrap" style={{ fontSize: "clamp(1.5rem, 3.2vw, 2.3rem)", lineHeight: 1.15 }}>
             {t.cta.title2}
           </p>
           <div className="mt-8">

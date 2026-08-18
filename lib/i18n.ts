@@ -52,7 +52,7 @@ export const dict = {
     faqTitle: "Lo que nos preguntan.",
     cta: {
       title1: "Cada día que pasa igual,",
-      title2: "tu automotora deja plata sobre la mesa.",
+      title2: "Tu automotora deja plata sobre la mesa.",
       sub: "El diagnóstico te muestra exactamente cuánta. En minutos, gratis, y sin que te llamemos si no querés. Después decidís vos.",
       cta1: "Ver cuánto estoy perdiendo",
       cta2: "Hablar por WhatsApp",
@@ -112,7 +112,7 @@ export const dict = {
     faqTitle: "What people ask us.",
     cta: {
       title1: "Every day nothing changes,",
-      title2: "your dealership leaves money on the table.",
+      title2: "Your dealership leaves money on the table.",
       sub: "The diagnosis shows you exactly how much. In minutes, free, and we won't call you unless you want. Then it's your call.",
       cta1: "See how much I'm losing",
       cta2: "Chat on WhatsApp",
