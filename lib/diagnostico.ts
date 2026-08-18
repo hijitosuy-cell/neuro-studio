@@ -683,13 +683,17 @@ export function interpretar(score: number) {
 
 type RangoPrecio = { impl: [number, number]; mensual: [number, number] };
 
-/** Precio base por servicio, antes de ajustar por tamaño y severidad. */
+/**
+ * Rango real por servicio (USD), de automotora chica a grande.
+ * El presupuesto NUNCA sale de estos límites: se interpola dentro según
+ * tamaño y severidad. Ajustado a lo que Neuro Studio cobra de verdad.
+ */
 const PRECIO_BASE: Record<string, RangoPrecio> = {
-  saas: { impl: [2500, 6000], mensual: [150, 400] },
-  chatbot: { impl: [900, 1800], mensual: [120, 250] },
-  web: { impl: [1200, 2500], mensual: [40, 90] },
-  ads: { impl: [500, 1000], mensual: [300, 800] },
-  contenido: { impl: [400, 900], mensual: [250, 600] },
+  saas: { impl: [1500, 4000], mensual: [300, 600] },
+  chatbot: { impl: [500, 1200], mensual: [80, 200] },
+  web: { impl: [600, 1500], mensual: [30, 70] },
+  ads: { impl: [300, 600], mensual: [200, 500] },
+  contenido: { impl: [250, 600], mensual: [200, 450] },
 };
 
 const NOMBRE_SERVICIO: Record<string, string> = {
@@ -705,35 +709,31 @@ function num(v: unknown, def = 0) {
   return Number.isFinite(n) ? n : def;
 }
 
-/** Multiplicador de tamaño según vendedores, sucursales y stock. */
-function factorTamano(r: Record<string, unknown>) {
+/** Posición 0..1 según tamaño (vendedores + sucursales + stock). */
+function posTamano(r: Record<string, unknown>) {
   const vend = num(r.vendedores, 3);
   const suc = Math.max(1, num(r.sucursales, 1));
   const stock = num(r.stock_aprox, 0);
-  let f = 1;
-  if (vend >= 16) f = 1.6;
-  else if (vend >= 9) f = 1.35;
-  else if (vend >= 4) f = 1.15;
-  if (suc >= 3) f += 0.25;
-  else if (suc === 2) f += 0.1;
-  if (stock >= 150) f += 0.15;
-  else if (stock >= 60) f += 0.07;
-  return Math.round(f * 100) / 100;
+  let p = vend >= 16 ? 1 : vend >= 9 ? 0.7 : vend >= 4 ? 0.4 : 0.1;
+  if (suc >= 3) p += 0.15;
+  else if (suc === 2) p += 0.07;
+  if (stock >= 150) p += 0.1;
+  else if (stock >= 60) p += 0.05;
+  return Math.min(1, p);
 }
 
 /** Etiqueta de tamaño para el dashboard. */
 export function tamanoAutomotora(r: Record<string, unknown>) {
-  const f = factorTamano(r);
-  if (f >= 1.5) return "grande";
-  if (f >= 1.2) return "mediana";
+  const p = posTamano(r);
+  if (p >= 0.7) return "grande";
+  if (p >= 0.4) return "mediana";
   return "chica";
 }
 
 export type Presupuesto = {
   moneda: "USD";
   tamano: string;
-  factor: number;
-  diagnostico: [number, number];
+  diagnostico: string;
   items: { servicio: string; impl: [number, number]; mensual: [number, number] }[];
   implTotal: [number, number];
   mensualTotal: [number, number];
@@ -741,44 +741,42 @@ export type Presupuesto = {
 };
 
 /**
- * Arma el presupuesto interno a partir de los servicios recomendados y el
- * tamaño/severidad. Si el cliente marcó servicios de interés, usa esos;
- * si no, usa los recomendados por el diagnóstico.
+ * Presupuesto interno. Interpola DENTRO del rango real de cada servicio
+ * (nunca lo excede) según tamaño + severidad del diagnóstico.
+ * El diagnóstico es gratis: no se cobra.
  */
 export function presupuestoInterno(
   r: Record<string, unknown>,
   serviciosIds: string[],
   totalScore: number
 ): Presupuesto {
-  const factor = factorTamano(r);
+  const pos = posTamano(r);
+  const sev = (100 - totalScore) / 100; // más desorden → más arriba del rango
+  const centro = Math.min(1, pos * 0.6 + sev * 0.4);
   const ids = serviciosIds.length ? serviciosIds : servicios.map((s) => s.id);
 
-  // Severidad: score bajo empuja al extremo alto del rango (más trabajo).
-  const sev = totalScore <= 30 ? 1 : totalScore <= 55 ? 0.7 : totalScore <= 75 ? 0.4 : 0.2;
+  const round50 = (n: number) => Math.round(n / 50) * 50;
+  const lerp = (min: number, max: number, t: number) => min + (max - min) * Math.max(0, Math.min(1, t));
+
+  const banda = ([min, max]: [number, number]): [number, number] => {
+    const lo = round50(lerp(min, max, centro - 0.18));
+    const hi = round50(lerp(min, max, centro + 0.18));
+    return [Math.max(min, lo), Math.min(max, hi)];
+  };
 
   const items = ids
     .filter((id) => PRECIO_BASE[id])
     .map((id) => {
       const base = PRECIO_BASE[id];
-      const ajusta = ([min, max]: [number, number]): [number, number] => {
-        const lo = Math.round((min * factor) / 50) * 50;
-        // el piso sube según severidad, acercándose al techo
-        const piso = Math.round((min + (max - min) * sev * 0.5) * factor / 50) * 50;
-        const hi = Math.round((max * factor) / 50) * 50;
-        return [Math.max(lo, piso), hi];
-      };
-      return { servicio: NOMBRE_SERVICIO[id] ?? id, impl: ajusta(base.impl), mensual: ajusta(base.mensual) };
+      return { servicio: NOMBRE_SERVICIO[id] ?? id, impl: banda(base.impl), mensual: banda(base.mensual) };
     });
 
   const sum = (sel: (i: (typeof items)[number]) => [number, number]): [number, number] =>
     items.reduce<[number, number]>((acc, i) => [acc[0] + sel(i)[0], acc[1] + sel(i)[1]], [0, 0]);
 
-  const vend = num(r.vendedores, 3);
-  const diagBase: [number, number] = vend >= 9 ? [250, 500] : vend >= 4 ? [180, 350] : [120, 250];
-
   const notas: string[] = [];
-  notas.push(`Automotora ${tamanoAutomotora(r)} · factor ${factor} · ${vend} vendedores`);
-  if (totalScore <= 40) notas.push("Score bajo: mucho por implementar, presupuestar cerca del techo.");
+  notas.push(`Automotora ${tamanoAutomotora(r)} · ${num(r.vendedores, 0)} vendedores · ${num(r.sucursales, 1)} sucursal(es)`);
+  if (totalScore <= 40) notas.push("Score bajo: mucho por implementar, presupuestar en la parte alta del rango.");
   if (r.presupuesto === "No hay presupuesto por ahora") notas.push("⚠ Dijo que no hay presupuesto: calificar antes de cotizar.");
   if (r.inversion_inicial) notas.push(`Inversión inicial que declaró: ${r.inversion_inicial}`);
   if (r.inversion_mensual) notas.push(`Inversión mensual que declaró: ${r.inversion_mensual}`);
@@ -787,8 +785,7 @@ export function presupuestoInterno(
   return {
     moneda: "USD",
     tamano: tamanoAutomotora(r),
-    factor,
-    diagnostico: diagBase,
+    diagnostico: "Gratis",
     items,
     implTotal: sum((i) => i.impl),
     mensualTotal: sum((i) => i.mensual),

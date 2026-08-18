@@ -127,6 +127,53 @@ body {
 
 .prose-link { color: var(--brand-accent); text-decoration: underline; text-underline-offset: 3px; }
 
+/* Hover lift para tarjetas */
+.lift { transition: transform 300ms cubic-bezier(0.22,1,0.36,1), box-shadow 300ms; }
+.lift:hover { transform: translateY(-4px); }
+@media (prefers-reduced-motion: reduce) { .lift:hover { transform: none; } }
+
+/* Badge gratis con pulso suave */
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.35); }
+  70% { box-shadow: 0 0 0 10px rgba(16,185,129,0); }
+  100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+}
+.pulse-badge { animation: pulse-ring 2.4s ease-out infinite; }
+@media (prefers-reduced-motion: reduce) { .pulse-badge { animation: none; } }
+
+/* Pill de canal (estilo agentes) */
+.chip {
+  display: inline-flex; align-items: center;
+  font-size: 12px; font-weight: 500;
+  padding: 3px 10px; border-radius: 999px;
+  background: rgba(47,95,214,0.1); color: var(--brand-accent);
+  border: 1px solid rgba(47,95,214,0.2);
+}
+.chip-on-dark {
+  background: rgba(143,176,255,0.12); color: #8fb0ff;
+  border-color: rgba(143,176,255,0.25);
+}
+
+/* Número gigante de servicio */
+.num-xl {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 700; line-height: 1;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  color: rgba(47,95,214,0.18);
+}
+
+/* Gradiente de acento para destacar */
+.accent-gradient {
+  background: linear-gradient(135deg, #2f5fd6, #8fb0ff);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Glow suave de fondo */
+.glow-top {
+  background: radial-gradient(60% 60% at 50% 0%, rgba(47,95,214,0.16), transparent 70%);
+}
+
 .wa-bubble { max-width: 80%; padding: 0.55rem 0.75rem 0.4rem; border-radius: 10px; font-size: 0.85rem; line-height: 1.35; color: #eaf4ea; }
 .wa-bubble--in { background: #202c33; border-top-left-radius: 4px; align-self: flex-start; }
 .wa-bubble--out { background: #005c4b; border-top-right-radius: 4px; align-self: flex-end; }

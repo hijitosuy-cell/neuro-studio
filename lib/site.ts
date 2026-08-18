@@ -9,9 +9,8 @@ export const site = {
     encodeURIComponent("Hola, quiero coordinar una reunión para mi automotora."),
   nav: [
     { href: "#diagnostico", label: "Diagnóstico" },
+    { href: "#servicios", label: "Servicios" },
     { href: "#metodo", label: "Método" },
-    { href: "#sistema", label: "Sistema" },
-    { href: "#planes", label: "Planes" },
     { href: "#preguntas", label: "Preguntas" },
   ],
 };
@@ -65,28 +64,37 @@ export const sistema = [
   },
 ];
 
-/** 3 planes */
-export const planes = [
+/** Servicios modulares que se combinan según el diagnóstico. */
+export const serviciosWeb = [
   {
-    name: "Diagnóstico",
-    price: "Pago único",
-    body: "Auditoría completa + puntaje + plan de prioridades.",
-    outputs: ["Informe con las 10 áreas", "Puntaje 0–100", "Plan de acción"],
-    featured: false,
+    n: "01",
+    name: "Sistema de gestión",
+    canales: ["Stock", "Leads", "Comisiones"],
+    body: "Stock, consultas, vendedores, financiaciones y comisiones en un panel. Reportes que salen solos, datos que no se pierden.",
   },
   {
-    name: "Implementación",
-    price: "Según el plan",
-    body: "Construimos e instalamos todo lo que el diagnóstico marcó.",
-    outputs: ["Sistema andando", "Equipo capacitado", "Datos migrados"],
-    featured: true,
+    n: "02",
+    name: "Asistente de WhatsApp con IA",
+    canales: ["WhatsApp", "Instagram", "Web"],
+    body: "Responde 24/7, califica al cliente, consulta el stock y agenda test-drives solo. Deriva al vendedor cuando hay intención real.",
   },
   {
-    name: "Acompañamiento",
-    price: "Mensual",
-    body: "Soporte, mejoras, marketing y reportes todos los meses.",
-    outputs: ["Cierres mensuales", "Nuevas automatizaciones", "Marketing continuo"],
-    featured: false,
+    n: "03",
+    name: "Sitio web con catálogo",
+    canales: ["Google", "Catálogo", "Formularios"],
+    body: "Sitio propio rápido, con buscador de vehículos, ficha por unidad y formularios que entran directo al sistema.",
+  },
+  {
+    n: "04",
+    name: "Publicidad con seguimiento",
+    canales: ["Meta Ads", "Google Ads"],
+    body: "Campañas conectadas al sistema: qué anuncio trajo qué consulta y qué consulta terminó en venta.",
+  },
+  {
+    n: "05",
+    name: "Contenido y redes",
+    canales: ["Reels", "Fotos", "Posts"],
+    body: "Contenido armado desde el stock que hay que mover, no desde un calendario genérico.",
   },
 ];
 
