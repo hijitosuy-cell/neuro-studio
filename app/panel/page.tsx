@@ -57,8 +57,21 @@ export default function Panel() {
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email.trim(), pass);
-    } catch {
-      setErr("Email o contraseña incorrectos.");
+    } catch (e: unknown) {
+      const code = (e as { code?: string })?.code || "";
+      const msg =
+        code === "auth/operation-not-allowed"
+          ? "El proveedor Email/Contraseña no está activado en Firebase. Activalo en Authentication → Sign-in method."
+          : code === "auth/invalid-email"
+          ? "El email no tiene un formato válido."
+          : code === "auth/user-not-found"
+          ? "No existe un usuario con ese email. Crealo en Firebase → Authentication → Users."
+          : code === "auth/wrong-password" || code === "auth/invalid-credential"
+          ? "Email o contraseña incorrectos."
+          : code === "auth/too-many-requests"
+          ? "Demasiados intentos. Esperá unos minutos y probá de nuevo."
+          : `Error: ${code || "no se pudo iniciar sesión"}`;
+      setErr(msg);
     } finally {
       setLoading(false);
     }
