@@ -31,23 +31,30 @@ export function HeroVideo() {
   }, []);
 
   return (
-    <div aria-hidden className="absolute inset-0 overflow-hidden">
-      <div ref={ref} className="absolute inset-0 will-change-transform">
-        {/* Video opcional: si no existe, queda el grid+glow de abajo */}
+    <div aria-hidden className="absolute inset-0 overflow-hidden" style={{ background: "var(--page)" }}>
+      <div ref={ref} className="absolute inset-0 will-change-transform" style={{ background: "var(--page)" }}>
+        {/* Video con poster (primer frame) para que no haya parpadeo antes de cargar */}
         <video
-          className="h-full w-full object-cover opacity-30"
+          className="h-full w-full object-cover opacity-35"
           autoPlay
           muted
           loop
           playsInline
-          poster="/neuro-studio-logo.png"
+          preload="auto"
+          poster="/hero-poster.jpg"
           onError={(e) => ((e.currentTarget.style.display = "none"))}
         >
           <source src="/hero.mp4" type="video/mp4" />
         </video>
       </div>
-      {/* Velo azulado para que resalten los textos */}
-      <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(6,10,22,0.7), rgba(6,10,22,0.92))" }} />
+      {/* Velo azulado: se funde a fondo sólido abajo para que no se note el corte con la sección siguiente */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(6,10,22,0.55) 0%, rgba(6,10,22,0.8) 55%, rgba(6,10,22,0.97) 88%, var(--page) 100%)",
+        }}
+      />
     </div>
   );
 }

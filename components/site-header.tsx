@@ -15,7 +15,7 @@ export function SiteHeader() {
   return (
     <header
       className="sticky top-0 z-40 border-b"
-      style={{ background: "rgba(6,10,22,0.92)", backdropFilter: "blur(12px)", borderColor: "var(--rule-d)" }}
+      style={{ background: "rgba(6,10,22,0.96)", backdropFilter: "blur(12px)", borderColor: "var(--rule-d)" }}
     >
       <div className="wrap flex h-20 items-center justify-between">
         <Link href="/" className="group flex items-center gap-2.5" aria-label="Neuro Studio">

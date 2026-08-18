@@ -54,8 +54,8 @@ export function Spotlight({
   const Component = Tag as React.ElementType;
   const glow =
     tone === "dark"
-      ? "radial-gradient(240px circle at var(--mx) var(--my), rgba(143,176,255,0.16), rgba(120,160,255,0.05) 45%, transparent 65%)"
-      : "radial-gradient(260px circle at var(--mx) var(--my), rgba(47,95,214,0.1), rgba(47,95,214,0.03) 45%, transparent 65%)";
+      ? "radial-gradient(260px circle at var(--mx) var(--my), rgba(160,190,255,0.09), rgba(160,190,255,0.03) 50%, transparent 68%)"
+      : "radial-gradient(280px circle at var(--mx) var(--my), rgba(120,160,255,0.07), rgba(120,160,255,0.02) 50%, transparent 68%)";
 
   return (
     <Component

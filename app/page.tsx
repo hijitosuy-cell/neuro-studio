@@ -41,15 +41,15 @@ function Hero() {
   return (
     <section className="relative overflow-hidden" style={{ background: "var(--page)" }}>
       <HeroVideo />
-      <div aria-hidden className="glow-blob glow-blob--brand animate-blob" style={{ width: 480, height: 480, top: -160, left: -120 }} />
-      <div aria-hidden className="glow-blob glow-blob--hi animate-blob" style={{ width: 380, height: 380, top: -40, right: -80, animationDelay: "3s" }} />
-      <div className="wrap relative flex min-h-[78vh] flex-col items-center justify-center py-16 text-center md:min-h-[86vh] md:py-24">
+      <div aria-hidden className="glow-blob glow-blob--brand animate-blob" style={{ width: 440, height: 440, top: 160, left: -140, opacity: 0.32 }} />
+      <div aria-hidden className="glow-blob glow-blob--hi animate-blob" style={{ width: 360, height: 360, top: 280, right: -110, opacity: 0.3, animationDelay: "3s" }} />
+      <div className="wrap relative flex min-h-[calc(100svh-5rem)] flex-col items-center justify-center py-14 text-center md:min-h-[86vh] md:py-24">
         <Reveal className="max-w-4xl">
           <span className="chip chip-on-dark">{t.hero.chip}</span>
-          <h1 className="font-display font-semibold mt-5 text-paper md:mt-6" style={{ fontSize: "clamp(1.6rem, 6vw, 3.4rem)", lineHeight: 1.1 }}>
+          <h1 className="font-display font-semibold mt-5 text-paper md:mt-6" style={{ fontSize: "clamp(1.45rem, 5.4vw, 3.4rem)", lineHeight: 1.1 }}>
             {t.hero.title1}
             <br />
-            <span className="accent-gradient md:whitespace-nowrap">{t.hero.title2}</span>
+            <span className="accent-gradient whitespace-nowrap">{t.hero.title2}</span>
           </h1>
           <p className="mx-auto mt-5 max-w-xl text-[0.95rem] md:mt-6 md:text-lg" style={{ color: "var(--paper-dim)" }}>{t.hero.sub}</p>
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row md:mt-9">
@@ -70,7 +70,7 @@ function Diagnostico() {
       <div className="wrap py-24 md:py-28">
         <Reveal className="mx-auto max-w-3xl text-center">
           <div className="label" style={{ color: "var(--brand-accent)" }}>{t.diag.kicker}</div>
-          <h2 className="font-display font-semibold mt-4" style={{ fontSize: "clamp(2rem, 4.4vw, 3.25rem)", color: "var(--brand)" }}>{t.diag.title}</h2>
+          <h2 className="font-display font-semibold mt-4" style={{ fontSize: "clamp(1.6rem, 5vw, 3.25rem)", color: "var(--brand)" }}>{t.diag.title}</h2>
           <p className="mx-auto mt-5 max-w-2xl text-lg" style={{ color: "var(--fg-muted)" }}>{t.diag.sub}</p>
         </Reveal>
         <div className="mt-12">
@@ -89,7 +89,7 @@ function Metodo() {
       <div className="wrap relative py-24 md:py-28">
         <Reveal className="mx-auto max-w-2xl text-center">
           <div className="label" style={{ color: "#8fb0ff" }}>{t.metodo.kicker}</div>
-          <h2 className="font-display font-semibold mt-4 text-paper" style={{ fontSize: "clamp(1.9rem, 3.4vw, 2.7rem)" }}>{t.metodo.title}</h2>
+          <h2 className="font-display font-semibold mt-4 text-paper" style={{ fontSize: "clamp(1.55rem, 5vw, 2.7rem)" }}>{t.metodo.title}</h2>
           <p className="mt-4 text-base" style={{ color: "var(--paper-dim)" }}>{t.metodo.sub}</p>
         </Reveal>
 
@@ -120,7 +120,7 @@ function Producto() {
       <div className="wrap py-24 md:py-28">
         <Reveal className="max-w-2xl">
           <div className="label" style={{ color: "var(--brand-accent)" }}>{t.metodo.showKicker}</div>
-          <h2 className="font-display font-semibold mt-4" style={{ fontSize: "clamp(1.9rem, 4vw, 3rem)", color: "var(--brand)" }}>{t.metodo.showTitle}</h2>
+          <h2 className="font-display font-semibold mt-4" style={{ fontSize: "clamp(1.55rem, 5vw, 3rem)", color: "var(--brand)" }}>{t.metodo.showTitle}</h2>
           <p className="mt-5 text-lg" style={{ color: "var(--fg-muted)" }}>{t.metodo.showSub}</p>
         </Reveal>
 
@@ -155,7 +155,7 @@ function Servicios() {
       <div className="wrap py-24 md:py-28">
         <Reveal className="max-w-2xl">
           <div className="label" style={{ color: "var(--brand-accent)" }}>{t.servicios.kicker}</div>
-          <h2 className="font-display font-semibold mt-4" style={{ fontSize: "clamp(1.9rem, 4vw, 3rem)", color: "var(--brand)" }}>{t.servicios.title}</h2>
+          <h2 className="font-display font-semibold mt-4" style={{ fontSize: "clamp(1.55rem, 5vw, 3rem)", color: "var(--brand)" }}>{t.servicios.title}</h2>
           <p className="mt-5 text-lg" style={{ color: "var(--fg-muted)" }}>{t.servicios.sub}</p>
         </Reveal>
 
@@ -199,7 +199,7 @@ function Agendar() {
         <div className="grid items-center gap-10 lg:grid-cols-[1fr_0.85fr]">
           <Reveal>
             <span className="chip chip-on-dark">{t.agendar.kicker}</span>
-            <h2 className="font-display font-semibold mt-5 text-paper" style={{ fontSize: "clamp(2rem, 4.4vw, 3.25rem)" }}>{t.agendar.title}</h2>
+            <h2 className="font-display font-semibold mt-5 text-paper" style={{ fontSize: "clamp(1.6rem, 5vw, 3.25rem)" }}>{t.agendar.title}</h2>
             <p className="mt-5 max-w-2xl text-lg" style={{ color: "var(--paper-dim)" }}>{t.agendar.sub}</p>
           </Reveal>
           <Reveal delay={120} className="reveal-scale overflow-hidden rounded-2xl" style={{ border: "1px solid var(--rule-d)" }}>
@@ -248,7 +248,7 @@ function FAQ() {
         <Reveal className="grid gap-12 md:grid-cols-[320px_1fr]">
           <div>
             <div className="label" style={{ color: "#8fb0ff" }}>{t.faqKicker}</div>
-            <h2 className="font-display font-semibold mt-4 text-paper" style={{ fontSize: "clamp(1.9rem, 3.5vw, 2.75rem)" }}>{t.faqTitle}</h2>
+            <h2 className="font-display font-semibold mt-4 text-paper" style={{ fontSize: "clamp(1.55rem, 5vw, 2.75rem)" }}>{t.faqTitle}</h2>
           </div>
           <div className="border-t border-b" style={{ borderColor: "var(--rule-d)" }}>
             {faqs.map((f) => (
