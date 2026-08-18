@@ -8,7 +8,7 @@ const csp = [
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "font-src 'self' https://fonts.gstatic.com data:",
   "img-src 'self' data: https:",
-  `connect-src 'self' https:${isDev ? " ws: wss:" : ""}`,
+  `connect-src 'self' https: wss:${isDev ? " ws:" : ""}`,
   "frame-src 'self' https://cal.com https://*.cal.com",
   "frame-ancestors 'self'",
   "base-uri 'self'",

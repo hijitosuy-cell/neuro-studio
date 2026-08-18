@@ -590,6 +590,37 @@ export function recomendar(respuestas: Record<string, unknown>) {
     .sort((a, b) => b.razones.length - a.razones.length);
 }
 
+/**
+ * Aplana las respuestas a { area, pregunta, respuesta } para guardarlas
+ * legibles en el SaaS. Ignora los campos que quedaron vacíos.
+ */
+export function detalleRespuestas(
+  modo: "express" | "completo",
+  respuestas: Record<string, unknown>
+): { area: string; pregunta: string; respuesta: string }[] {
+  const nombreArea = (id?: AreaId) =>
+    id ? (AREAS.find((a) => a.id === id)?.nombre ?? "General") : "General";
+
+  const filas: { area: string; pregunta: string; respuesta: string }[] = [];
+
+  for (const { seccion, campos } of camposDe(modo)) {
+    for (const campo of campos) {
+      const v = respuestas[campo.id];
+      const vacio =
+        v === undefined || v === null || v === "" || (Array.isArray(v) && v.length === 0);
+      if (vacio) continue;
+
+      filas.push({
+        area: "area" in campo && campo.area ? nombreArea(campo.area) : seccion.nombre,
+        pregunta: campo.label,
+        respuesta: Array.isArray(v) ? v.join(", ") : String(v),
+      });
+    }
+  }
+
+  return filas;
+}
+
 export function interpretar(score: number) {
   if (score >= 75)
     return { titulo: "Operación ordenada", texto: "Tienen buena base. Lo que queda es automatizar y afinar lo que ya funciona." };

@@ -1,12 +1,15 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 import {
   camposDe,
   contarCampos,
   calcular,
   recomendar,
   interpretar,
+  detalleRespuestas,
   WHATSAPP,
   CALENDAR_URL,
   type Campo,
@@ -62,7 +65,31 @@ export function DiagnosticoTool() {
     } else {
       setElegidos(recomendados.slice(0, 3).map((s) => s.id));
       setPaso("resultado");
+      guardarEnSaaS();
       window.document.getElementById("diagnostico")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
+
+  /** Guarda el diagnóstico en el SaaS. Si falla, no interrumpe al visitante. */
+  async function guardarEnSaaS() {
+    try {
+      await addDoc(collection(db, "diagnosticos_web"), {
+        tipo: modo,
+        negocio: r.empresa ?? "",
+        contacto: r.contacto ?? "",
+        ciudad: r.ciudad ?? "",
+        telefono: r.telefono ?? "",
+        vendedores: r.vendedores ?? "",
+        puntajeGeneral: resultado.total,
+        areas: resultado.porArea
+          .filter((a) => a.respondidas > 0)
+          .map((a) => ({ nombre: a.nombre, puntaje: a.score })),
+        respuestas: detalleRespuestas(modo, r),
+        creadoEnMs: Date.now(),
+        visto: false,
+      });
+    } catch {
+      /* silencioso a propósito */
     }
   }
 
@@ -168,7 +195,7 @@ export function DiagnosticoTool() {
         </div>
 
         <p className="mt-4 text-center text-xs" style={{ color: "var(--fg-muted)" }}>
-          No guardamos nada en ningún servidor. Todo queda en tu navegador hasta que decidas enviarlo.
+          Guardamos tus respuestas para preparar el análisis antes de la reunión. No las compartimos con nadie.
         </p>
       </div>
     );

@@ -129,8 +129,8 @@ function Diagnostico() {
             Descubrí en qué porcentaje está trabajando tu automotora.
           </h2>
           <p className="mt-6 text-body" style={{ color: "var(--fg-muted)" }}>
-            Respondé y te damos un puntaje por área y uno general. Sin costo, sin
-            registro, sin que te llamemos si no querés.
+            Respondé y te damos un puntaje por área y uno general. Sin costo y
+            sin crear ninguna cuenta.
           </p>
         </Reveal>
 
