@@ -2,7 +2,7 @@ export const site = {
   name: "Neuro Studio",
   location: "Salto · Uruguay",
   email: "neurovidstudioia@gmail.com",
-  bookingUrl: "https://calendar.app.google/itbzQ1a5Bn24EeGH7",
+  bookingUrl: "https://cal.com/neurostudio/diagnostico-comercial-para-automotoras-neuro-studio",
   whatsapp: "59898169358",
   whatsappUrl:
     "https://wa.me/59898169358?text=" +

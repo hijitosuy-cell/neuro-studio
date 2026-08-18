@@ -26,6 +26,7 @@ export default function Home() {
       <div className="horizon horizon-light" aria-hidden />
       <Servicios />
       <div className="horizon horizon-dark" aria-hidden />
+      <Agendar />
       <FAQ />
       <CTA />
     </>
@@ -170,6 +171,51 @@ function Servicios() {
             <a href="#diagnostico" className="mt-6 inline-flex text-sm font-medium text-white underline underline-offset-4">{t.servicios.planCta}</a>
           </Reveal>
         </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── Agendar (OSCURO, embed cal.com) ─── */
+function Agendar() {
+  const { t } = useLang();
+  const cards = [
+    { n: "01", ti: t.agendar.c1t, bo: t.agendar.c1b },
+    { n: "02", ti: t.agendar.c2t, bo: t.agendar.c2b },
+    { n: "03", ti: t.agendar.c3t, bo: t.agendar.c3b },
+  ];
+  return (
+    <section id="agendar" className="relative overflow-hidden" style={{ background: "var(--page)" }}>
+      <div aria-hidden className="bg-grid absolute inset-0" />
+      <div aria-hidden className="glow-blob glow-blob--hi animate-blob" style={{ width: 460, height: 460, top: -120, left: "50%", transform: "translateX(-50%)" }} />
+      <div className="wrap relative py-24 md:py-28">
+        <Reveal className="mx-auto max-w-3xl text-center">
+          <span className="chip chip-on-dark">{t.agendar.kicker}</span>
+          <h2 className="font-display font-semibold mt-5 text-paper" style={{ fontSize: "clamp(2rem, 4.4vw, 3.25rem)" }}>{t.agendar.title}</h2>
+          <p className="mx-auto mt-5 max-w-2xl text-lg" style={{ color: "var(--paper-dim)" }}>{t.agendar.sub}</p>
+        </Reveal>
+
+        <div className="mt-12 grid gap-5 md:grid-cols-3">
+          {cards.map((c, i) => (
+            <Reveal as="article" key={c.n} delay={i * 80} className="glass relative overflow-hidden p-7">
+              <div aria-hidden className="absolute right-4 top-2 font-display font-bold leading-none" style={{ fontSize: "4.5rem", color: "rgba(143,176,255,0.1)" }}>{c.n}</div>
+              <div className="relative">
+                <h3 className="font-display font-semibold text-lg text-paper">{c.ti}</h3>
+                <p className="mt-2.5 text-sm" style={{ color: "var(--paper-dim)" }}>{c.bo}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
+        <Reveal className="reveal-scale mt-10 overflow-hidden rounded-2xl" style={{ border: "1px solid var(--rule-d)", background: "#0b1122" }}>
+          <iframe
+            src={`${site.bookingUrl}?embed=true&theme=dark&hideEventTypeDetails=false`}
+            title="Agendar reunión"
+            className="w-full"
+            style={{ height: "760px", border: "0" }}
+            loading="lazy"
+          />
+        </Reveal>
       </div>
     </section>
   );

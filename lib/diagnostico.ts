@@ -583,7 +583,7 @@ export const servicios: Servicio[] = [
 /* ─────────── Utilidades ─────────── */
 
 export const WHATSAPP = "59898169358";
-export const CALENDAR_URL = "https://calendar.app.google/itbzQ1a5Bn24EeGH7";
+export const CALENDAR_URL = "https://cal.com/neurostudio/diagnostico-comercial-para-automotoras-neuro-studio";
 
 export function camposDe(modo: "express" | "completo"): { seccion: Seccion; campos: Campo[] }[] {
   return secciones
