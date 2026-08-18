@@ -10,8 +10,8 @@ export function SiteHeader() {
     >
       <div className="wrap flex h-20 items-center justify-between">
         <Link href="/" className="flex items-center gap-2.5 group" aria-label="Neuro Studio, inicio">
-          <Image src="/neuro-studio-logo.png" alt="" width={44} height={44} priority style={{ filter: "brightness(0) invert(1)" }} />
-          <span className="font-display text-xl font-semibold hidden sm:inline text-paper">Neuro Studio</span>
+          <Image src="/neuro-studio-logo.png" alt="" width={44} height={44} priority className="logo-hover" style={{ filter: "brightness(0) invert(1)" }} />
+          <span className="font-display text-xl font-semibold hidden sm:inline text-paper transition-colors group-hover:text-white">Neuro Studio</span>
         </Link>
         <nav className="hidden items-center gap-8 text-sm md:flex" style={{ color: "var(--paper-dim)" }}>
           {site.nav.map((l) => (

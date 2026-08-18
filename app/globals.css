@@ -60,6 +60,27 @@ body {
 
 ::selection { background: var(--brand-accent); color: white; }
 
+/* Scrollbar oscura */
+* { scrollbar-width: thin; scrollbar-color: #1e3d78 var(--page); }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--page); }
+::-webkit-scrollbar-thumb { background: #1e3d78; border-radius: 999px; border: 2px solid var(--page); }
+::-webkit-scrollbar-thumb:hover { background: var(--brand-accent); }
+
+/* Logo con animación al hover */
+.logo-hover { transition: transform 400ms cubic-bezier(0.22,1,0.36,1), filter 400ms; }
+.group:hover .logo-hover { transform: rotate(-6deg) scale(1.08); filter: drop-shadow(0 0 10px rgba(47,95,214,0.6)); }
+@media (prefers-reduced-motion: reduce) { .group:hover .logo-hover { transform: none; } }
+
+/* Transición de degradado entre secciones oscuras y claras */
+.fade-to-light { background: linear-gradient(to bottom, var(--page), #ffffff); height: 120px; }
+.fade-to-dark { background: linear-gradient(to bottom, #ffffff, var(--page)); height: 120px; }
+.fade-glow-light { position: relative; }
+.fade-glow-light::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(60% 100% at 50% 0%, rgba(47,95,214,0.22), transparent 70%);
+}
+
 /* Two fonts only: Poppins (display) + Inter Tight (everything else) */
 .font-display {
   font-family: var(--font-display), sans-serif;
@@ -267,6 +288,32 @@ body {
 }
 .glass:hover::before { opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .glass:hover { transform: none; } }
+
+/* Spotlight: brillo que sigue al cursor */
+.spotlight { position: relative; }
+.spotlight::after {
+  content: ""; position: absolute; inset: 0;
+  border-radius: inherit; pointer-events: none;
+  background: var(--spot, transparent);
+  opacity: 0; transition: opacity 250ms;
+}
+.spotlight:hover::after { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .spotlight::after { display: none; } }
+
+/* Tarjeta clara con borde y glow al hover */
+.card-light {
+  position: relative;
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+  transition: border-color 300ms, box-shadow 300ms, transform 300ms;
+}
+.card-light:hover {
+  border-color: rgba(47,95,214,0.35);
+  box-shadow: 0 16px 50px -24px rgba(47,95,214,0.4);
+  transform: translateY(-4px);
+}
+@media (prefers-reduced-motion: reduce) { .card-light:hover { transform: none; } }
 
 /* Reveal con más variantes */
 .reveal-left { opacity: 0; transform: translateX(-24px); transition: opacity 800ms cubic-bezier(0.22,1,0.36,1), transform 800ms cubic-bezier(0.22,1,0.36,1); }
