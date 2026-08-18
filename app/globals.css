@@ -79,7 +79,7 @@ body {
 .font-display { font-family: var(--font-display), sans-serif; letter-spacing: -0.02em; line-height: 1.02; overflow-wrap: break-word; }
 .font-mono { font-family: var(--font-mono), monospace; }
 
-.mono-label { font-family: var(--font-mono), monospace; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--fg-muted); }
+.mono-label { font-family: var(--font-mono), monospace; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--fg-muted); }
 
 .text-body { max-width: 62ch; }
 

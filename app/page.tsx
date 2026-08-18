@@ -95,7 +95,7 @@ function Evidence() {
       <div className="wrap py-20 md:py-28">
         <Reveal className="max-w-3xl">
           <div className="mono-label" style={{ color: "var(--brand-accent)" }}>Evidencia · 2024/25</div>
-          <h2 className="font-display font-semibold mt-4" style={{ fontSize: "clamp(2rem, 4.6vw, 3.4rem)", color: "var(--brand)" }}>
+          <h2 className="font-display font-semibold mt-4" style={{ fontSize: "clamp(2rem, 4.2vw, 3.2rem)", color: "var(--brand)" }}>
             Uruguay vende más autos y pierde más leads que nunca.
           </h2>
         </Reveal>
@@ -123,7 +123,7 @@ function Metodo() {
       <div className="wrap py-24 md:py-32">
         <Reveal className="max-w-3xl">
           <div className="mono-label" style={{ color: "#8fb0ff" }}>Método · 5 fases</div>
-          <h2 className="font-display font-semibold mt-4 text-paper" style={{ fontSize: "clamp(2rem, 4.6vw, 3.4rem)" }}>
+          <h2 className="font-display font-semibold mt-4 text-paper" style={{ fontSize: "clamp(2rem, 4.2vw, 3.2rem)" }}>
             Un sistema repetible para transformar automotoras.
           </h2>
           <p className="mt-6 text-body" style={{ color: "var(--paper-dim)" }}>
@@ -171,7 +171,7 @@ function ProductGallery() {
       <div className="wrap py-24 md:py-32">
         <Reveal className="max-w-3xl">
           <div className="mono-label" style={{ color: "var(--brand-accent)" }}>Neuro Build · en producción</div>
-          <h2 className="font-display font-semibold mt-4" style={{ fontSize: "clamp(2rem, 4.6vw, 3.4rem)", color: "var(--brand)" }}>
+          <h2 className="font-display font-semibold mt-4" style={{ fontSize: "clamp(2rem, 4.2vw, 3.2rem)", color: "var(--brand)" }}>
             Así se ve tu concesionaria cuando el sistema está andando.
           </h2>
           <p className="mt-6 text-body" style={{ color: "var(--fg-muted)" }}>
@@ -206,7 +206,7 @@ function NeuroScanSection() {
       <div className="wrap py-24 md:py-32">
         <Reveal className="max-w-3xl">
           <div className="mono-label" style={{ color: "var(--brand-accent)" }}>Fase 1 · Neuro Scan</div>
-          <h2 className="font-display font-semibold mt-4" style={{ fontSize: "clamp(2rem, 4.6vw, 3.4rem)", color: "var(--brand)" }}>
+          <h2 className="font-display font-semibold mt-4" style={{ fontSize: "clamp(2rem, 4.2vw, 3.2rem)", color: "var(--brand)" }}>
             Antes de vender tecnología, medimos cuánto estás perdiendo.
           </h2>
           <p className="mt-6 text-body" style={{ color: "var(--fg-muted)" }}>
@@ -234,7 +234,7 @@ function Modulos() {
       <div className="wrap py-24 md:py-32">
         <Reveal className="max-w-3xl">
           <div className="mono-label" style={{ color: "var(--brand-accent)" }}>Neuro Build · Módulos</div>
-          <h2 className="font-display font-semibold mt-4" style={{ fontSize: "clamp(2rem, 4.6vw, 3.4rem)", color: "var(--brand)" }}>
+          <h2 className="font-display font-semibold mt-4" style={{ fontSize: "clamp(2rem, 4.2vw, 3.2rem)", color: "var(--brand)" }}>
             Cinco piezas que se combinan según tu Blueprint.
           </h2>
           <p className="mt-6 text-body" style={{ color: "var(--fg-muted)" }}>
@@ -264,7 +264,7 @@ function Ofertas() {
       <div className="wrap py-24 md:py-32">
         <Reveal className="max-w-3xl">
           <div className="mono-label" style={{ color: "var(--brand-accent)" }}>Oferta comercial</div>
-          <h2 className="font-display font-semibold mt-4" style={{ fontSize: "clamp(2rem, 4.6vw, 3.4rem)", color: "var(--brand)" }}>
+          <h2 className="font-display font-semibold mt-4" style={{ fontSize: "clamp(2rem, 4.2vw, 3.2rem)", color: "var(--brand)" }}>
             Tres niveles. Empezás por donde estás.
           </h2>
           <p className="mt-6 text-body" style={{ color: "var(--fg-muted)" }}>
@@ -345,7 +345,7 @@ function Cases() {
         <Reveal className="grid gap-10 md:grid-cols-12">
           <div className="md:col-span-6">
             <div className="mono-label" style={{ color: "var(--brand-accent)" }}>Casos · cupo 2026</div>
-            <h2 className="font-display font-semibold mt-4" style={{ fontSize: "clamp(2rem, 4.6vw, 3.4rem)", color: "var(--brand)" }}>
+            <h2 className="font-display font-semibold mt-4" style={{ fontSize: "clamp(2rem, 4.2vw, 3.2rem)", color: "var(--brand)" }}>
               Vas a poder ser el primer caso público.
             </h2>
             <p className="mt-6 text-body" style={{ color: "var(--fg-muted)" }}>
