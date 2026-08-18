@@ -2,8 +2,13 @@ export const site = {
   name: "Neuro Studio",
   location: "Salto · Uruguay",
   email: "neurovidstudioia@gmail.com",
-  bookingUrl: "https://cal.com/neurostudio/diagnostico",
+  bookingUrl: "https://calendar.app.google/itbzQ1a5Bn24EeGH7",
+  whatsapp: "59898169358",
+  whatsappUrl:
+    "https://wa.me/59898169358?text=" +
+    encodeURIComponent("Hola, quiero coordinar una reunión para mi automotora."),
   nav: [
+    { href: "#diagnostico", label: "Diagnóstico" },
     { href: "#metodo", label: "Método" },
     { href: "#sistema", label: "Sistema" },
     { href: "#planes", label: "Planes" },
@@ -38,20 +43,6 @@ export const fases = [
     title: "Optimización",
     body: "Todos los meses medimos, corregimos y automatizamos más. El sistema mejora con tu negocio.",
   },
-];
-
-/** Áreas del diagnóstico */
-export const areas = [
-  { label: "Captación de leads", score: 62 },
-  { label: "Velocidad de respuesta", score: 31 },
-  { label: "Gestión de vendedores", score: 54 },
-  { label: "Control de stock", score: 67 },
-  { label: "Marketing", score: 42 },
-  { label: "Rentabilidad", score: 46 },
-  { label: "Datos y reportes", score: 35 },
-  { label: "Atención al cliente", score: 28 },
-  { label: "Automatización", score: 18 },
-  { label: "Dirección", score: 21 },
 ];
 
 /** Lo que construimos — nombres directos */

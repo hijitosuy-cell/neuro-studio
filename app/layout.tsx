@@ -4,6 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { WhatsappFab } from "@/components/whatsapp-fab";
 
 const display = Poppins({
   variable: "--font-display",
@@ -100,6 +101,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <SiteHeader />
         <main id="main">{children}</main>
         <SiteFooter />
+        <WhatsappFab />
       </body>
     </html>
   );

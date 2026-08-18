@@ -1,9 +1,10 @@
 import Image from "next/image";
 import Script from "next/script";
-import { site, fases, areas, sistema, planes, datos } from "@/lib/site";
+import { site, fases, sistema, planes, datos } from "@/lib/site";
 import { WhatsappMock } from "@/components/brand-mark";
 import { CategoryMarquee } from "@/components/ops-ticker";
-import { Reveal, CountUp } from "@/components/reveal";
+import { Reveal } from "@/components/reveal";
+import { DiagnosticoTool } from "@/components/diagnostico-tool";
 
 export default function Home() {
   return (
@@ -46,14 +47,12 @@ function Hero() {
             está escapando y construimos el sistema para recuperarlo.
           </p>
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-            <a href={site.bookingUrl} target="_blank" rel="noopener noreferrer" className="btn btn-solid-on-dark">
-              Pedir diagnóstico gratis
+            <a href="#diagnostico" className="btn btn-solid-on-dark">
+              Hacer el diagnóstico gratis
             </a>
-            <a href="#metodo" className="btn btn-on-dark">Ver cómo trabajamos</a>
-          </div>
-          <div className="mt-8 flex items-center gap-2 text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>
-            <span className="signal-dot" />
-            Tomamos 2 clientes nuevos este semestre
+            <a href={site.bookingUrl} target="_blank" rel="noopener noreferrer" className="btn btn-on-dark">
+              Agendar reunión
+            </a>
           </div>
         </Reveal>
 
@@ -119,47 +118,25 @@ function Metodo() {
   );
 }
 
-/* ─── 4. Diagnóstico (dark) ─── */
+/* ─── 4. Diagnóstico interactivo ─── */
 function Diagnostico() {
-  const total = Math.round(areas.reduce((s, a) => s + a.score, 0) / areas.length);
   return (
-    <section style={{ background: "var(--ink)" }}>
+    <section id="diagnostico" className="border-b rule scroll-mt-24">
       <div className="wrap py-24 md:py-32">
         <Reveal className="max-w-2xl">
-          <div className="label" style={{ color: "#8fb0ff" }}>Paso 1 · Diagnóstico</div>
-          <h2 className="font-display font-semibold mt-4 text-paper" style={{ fontSize: "clamp(2rem, 4vw, 3.25rem)" }}>
-            Un puntaje que te dice cuánta plata dejás sobre la mesa.
+          <div className="label" style={{ color: "var(--brand-accent)" }}>Diagnóstico gratis</div>
+          <h2 className="font-display font-semibold mt-4" style={{ fontSize: "clamp(2rem, 4vw, 3.25rem)", color: "var(--brand)" }}>
+            Descubrí en qué porcentaje está trabajando tu automotora.
           </h2>
+          <p className="mt-6 text-body" style={{ color: "var(--fg-muted)" }}>
+            Respondé y te damos un puntaje por área y uno general. Sin costo, sin
+            registro, sin que te llamemos si no querés.
+          </p>
         </Reveal>
 
-        <Reveal className="mt-14 grid gap-12 lg:grid-cols-[300px_1fr] lg:gap-16">
-          <div>
-            <div className="font-display font-semibold text-paper leading-none" style={{ fontSize: "6rem" }}>
-              <CountUp end={total} />
-              <span style={{ color: "var(--paper-dim)", fontSize: "3rem" }}>/100</span>
-            </div>
-            <p className="mt-4 text-body" style={{ color: "var(--paper-dim)" }}>
-              Puntaje típico de una automotora uruguaya antes de trabajar con nosotros.
-            </p>
-            <a href={site.bookingUrl} target="_blank" rel="noopener noreferrer" className="btn btn-solid-on-dark mt-8">
-              Ver el tuyo
-            </a>
-          </div>
-
-          <ul className="grid gap-4 sm:grid-cols-2">
-            {areas.map((a) => (
-              <li key={a.label} className="text-sm">
-                <div className="flex items-baseline justify-between text-paper">
-                  <span>{a.label}</span>
-                  <span style={{ color: "var(--paper-dim)" }}>{a.score}</span>
-                </div>
-                <div className="score-bar-track mt-2" style={{ "--score": `${a.score}%` } as React.CSSProperties}>
-                  <div className="score-bar-fill" />
-                </div>
-              </li>
-            ))}
-          </ul>
-        </Reveal>
+        <div className="mt-14">
+          <DiagnosticoTool />
+        </div>
       </div>
     </section>
   );
@@ -223,10 +200,10 @@ function Planes() {
                   ))}
                 </ul>
                 <a
-                  href={site.bookingUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`mt-auto pt-8 ${p.featured ? "" : ""}`}
+                  href={p.name === "Diagnóstico" ? "#diagnostico" : site.bookingUrl}
+                  target={p.name === "Diagnóstico" ? undefined : "_blank"}
+                  rel={p.name === "Diagnóstico" ? undefined : "noopener noreferrer"}
+                  className="mt-auto pt-8"
                   style={{ color: "var(--brand-accent)", fontWeight: 500 }}
                 >
                   Empezar →
@@ -311,10 +288,18 @@ function CTA() {
           </h2>
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <a href={site.bookingUrl} target="_blank" rel="noopener noreferrer" className="btn btn-solid-on-dark">
-              Agendar diagnóstico
+              Agendar reunión
             </a>
-            <a href={`mailto:${site.email}`} className="btn btn-on-dark">{site.email}</a>
+            <a href={site.whatsappUrl} target="_blank" rel="noopener noreferrer" className="btn btn-on-dark">
+              Escribinos por WhatsApp
+            </a>
           </div>
+          <p className="mt-6 text-sm" style={{ color: "var(--paper-dim)" }}>
+            o por mail a{" "}
+            <a href={`mailto:${site.email}`} className="underline" style={{ color: "white" }}>
+              {site.email}
+            </a>
+          </p>
         </Reveal>
       </div>
     </section>
