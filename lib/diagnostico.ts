@@ -34,7 +34,7 @@ export const secciones: Seccion[] = [
       { tipo: "texto", id: "empresa", label: "Nombre de la automotora", placeholder: "Auto Sur", requerido: true, express: true },
       { tipo: "texto", id: "contacto", label: "Tu nombre", placeholder: "Marcos", requerido: true, express: true },
       { tipo: "texto", id: "ciudad", label: "Ciudad", placeholder: "Salto", express: true },
-      { tipo: "texto", id: "telefono", label: "WhatsApp", placeholder: "099 123 456" },
+      { tipo: "texto", id: "telefono", label: "WhatsApp", placeholder: "099 123 456", express: true },
       { tipo: "numero", id: "sucursales", label: "¿Cuántas sucursales tienen?", placeholder: "1" },
       { tipo: "numero", id: "vendedores", label: "¿Cuántos vendedores trabajan?", placeholder: "4", express: true },
       { tipo: "numero", id: "stock_cant", label: "¿Cuántos vehículos tienen en stock aprox.?", placeholder: "40" },
