@@ -2,113 +2,112 @@
 
 import { useMemo, useState } from "react";
 import {
-  areas,
-  preguntasDe,
-  totalPreguntas,
+  camposDe,
+  contarCampos,
+  calcular,
+  recomendar,
   interpretar,
   WHATSAPP,
   CALENDAR_URL,
-  type Pregunta,
+  type Campo,
 } from "@/lib/diagnostico";
 
 type Modo = "express" | "completo";
-type Paso = "inicio" | "datos" | "preguntas" | "resultado";
+type Paso = "inicio" | "form" | "resultado";
+type Valor = string | string[] | undefined;
 
 export function DiagnosticoTool() {
   const [paso, setPaso] = useState<Paso>("inicio");
   const [modo, setModo] = useState<Modo>("express");
-  const [empresa, setEmpresa] = useState("");
-  const [nombre, setNombre] = useState("");
-  const [errorDatos, setErrorDatos] = useState("");
-  const [respuestas, setRespuestas] = useState<Record<string, number>>({});
-  const [indice, setIndice] = useState(0);
+  const [seccionIdx, setSeccionIdx] = useState(0);
+  const [r, setR] = useState<Record<string, Valor>>({});
+  const [errores, setErrores] = useState<Record<string, string>>({});
+  const [elegidos, setElegidos] = useState<string[]>([]);
 
-  const preguntas = useMemo(() => preguntasDe(modo), [modo]);
-  const actual = preguntas[indice];
+  const bloques = useMemo(() => camposDe(modo), [modo]);
+  const bloque = bloques[seccionIdx];
 
-  const resultado = useMemo(() => {
-    const porArea = areas.map((a) => {
-      const suyas = a.preguntas.filter((p) => respuestas[p.id] !== undefined);
-      const score = suyas.length
-        ? Math.round(suyas.reduce((s, p) => s + respuestas[p.id], 0) / suyas.length)
-        : 0;
-      return { nombre: a.nombre, score, respondidas: suyas.length };
-    });
-    const conDatos = porArea.filter((a) => a.respondidas > 0);
-    const total = conDatos.length
-      ? Math.round(conDatos.reduce((s, a) => s + a.score, 0) / conDatos.length)
-      : 0;
-    const criticas = [...conDatos].sort((a, b) => a.score - b.score).slice(0, 3);
-    return { porArea, total, criticas };
-  }, [respuestas]);
+  const resultado = useMemo(() => calcular(r), [r]);
+  const recomendados = useMemo(() => recomendar(r), [r]);
 
   function empezar(m: Modo) {
     setModo(m);
-    setRespuestas({});
-    setIndice(0);
-    setPaso("datos");
+    setR({});
+    setErrores({});
+    setElegidos([]);
+    setSeccionIdx(0);
+    setPaso("form");
   }
 
-  function confirmarDatos() {
-    if (!empresa.trim()) {
-      setErrorDatos("Escribí el nombre de tu automotora para continuar.");
+  function set(id: string, v: Valor) {
+    setR((prev) => ({ ...prev, [id]: v }));
+    if (errores[id]) setErrores((e) => ({ ...e, [id]: "" }));
+  }
+
+  function avanzar() {
+    const faltan: Record<string, string> = {};
+    for (const c of bloque.campos) {
+      const req = "requerido" in c && c.requerido;
+      const v = r[c.id];
+      const vacio = v === undefined || v === "" || (Array.isArray(v) && v.length === 0);
+      if (req && vacio) faltan[c.id] = "Completá este campo para seguir.";
+    }
+    if (Object.keys(faltan).length) {
+      setErrores(faltan);
       return;
     }
-    setErrorDatos("");
-    setPaso("preguntas");
-  }
-
-  function responder(p: Pregunta, score: number) {
-    setRespuestas((r) => ({ ...r, [p.id]: score }));
-    if (indice + 1 < preguntas.length) {
-      setIndice(indice + 1);
+    if (seccionIdx + 1 < bloques.length) {
+      setSeccionIdx(seccionIdx + 1);
+      window.document.getElementById("diagnostico")?.scrollIntoView({ behavior: "smooth", block: "start" });
     } else {
+      setElegidos(recomendados.slice(0, 3).map((s) => s.id));
       setPaso("resultado");
+      window.document.getElementById("diagnostico")?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   }
 
-  const mensajeWhatsapp = useMemo(() => {
-    const lineas = [
-      `Hola, soy ${nombre || "—"} de ${empresa || "—"}.`,
+  const mensaje = useMemo(() => {
+    const nombresElegidos = recomendados.filter((s) => elegidos.includes(s.id)).map((s) => s.nombre);
+    const l = [
+      `Hola, soy ${r.contacto || "—"} de ${r.empresa || "—"}${r.ciudad ? ` (${r.ciudad})` : ""}.`,
       "",
-      `Hice el diagnóstico ${modo === "express" ? "express" : "completo"} en la web.`,
-      `Puntaje: ${resultado.total}/100`,
+      `Hice el diagnóstico ${modo} en la web.`,
+      `Puntaje general: ${resultado.total}/100`,
       "",
       "Áreas más flojas:",
       ...resultado.criticas.map((c) => `• ${c.nombre}: ${c.score}/100`),
-      "",
-      "Quiero coordinar una reunión.",
     ];
-    return encodeURIComponent(lineas.join("\n"));
-  }, [nombre, empresa, modo, resultado]);
-
-  const mensajeDirecto = encodeURIComponent(
-    "Hola, quiero coordinar una reunión para que hagan el diagnóstico de mi automotora."
-  );
+    if (nombresElegidos.length) {
+      l.push("", "Me interesa:", ...nombresElegidos.map((n) => `• ${n}`));
+    }
+    if (r.dolor) l.push("", `Mi principal problema: ${r.dolor}`);
+    l.push("", "Quiero coordinar una reunión.");
+    return encodeURIComponent(l.join("\n"));
+  }, [r, modo, resultado, recomendados, elegidos]);
 
   /* ── Inicio ── */
   if (paso === "inicio") {
     return (
       <div className="grid gap-5 md:grid-cols-3">
-        <Opcion
+        <Tarjeta
           titulo="Diagnóstico express"
-          meta={`${totalPreguntas("express")} preguntas · 3 minutos`}
-          texto="Una pregunta clave por área. Te da un panorama rápido de dónde estás parado."
+          meta={`${contarCampos("express")} preguntas · 4 minutos`}
+          texto="Lo esencial de cada área. Suficiente para ver dónde estás parado."
           cta="Empezar express"
           onClick={() => empezar("express")}
         />
-        <Opcion
+        <Tarjeta
           destacado
           titulo="Diagnóstico completo"
-          meta={`${totalPreguntas("completo")} preguntas · 10 minutos`}
-          texto="Las 10 áreas a fondo. El mismo relevamiento que hacemos en una reunión, pero lo hacés vos."
+          meta={`${contarCampos("completo")} preguntas · 12 minutos`}
+          texto="El relevamiento entero, el mismo que hacemos en una reunión. Resultado mucho más preciso."
           cta="Empezar completo"
           onClick={() => empezar("completo")}
         />
-        <Opcion
+        <Tarjeta
           titulo="Que lo hagamos nosotros"
           meta="Reunión de 30 minutos"
-          texto="Agendás y lo hacemos juntos por videollamada, sin que completes nada ahora."
+          texto="Agendás y lo completamos juntos por videollamada."
           cta="Agendar reunión"
           href={CALENDAR_URL}
         />
@@ -116,104 +115,61 @@ export function DiagnosticoTool() {
     );
   }
 
-  /* ── Datos ── */
-  if (paso === "datos") {
+  /* ── Formulario ── */
+  if (paso === "form" && bloque) {
     return (
-      <div className="surface mx-auto max-w-xl p-8">
-        <div className="label" style={{ color: "var(--brand-accent)" }}>
-          Diagnóstico {modo === "express" ? "express" : "completo"}
-        </div>
-        <h3 className="font-display font-semibold mt-3 text-2xl" style={{ color: "var(--brand)" }}>
-          Antes de empezar
-        </h3>
-        <div className="mt-6 grid gap-4">
-          <label className="grid gap-1.5">
-            <span className="text-sm font-medium">Nombre de tu automotora</span>
-            <input
-              value={empresa}
-              onChange={(e) => { setEmpresa(e.target.value); if (errorDatos) setErrorDatos(""); }}
-              placeholder="Auto Sur"
-              className="h-12 rounded-lg border px-4"
-              style={{ borderColor: "var(--rule-strong)", background: "white" }}
-            />
-          </label>
-          <label className="grid gap-1.5">
-            <span className="text-sm font-medium">Tu nombre <span style={{ color: "var(--fg-muted)", fontWeight: 400 }}>(opcional)</span></span>
-            <input
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
-              placeholder="Marcos"
-              className="h-12 rounded-lg border px-4"
-              style={{ borderColor: "var(--rule-strong)", background: "white" }}
-            />
-          </label>
-          {errorDatos && (
-            <p className="text-sm" style={{ color: "#dc2626" }}>{errorDatos}</p>
-          )}
-        </div>
-        <div className="mt-7 flex flex-wrap gap-3">
-          <button onClick={confirmarDatos} className="btn btn-brand">
-            Comenzar
-          </button>
-          <button onClick={() => setPaso("inicio")} className="btn">Volver</button>
-        </div>
-        <p className="mt-5 text-xs" style={{ color: "var(--fg-muted)" }}>
-          No guardamos nada en ningún servidor. Los datos quedan en tu navegador hasta que decidas enviarlos.
-        </p>
-      </div>
-    );
-  }
-
-  /* ── Preguntas ── */
-  if (paso === "preguntas" && actual) {
-    const pct = Math.round((indice / preguntas.length) * 100);
-    const areaActual = areas.find((a) => a.preguntas.some((p) => p.id === actual.id));
-    return (
-      <div className="surface mx-auto max-w-2xl p-8 md:p-10">
-        <div className="flex items-baseline justify-between text-sm" style={{ color: "var(--fg-muted)" }}>
-          <span>{areaActual?.nombre}</span>
-          <span>{indice + 1} de {preguntas.length}</span>
+      <div className="mx-auto max-w-3xl">
+        <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+          {bloques.map((b, i) => (
+            <span
+              key={b.seccion.id}
+              style={{
+                color: i === seccionIdx ? "var(--brand)" : "var(--fg-muted)",
+                fontWeight: i === seccionIdx ? 600 : 400,
+                opacity: i > seccionIdx ? 0.5 : 1,
+              }}
+            >
+              {b.seccion.nombre}
+            </span>
+          ))}
         </div>
         <div className="mt-3 h-1.5 overflow-hidden rounded-full" style={{ background: "rgba(11,28,63,0.08)" }}>
           <div
             className="h-full rounded-full transition-all duration-300"
-            style={{ width: `${pct}%`, background: "var(--brand-accent)" }}
+            style={{ width: `${(seccionIdx / bloques.length) * 100}%`, background: "var(--brand-accent)" }}
           />
         </div>
 
-        <h3 className="font-display font-semibold mt-8 text-2xl md:text-3xl" style={{ color: "var(--brand)" }}>
-          {actual.q}
-        </h3>
-        {actual.help && (
-          <p className="mt-2 text-sm" style={{ color: "var(--fg-muted)" }}>{actual.help}</p>
-        )}
+        <div className="surface mt-6 p-7 md:p-9">
+          <div className="label" style={{ color: "var(--brand-accent)" }}>
+            Sección {seccionIdx + 1} de {bloques.length}
+          </div>
+          <h3 className="font-display font-semibold mt-2 text-2xl md:text-3xl" style={{ color: "var(--brand)" }}>
+            {bloque.seccion.nombre}
+          </h3>
 
-        <div className="mt-7 grid gap-3">
-          {actual.opciones.map((o) => (
+          <div className="mt-8 grid gap-7">
+            {bloque.campos.map((c) => (
+              <CampoInput key={c.id} campo={c} valor={r[c.id]} error={errores[c.id]} onChange={(v) => set(c.id, v)} />
+            ))}
+          </div>
+
+          <div className="mt-9 flex flex-wrap items-center gap-3">
+            <button onClick={avanzar} className="btn btn-brand">
+              {seccionIdx + 1 < bloques.length ? "Siguiente" : "Ver resultado"}
+            </button>
             <button
-              key={o.label}
-              onClick={() => responder(actual, o.score)}
-              className="rounded-xl border px-5 py-4 text-left transition hover:border-current"
-              style={{ borderColor: "var(--rule-strong)" }}
+              onClick={() => (seccionIdx > 0 ? setSeccionIdx(seccionIdx - 1) : setPaso("inicio"))}
+              className="btn"
             >
-              {o.label}
+              Anterior
             </button>
-          ))}
+          </div>
         </div>
 
-        <div className="mt-6 flex justify-between text-sm">
-          <button
-            onClick={() => (indice > 0 ? setIndice(indice - 1) : setPaso("datos"))}
-            style={{ color: "var(--fg-muted)" }}
-          >
-            ← Atrás
-          </button>
-          {Object.keys(respuestas).length > 0 && (
-            <button onClick={() => setPaso("resultado")} className="prose-link">
-              Ver resultado con lo respondido
-            </button>
-          )}
-        </div>
+        <p className="mt-4 text-center text-xs" style={{ color: "var(--fg-muted)" }}>
+          No guardamos nada en ningún servidor. Todo queda en tu navegador hasta que decidas enviarlo.
+        </p>
       </div>
     );
   }
@@ -224,10 +180,10 @@ export function DiagnosticoTool() {
     <div className="mx-auto max-w-4xl">
       <div className="rounded-2xl p-8 md:p-12" style={{ background: "var(--ink)" }}>
         <div className="label" style={{ color: "#8fb0ff" }}>
-          Resultado · {empresa || "tu automotora"}
+          Resultado · {String(r.empresa || "tu automotora")}
         </div>
 
-        <div className="mt-6 grid gap-10 md:grid-cols-[240px_1fr] md:gap-14">
+        <div className="mt-6 grid gap-10 md:grid-cols-[230px_1fr] md:gap-14">
           <div>
             <div className="font-display font-semibold text-paper leading-none" style={{ fontSize: "5.5rem" }}>
               {resultado.total}
@@ -239,43 +195,103 @@ export function DiagnosticoTool() {
 
           <ul className="grid gap-3.5">
             {resultado.porArea.map((a) => (
-              <li key={a.nombre} className="text-sm">
+              <li key={a.id} className="text-sm">
                 <div className="flex items-baseline justify-between text-paper">
-                  <span style={{ opacity: a.respondidas ? 1 : 0.4 }}>{a.nombre}</span>
-                  <span style={{ color: "var(--paper-dim)" }}>
-                    {a.respondidas ? `${a.score}` : "—"}
-                  </span>
+                  <span style={{ opacity: a.respondidas ? 1 : 0.45 }}>{a.nombre}</span>
+                  <span style={{ color: "var(--paper-dim)" }}>{a.respondidas ? a.score : "—"}</span>
                 </div>
                 <div className="score-bar-track mt-1.5">
-                  <div className="score-bar-fill" style={{ width: `${a.score}%`, transition: "width 900ms cubic-bezier(0.22,1,0.36,1)" }} />
+                  <div
+                    className="score-bar-fill"
+                    style={{ width: `${a.score}%`, transition: "width 900ms cubic-bezier(0.22,1,0.36,1)" }}
+                  />
                 </div>
               </li>
             ))}
           </ul>
         </div>
+      </div>
 
-        <div className="mt-10 border-t pt-8" style={{ borderColor: "rgba(255,255,255,0.14)" }}>
-          <p className="text-paper text-body">
-            Con este resultado ya podemos armarte un plan concreto. Elegí cómo seguir:
+      {recomendados.length > 0 && (
+        <div className="mt-10">
+          <h3 className="font-display font-semibold text-2xl" style={{ color: "var(--brand)" }}>
+            Lo que te recomendamos
+          </h3>
+          <p className="mt-2 text-sm" style={{ color: "var(--fg-muted)" }}>
+            Elegí lo que te interesa y lo incluimos en la propuesta.
           </p>
-          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-            <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="btn btn-solid-on-dark">
-              Agendar reunión
-            </a>
-            <a
-              href={`https://wa.me/${WHATSAPP}?text=${mensajeWhatsapp}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-on-dark"
-            >
-              Enviar resultado por WhatsApp
-            </a>
-          </div>
+
+          <ul className="mt-6 grid gap-4">
+            {recomendados.map((s) => {
+              const activo = elegidos.includes(s.id);
+              return (
+                <li key={s.id}>
+                  <button
+                    onClick={() =>
+                      setElegidos((e) => (activo ? e.filter((x) => x !== s.id) : [...e, s.id]))
+                    }
+                    aria-pressed={activo}
+                    className="surface w-full p-6 text-left transition"
+                    style={activo ? { border: "2px solid var(--brand)", background: "rgba(20,42,82,0.03)" } : {}}
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <div className="font-display font-semibold text-xl" style={{ color: "var(--brand)" }}>
+                          {s.nombre}
+                        </div>
+                        <p className="mt-2 text-sm" style={{ color: "var(--fg-muted)" }}>{s.desc}</p>
+                      </div>
+                      <span
+                        aria-hidden
+                        className="mt-1 grid h-6 w-6 shrink-0 place-items-center rounded-md text-xs text-white"
+                        style={{
+                          background: activo ? "var(--brand)" : "transparent",
+                          border: activo ? "none" : "1.5px solid var(--rule-strong)",
+                        }}
+                      >
+                        {activo ? "✓" : ""}
+                      </span>
+                    </div>
+                    <div className="mt-4 border-t rule pt-3">
+                      <div className="label" style={{ fontSize: 12 }}>Por qué</div>
+                      <ul className="mt-2 grid gap-1 text-sm" style={{ color: "var(--fg-muted)" }}>
+                        {s.razones.map((m) => (
+                          <li key={m}>· {m}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
+
+      <div className="mt-10 rounded-2xl p-8 text-center" style={{ background: "var(--bg-2)" }}>
+        <h3 className="font-display font-semibold text-2xl" style={{ color: "var(--brand)" }}>
+          Coordinemos una reunión
+        </h3>
+        <p className="mt-2 text-sm" style={{ color: "var(--fg-muted)" }}>
+          Te llevamos el resultado analizado y una propuesta concreta.
+        </p>
+        <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="btn btn-brand">
+            Elegir día y hora
+          </a>
+          <a
+            href={`https://wa.me/${WHATSAPP}?text=${mensaje}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn"
+          >
+            Enviar por WhatsApp
+          </a>
         </div>
       </div>
 
       <div className="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm">
-        <button onClick={() => { setRespuestas({}); setIndice(0); setPaso("inicio"); }} style={{ color: "var(--fg-muted)" }}>
+        <button onClick={() => { setR({}); setElegidos([]); setSeccionIdx(0); setPaso("inicio"); }} style={{ color: "var(--fg-muted)" }}>
           Volver a empezar
         </button>
         {modo === "express" && (
@@ -288,39 +304,117 @@ export function DiagnosticoTool() {
   );
 }
 
-function Opcion({
-  titulo,
-  meta,
-  texto,
-  cta,
-  onClick,
-  href,
-  destacado,
+/* ─── Campos ─── */
+
+function CampoInput({
+  campo,
+  valor,
+  error,
+  onChange,
 }: {
-  titulo: string;
-  meta: string;
-  texto: string;
-  cta: string;
-  onClick?: () => void;
-  href?: string;
-  destacado?: boolean;
+  campo: Campo;
+  valor: Valor;
+  error?: string;
+  onChange: (v: Valor) => void;
+}) {
+  const req = "requerido" in campo && campo.requerido;
+  const base = {
+    borderColor: error ? "#dc2626" : "var(--rule-strong)",
+    background: "white",
+  };
+
+  return (
+    <div className="grid gap-1.5">
+      <label htmlFor={campo.id} className="text-sm font-medium">
+        {campo.label}
+        {!req && campo.tipo !== "multi" && (
+          <span style={{ color: "var(--fg-muted)", fontWeight: 400 }}> (opcional)</span>
+        )}
+      </label>
+      {"ayuda" in campo && campo.ayuda && (
+        <p className="text-xs" style={{ color: "var(--fg-muted)" }}>{campo.ayuda}</p>
+      )}
+
+      {campo.tipo === "texto" && (
+        <input id={campo.id} value={(valor as string) ?? ""} placeholder={campo.placeholder}
+          onChange={(e) => onChange(e.target.value)}
+          className="h-12 rounded-lg border px-4" style={base} />
+      )}
+
+      {campo.tipo === "numero" && (
+        <input id={campo.id} type="number" inputMode="numeric" value={(valor as string) ?? ""} placeholder={campo.placeholder}
+          onChange={(e) => onChange(e.target.value)}
+          className="h-12 rounded-lg border px-4" style={base} />
+      )}
+
+      {campo.tipo === "textarea" && (
+        <textarea id={campo.id} rows={3} value={(valor as string) ?? ""} placeholder={campo.placeholder}
+          onChange={(e) => onChange(e.target.value)}
+          className="rounded-lg border p-4" style={base} />
+      )}
+
+      {campo.tipo === "select" && (
+        <div className="grid gap-2 sm:grid-cols-2">
+          {campo.opciones.map((o) => {
+            const activo = valor === o.label;
+            return (
+              <button key={o.label} type="button" onClick={() => onChange(o.label)} aria-pressed={activo}
+                className="rounded-lg border px-4 py-3 text-left text-sm transition"
+                style={{
+                  borderColor: activo ? "var(--brand)" : error ? "#dc2626" : "var(--rule-strong)",
+                  borderWidth: activo ? 2 : 1,
+                  background: activo ? "rgba(20,42,82,0.04)" : "white",
+                  fontWeight: activo ? 500 : 400,
+                }}>
+                {o.label}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
+      {campo.tipo === "multi" && (
+        <div className="flex flex-wrap gap-2">
+          {campo.opciones.map((o) => {
+            const arr = (valor as string[]) ?? [];
+            const activo = arr.includes(o.label);
+            return (
+              <button key={o.label} type="button" aria-pressed={activo}
+                onClick={() => onChange(activo ? arr.filter((x) => x !== o.label) : [...arr, o.label])}
+                className="rounded-full border px-4 py-2 text-sm transition"
+                style={{
+                  borderColor: activo ? "var(--brand)" : "var(--rule-strong)",
+                  borderWidth: activo ? 2 : 1,
+                  background: activo ? "rgba(20,42,82,0.04)" : "white",
+                  fontWeight: activo ? 500 : 400,
+                }}>
+                {o.label}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
+      {error && <p className="text-sm" style={{ color: "#dc2626" }}>{error}</p>}
+    </div>
+  );
+}
+
+function Tarjeta({
+  titulo, meta, texto, cta, onClick, href, destacado,
+}: {
+  titulo: string; meta: string; texto: string; cta: string;
+  onClick?: () => void; href?: string; destacado?: boolean;
 }) {
   return (
-    <div
-      className="surface flex flex-col p-7"
-      style={destacado ? { border: "2px solid var(--brand)" } : {}}
-    >
+    <div className="surface flex flex-col p-7" style={destacado ? { border: "2px solid var(--brand)" } : {}}>
       <h3 className="font-display font-semibold text-xl" style={{ color: "var(--brand)" }}>{titulo}</h3>
       <div className="mt-1 text-sm" style={{ color: "var(--fg-muted)" }}>{meta}</div>
-      <p className="mt-4 text-sm flex-1" style={{ color: "var(--fg-muted)" }}>{texto}</p>
+      <p className="mt-4 flex-1 text-sm" style={{ color: "var(--fg-muted)" }}>{texto}</p>
       {href ? (
-        <a href={href} target="_blank" rel="noopener noreferrer" className={`btn mt-6 ${destacado ? "btn-brand" : ""}`}>
-          {cta}
-        </a>
+        <a href={href} target="_blank" rel="noopener noreferrer" className={`btn mt-6 ${destacado ? "btn-brand" : ""}`}>{cta}</a>
       ) : (
-        <button onClick={onClick} className={`btn mt-6 ${destacado ? "btn-brand" : ""}`}>
-          {cta}
-        </button>
+        <button onClick={onClick} className={`btn mt-6 ${destacado ? "btn-brand" : ""}`}>{cta}</button>
       )}
     </div>
   );
