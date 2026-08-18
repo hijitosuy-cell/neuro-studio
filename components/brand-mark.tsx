@@ -20,12 +20,12 @@ export function NeuroPanelMock() {
           <span className="grid h-7 w-7 place-items-center rounded-lg text-[11px] font-semibold text-white" style={{ background: "linear-gradient(135deg,#2f5fd6,#7c4dff)" }}>◉</span>
           <div>
             <div className="text-[13px] font-semibold text-paper">Neuro Twin</div>
-            <div className="text-[10px]" style={{ color: "var(--paper-dim)" }}>El gemelo digital de tu automotora</div>
+            <div className="text-[11px]" style={{ color: "var(--paper-dim)" }}>El gemelo digital de tu automotora</div>
           </div>
         </div>
         <div className="flex gap-1.5">
           {["Modo CEO", "Embudo", "Salud"].map((t, i) => (
-            <span key={t} className="rounded-md px-2 py-1 text-[10px]" style={{ background: i === 0 ? "rgba(47,95,214,0.25)" : "rgba(255,255,255,0.04)", color: i === 0 ? "#8fb0ff" : "var(--paper-dim)" }}>{t}</span>
+            <span key={t} className="rounded-md px-2 py-1 text-[11px]" style={{ background: i === 0 ? "rgba(47,95,214,0.25)" : "rgba(255,255,255,0.04)", color: i === 0 ? "#8fb0ff" : "var(--paper-dim)" }}>{t}</span>
           ))}
         </div>
       </div>
@@ -56,7 +56,7 @@ export function NeuroPanelMock() {
                   strokeDasharray={`${(a.val / 100) * 94} 94`} transform="rotate(-90 18 18)" />
                 <text x="18" y="21" textAnchor="middle" fontSize="9" fill="#fff">{a.val}</text>
               </svg>
-              <span className="text-[8.5px]" style={{ color: "var(--paper-dim)" }}>{a.label}</span>
+              <span className="text-[11px]" style={{ color: "var(--paper-dim)" }}>{a.label}</span>
             </div>
           ))}
         </div>
@@ -68,7 +68,7 @@ export function NeuroPanelMock() {
         <ul className="grid gap-1.5">
           {recs.map((r) => (
             <li key={r.n} className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-[11.5px]" style={{ background: "rgba(255,255,255,0.03)" }}>
-              <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full text-[10px] font-semibold text-white" style={{ background: r.tone }}>{r.n}</span>
+              <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full text-[11px] font-semibold text-white" style={{ background: r.tone }}>{r.n}</span>
               <span className="text-paper">{r.t}</span>
               <span className="ml-auto" style={{ color: "var(--paper-dim)" }}>›</span>
             </li>
@@ -100,14 +100,14 @@ export function SaasMock() {
       <div className="grid grid-cols-2 gap-2.5 p-3 sm:grid-cols-4">
         {kpis.map((k) => (
           <div key={k.label} className="rounded-lg p-3" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
-            <div className="text-[10px]" style={{ color: "var(--paper-dim)" }}>{k.label}</div>
+            <div className="text-[11px]" style={{ color: "var(--paper-dim)" }}>{k.label}</div>
             <div className="mt-1 font-display text-xl font-semibold" style={{ color: k.tone }}>{k.value}</div>
           </div>
         ))}
       </div>
       <div className="px-3 pb-3">
         <div className="rounded-lg p-3" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
-          <div className="text-[10px]" style={{ color: "var(--paper-dim)" }}>Ventas · últimos 8 meses</div>
+          <div className="text-[11px]" style={{ color: "var(--paper-dim)" }}>Ventas · últimos 8 meses</div>
           <div className="mt-3 flex h-20 items-end gap-1.5">
             {bars.map((h, i) => (
               <span key={i} className="flex-1 rounded-sm" style={{ height: `${h}%`, background: i === bars.length - 1 ? "#8fb0ff" : "var(--brand-accent)", opacity: 0.4 + i / bars.length / 1.6 }} />

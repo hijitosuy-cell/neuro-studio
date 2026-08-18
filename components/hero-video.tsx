@@ -48,7 +48,6 @@ export function HeroVideo() {
       </div>
       {/* Velo azulado para que resalten los textos */}
       <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(6,10,22,0.7), rgba(6,10,22,0.92))" }} />
-      <div className="bg-grid absolute inset-0" />
     </div>
   );
 }

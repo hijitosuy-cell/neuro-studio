@@ -24,6 +24,7 @@ export default function Home() {
       <div className="horizon horizon-dark" aria-hidden />
       <Metodo />
       <div className="horizon horizon-light" aria-hidden />
+      <Producto />
       <Servicios />
       <div className="horizon horizon-dark" aria-hidden />
       <Agendar />
@@ -79,13 +80,12 @@ function Diagnostico() {
   );
 }
 
-/* ─── 3. Método (OSCURO) ─── */
+/* ─── 3. Método (OSCURO): proceso en bloques conectados ─── */
 function Metodo() {
-  const { t, fases, servicios } = useLang();
+  const { t, fases } = useLang();
   return (
     <section id="metodo" className="relative overflow-hidden" style={{ background: "var(--page)" }}>
-      <div aria-hidden className="bg-grid absolute inset-0" />
-      <div aria-hidden className="glow-blob glow-blob--brand animate-blob" style={{ width: 460, height: 460, top: 60, left: -140 }} />
+      <div aria-hidden className="glow-blob glow-blob--brand animate-blob" style={{ width: 460, height: 460, top: 40, left: -160 }} />
       <div className="wrap relative py-24 md:py-28">
         <Reveal className="max-w-2xl">
           <div className="label" style={{ color: "#8fb0ff" }}>{t.metodo.kicker}</div>
@@ -93,56 +93,60 @@ function Metodo() {
           <p className="mt-5 text-lg" style={{ color: "var(--paper-dim)" }}>{t.metodo.sub}</p>
         </Reveal>
 
-        <div className="relative mt-16">
-          <div aria-hidden className="absolute left-0 right-0 top-6 hidden h-px lg:block" style={{ background: "linear-gradient(90deg, transparent, rgba(47,95,214,0.6) 12%, rgba(47,95,214,0.6) 88%, transparent)" }} />
-          <ol className="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-5">
-            {fases.map((f, i) => (
-              <Reveal as="li" key={f.n} delay={i * 90} className="relative">
-                <div className="relative z-10 grid h-12 w-12 place-items-center rounded-full font-display font-semibold text-base text-white" style={{ background: "var(--brand-accent)", boxShadow: "0 0 0 4px var(--page), 0 0 24px -4px rgba(47,95,214,0.8)" }}>{f.n}</div>
-                <div className="mt-5">
-                  <div className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#8fb0ff" }}>{f.kicker}</div>
-                  <h3 className="font-display font-semibold mt-1.5 text-lg text-paper">{f.title}</h3>
-                  <p className="mt-2 text-sm" style={{ color: "var(--paper-dim)" }}>{f.body}</p>
+        {/* Bloques conectados */}
+        <ol className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          {fases.map((f, i) => (
+            <Reveal as="li" key={f.n} delay={i * 90} className="relative">
+              {/* Conector hacia el siguiente */}
+              {i < fases.length - 1 && (
+                <span aria-hidden className="absolute right-[-10px] top-16 z-10 hidden text-lg lg:block" style={{ color: "rgba(143,176,255,0.5)" }}>›</span>
+              )}
+              <div className="step-card h-full p-6">
+                <div className="flex items-center gap-3">
+                  <span className="grid h-9 w-9 place-items-center rounded-xl font-display font-semibold text-white" style={{ background: "var(--brand-accent)", boxShadow: "0 0 18px -4px rgba(47,95,214,0.8)" }}>{f.n}</span>
+                  <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#8fb0ff" }}>{f.kicker}</span>
                 </div>
-              </Reveal>
-            ))}
-          </ol>
-        </div>
-
-        <Reveal className="mt-24 max-w-2xl">
-          <div className="label" style={{ color: "#8fb0ff" }}>{t.metodo.showKicker}</div>
-          <h3 className="font-display font-semibold mt-3 text-2xl md:text-3xl text-paper">{t.metodo.showTitle}</h3>
-          <p className="mt-4 text-base" style={{ color: "var(--paper-dim)" }}>{t.metodo.showSub}</p>
-        </Reveal>
-
-        <div className="mt-8 grid gap-6 lg:grid-cols-[1.15fr_1fr] lg:items-start">
-          <Reveal className="glass p-3.5"><NeuroPanelMock /></Reveal>
-          <Reveal className="glass p-3.5" delay={120}><WhatsappMock /></Reveal>
-        </div>
-
-        <Reveal className="mt-6 grid gap-3 sm:grid-cols-3 lg:grid-cols-5">
-          {servicios.map((s) => (
-            <div key={s.n} className="rounded-xl px-4 py-4" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(143,176,255,0.14)" }}>
-              <span className="font-mono text-xs" style={{ color: "#8fb0ff" }}>{s.n}</span>
-              <div className="mt-1.5 text-sm font-medium text-paper">{s.name}</div>
-              <div className="mt-2 flex flex-wrap gap-1.5">
-                {s.canales.slice(0, 2).map((c) => (
-                  <span key={c} className="rounded-full px-2 py-0.5 text-[10px]" style={{ background: "rgba(47,95,214,0.14)", color: "#8fb0ff" }}>{c}</span>
-                ))}
+                <h3 className="font-display font-semibold mt-4 text-lg text-paper">{f.title}</h3>
+                <p className="mt-2 text-sm" style={{ color: "var(--paper-dim)" }}>{f.body}</p>
               </div>
-            </div>
+            </Reveal>
           ))}
-        </Reveal>
+        </ol>
       </div>
     </section>
   );
 }
 
-/* ─── 4. Servicios (CLARO) ─── */
+/* ─── 4. Producto (CLARO): el software real ─── */
+function Producto() {
+  const { t } = useLang();
+  return (
+    <section id="producto" style={{ background: "#fff" }}>
+      <div className="wrap py-24 md:py-28">
+        <Reveal className="max-w-2xl">
+          <div className="label" style={{ color: "var(--brand-accent)" }}>{t.metodo.showKicker}</div>
+          <h2 className="font-display font-semibold mt-4" style={{ fontSize: "clamp(1.9rem, 4vw, 3rem)", color: "var(--brand)" }}>{t.metodo.showTitle}</h2>
+          <p className="mt-5 text-lg" style={{ color: "var(--fg-muted)" }}>{t.metodo.showSub}</p>
+        </Reveal>
+
+        <div className="mt-12 grid gap-6 lg:grid-cols-[1.15fr_1fr] lg:items-start">
+          <Reveal className="rounded-2xl p-2" style={{ background: "var(--bg-2)" }}>
+            <NeuroPanelMock />
+          </Reveal>
+          <Reveal className="rounded-2xl p-2" delay={120} style={{ background: "var(--bg-2)" }}>
+            <WhatsappMock />
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── 5. Servicios (CLARO): las piezas ─── */
 function Servicios() {
   const { t, servicios } = useLang();
   return (
-    <section id="servicios" style={{ background: "#fff" }}>
+    <section id="servicios" className="border-t rule" style={{ background: "var(--bg-2)" }}>
       <div className="wrap py-24 md:py-28">
         <Reveal className="max-w-2xl">
           <div className="label" style={{ color: "var(--brand-accent)" }}>{t.servicios.kicker}</div>
@@ -186,7 +190,6 @@ function Agendar() {
   ];
   return (
     <section id="agendar" className="relative overflow-hidden" style={{ background: "var(--page)" }}>
-      <div aria-hidden className="bg-grid absolute inset-0" />
       <div aria-hidden className="glow-blob glow-blob--hi animate-blob" style={{ width: 460, height: 460, top: -120, left: "50%", transform: "translateX(-50%)" }} />
       <div className="wrap relative py-24 md:py-28">
         <Reveal className="mx-auto max-w-3xl text-center">
@@ -195,14 +198,14 @@ function Agendar() {
           <p className="mx-auto mt-5 max-w-2xl text-lg" style={{ color: "var(--paper-dim)" }}>{t.agendar.sub}</p>
         </Reveal>
 
-        <div className="mt-12 grid gap-5 md:grid-cols-3">
+        <div className="mt-12 grid gap-4 md:grid-cols-3">
           {cards.map((c, i) => (
-            <Reveal as="article" key={c.n} delay={i * 80} className="glass relative overflow-hidden p-7">
-              <div aria-hidden className="absolute right-4 top-2 font-display font-bold leading-none" style={{ fontSize: "4.5rem", color: "rgba(143,176,255,0.1)" }}>{c.n}</div>
-              <div className="relative">
+            <Reveal as="article" key={c.n} delay={i * 80} className="step-card p-6">
+              <div className="flex items-center gap-3">
+                <span className="font-display text-2xl font-bold" style={{ color: "rgba(143,176,255,0.4)" }}>{c.n}</span>
                 <h3 className="font-display font-semibold text-lg text-paper">{c.ti}</h3>
-                <p className="mt-2.5 text-sm" style={{ color: "var(--paper-dim)" }}>{c.bo}</p>
               </div>
+              <p className="mt-2.5 text-sm" style={{ color: "var(--paper-dim)" }}>{c.bo}</p>
             </Reveal>
           ))}
         </div>
@@ -221,12 +224,12 @@ function Agendar() {
   );
 }
 
-/* ─── 5. FAQ (OSCURO) ─── */
+/* ─── FAQ (OSCURO) ─── */
 function FAQ() {
   const { t, faqs } = useLang();
   return (
-    <section id="preguntas" className="relative overflow-hidden" style={{ background: "var(--page)" }}>
-      <div className="wrap relative py-24 md:py-28">
+    <section id="preguntas" className="border-t" style={{ background: "var(--page-2)", borderColor: "var(--rule-d)" }}>
+      <div className="wrap py-24 md:py-28">
         <Reveal className="grid gap-12 md:grid-cols-[320px_1fr]">
           <div>
             <div className="label" style={{ color: "#8fb0ff" }}>{t.faqKicker}</div>
@@ -249,28 +252,23 @@ function FAQ() {
   );
 }
 
-/* ─── 6. CTA (OSCURO) ─── */
+/* ─── CTA final (distinto al hero): cierre simple ─── */
 function CTA() {
   const { t } = useLang();
   return (
-    <section id="contacto" className="relative overflow-hidden" style={{ background: "linear-gradient(to bottom, var(--page), var(--page-2))" }}>
-      <div aria-hidden className="bg-grid absolute inset-0" style={{ maskImage: "linear-gradient(to bottom, transparent, #000 30%, #000 70%, transparent)" }} />
-      <div aria-hidden className="glow-blob glow-blob--brand animate-blob" style={{ width: 560, height: 380, top: -40, left: "50%", transform: "translateX(-50%)" }} />
-      <div className="wrap relative py-24 md:py-28 text-center">
+    <section id="contacto" className="relative overflow-hidden" style={{ background: "var(--page-2)" }}>
+      <div aria-hidden className="glow-blob glow-blob--brand" style={{ width: 620, height: 320, bottom: -140, left: "50%", transform: "translateX(-50%)" }} />
+      <div className="wrap relative border-t py-20 text-center" style={{ borderColor: "var(--rule-d)" }}>
         <Reveal>
-          <h2 className="font-display font-semibold mx-auto max-w-3xl text-paper" style={{ fontSize: "clamp(2rem, 4.6vw, 3.5rem)" }}>
-            {t.cta.title1}
-            <br />
-            <span className="accent-gradient">{t.cta.title2}</span>
-          </h2>
-          <p className="mx-auto mt-6 max-w-xl text-base md:text-lg" style={{ color: "var(--paper-dim)" }}>{t.cta.sub}</p>
-          <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <a href="#diagnostico" className="btn btn-shiny" style={{ borderRadius: "999px", height: 52, padding: "0 1.9rem" }}>{t.cta.cta1}</a>
-            <a href={site.whatsappUrl} target="_blank" rel="noopener noreferrer" className="btn btn-on-dark" style={{ borderRadius: "999px", height: 52 }}>{t.cta.cta2}</a>
+          <p className="font-display font-semibold mx-auto max-w-2xl text-paper" style={{ fontSize: "clamp(1.6rem, 3.4vw, 2.5rem)", lineHeight: 1.15 }}>
+            {t.cta.title2}
+          </p>
+          <div className="mt-8">
+            <a href="#agendar" className="btn btn-shiny" style={{ borderRadius: "999px", height: 54, padding: "0 2.2rem" }}>{t.cta.cta1}</a>
           </div>
-          <p className="mt-6 text-sm" style={{ color: "var(--paper-dim)" }}>
+          <p className="mt-5 text-sm" style={{ color: "var(--paper-dim)" }}>
             {t.cta.agenda}{" "}
-            <a href={site.bookingUrl} target="_blank" rel="noopener noreferrer" className="underline text-white">{t.cta.agendaLink}</a>
+            <a href={site.whatsappUrl} target="_blank" rel="noopener noreferrer" className="underline text-white">WhatsApp</a>
           </p>
         </Reveal>
       </div>

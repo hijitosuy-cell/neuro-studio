@@ -25,8 +25,8 @@ export const dict = {
     },
     metodo: {
       kicker: "El método",
-      title: "Un sistema, no una lista de servicios.",
-      sub: "Cada automotora pasa por los mismos cinco pasos. Lo que cambia es qué se construye en el medio. El método es lo que hace que todo tenga sentido.",
+      title: "Encontramos las fugas y las cerramos, paso a paso.",
+      sub: "Cada consulta sin responder, cada auto parado y cada dato en una planilla es plata que se escapa. El método las detecta y las convierte en ventas, en cinco pasos.",
       showKicker: "El sistema, por dentro",
       showTitle: "Tu automotora gestionada desde un solo lugar.",
       showSub: "El cerebro que cada mañana te dice qué hacer, el asistente que atiende por vos y todas las piezas conectadas trabajando juntas.",
@@ -85,8 +85,8 @@ export const dict = {
     },
     metodo: {
       kicker: "The method",
-      title: "A system, not a list of services.",
-      sub: "Every dealership goes through the same five steps. What changes is what gets built in between. The method is what makes it all make sense.",
+      title: "We find the leaks and close them, step by step.",
+      sub: "Every unanswered inquiry, every car sitting idle and every number stuck in a spreadsheet is money slipping away. The method finds them and turns them into sales, in five steps.",
       showKicker: "The system, up close",
       showTitle: "Your whole dealership managed from one place.",
       showSub: "The brain that tells you what to do each morning, the assistant that answers for you, and every piece connected working together.",

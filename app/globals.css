@@ -67,13 +67,28 @@ body {
 ::-webkit-scrollbar-thumb { background: #1e3d78; border-radius: 999px; border: 2px solid var(--page); }
 ::-webkit-scrollbar-thumb:hover { background: var(--brand-accent); }
 
-/* Logo con animación al hover */
-.logo-hover { transition: transform 450ms cubic-bezier(0.22,1,0.36,1), filter 450ms; }
+/* Logo con animación al hover: solo agranda un poco */
+.logo-hover { transition: transform 300ms cubic-bezier(0.22,1,0.36,1), filter 300ms; }
 a:hover .logo-hover,
 .group:hover .logo-hover {
-  transform: rotate(-8deg) scale(1.12);
-  filter: brightness(0) invert(1) drop-shadow(0 0 12px rgba(120,160,255,0.8));
+  transform: scale(1.1);
+  filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(120,160,255,0.6));
 }
+
+/* Tarjeta de paso conectada (método) */
+.step-card {
+  position: relative;
+  background: linear-gradient(180deg, rgba(47,95,214,0.09), rgba(255,255,255,0.015));
+  border: 1px solid rgba(143,176,255,0.16);
+  border-radius: 16px;
+  transition: border-color 300ms, transform 300ms, box-shadow 300ms;
+}
+.step-card:hover {
+  border-color: rgba(143,176,255,0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 18px 50px -24px rgba(47,95,214,0.6);
+}
+@media (prefers-reduced-motion: reduce) { .step-card:hover { transform: none; } }
 
 /* ═══ Transición tipo horizonte de planeta ═══
    Curva amplia con glow azul y puntos, no un corte recto. */
@@ -211,10 +226,10 @@ a:hover .logo-hover,
 /* Pill de canal (estilo agentes) */
 .chip {
   display: inline-flex; align-items: center;
-  font-size: 12px; font-weight: 500;
-  padding: 3px 10px; border-radius: 999px;
-  background: rgba(47,95,214,0.1); color: var(--brand-accent);
-  border: 1px solid rgba(47,95,214,0.2);
+  font-size: 12.5px; font-weight: 600;
+  padding: 5px 12px; border-radius: 999px;
+  background: rgba(47,95,214,0.12); color: var(--brand-hi);
+  border: 1px solid rgba(47,95,214,0.25);
 }
 .chip-on-dark {
   background: rgba(143,176,255,0.12); color: #8fb0ff;
@@ -242,15 +257,6 @@ a:hover .logo-hover,
 }
 
 /* ═══ Sistema estilo Scalefy (profundidad + glow) ═══ */
-
-/* Grid técnico de fondo */
-.bg-grid {
-  background-image:
-    linear-gradient(rgba(143,176,255,0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(143,176,255,0.05) 1px, transparent 1px);
-  background-size: 56px 56px;
-  mask-image: radial-gradient(ellipse 100% 80% at 50% 0%, #000 30%, transparent 80%);
-}
 
 /* Blobs de resplandor radial */
 .glow-blob {

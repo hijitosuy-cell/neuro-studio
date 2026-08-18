@@ -58,7 +58,7 @@ export function DiagnosticoLauncher() {
   return (
     <>
       {/* Invitación */}
-      <div className="mx-auto max-w-3xl rounded-3xl p-8 text-center md:p-12" style={{ background: "var(--bg)", border: "1px solid var(--rule)", boxShadow: "0 30px 90px -40px rgba(47,95,214,0.35)" }}>
+      <div className="mx-auto max-w-3xl rounded-3xl p-8 text-center md:p-12" style={{ background: "var(--bg)", boxShadow: "0 30px 90px -40px rgba(47,95,214,0.35)" }}>
         <div className="grid gap-2.5 sm:grid-cols-3">
           {[
             ["Análisis de tu caso concreto", "no un PDF genérico"],
