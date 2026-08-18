@@ -82,25 +82,47 @@ function Diagnostico() {
 }
 
 /* ─── 3. Método (OSCURO): proceso en bloques conectados ─── */
+const FASE_ACCENTS = ["#8fb0ff", "#7cff9e", "#ffbf47", "#ff9b9b", "#c9a0ff"];
+
 function Metodo() {
   const { t, fases } = useLang();
   return (
     <section id="metodo" className="relative overflow-hidden" style={{ background: "var(--page)" }}>
-      <div className="wrap relative py-24 md:py-28">
+      <div className="wrap relative py-20 md:py-28">
         <Reveal className="mx-auto max-w-2xl text-center">
           <div className="label" style={{ color: "#8fb0ff" }}>{t.metodo.kicker}</div>
           <h2 className="font-display font-semibold mt-4 text-paper" style={{ fontSize: "clamp(1.55rem, 5vw, 2.7rem)" }}>{t.metodo.title}</h2>
           <p className="mt-4 text-base" style={{ color: "var(--paper-dim)" }}>{t.metodo.sub}</p>
         </Reveal>
 
-        {/* Bloques a medida, con spotlight que sigue el cursor */}
-        <ol className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+        {/* Mobile/tablet: línea de tiempo vertical conectada, con números de color por fase */}
+        <ol className="relative mx-auto mt-12 max-w-md lg:hidden">
+          <span aria-hidden className="absolute bottom-3 left-[21px] top-3 w-px" style={{ background: "linear-gradient(180deg, #8fb0ff, #c9a0ff)" }} />
+          {fases.map((f, i) => (
+            <Reveal as="li" key={f.n} delay={i * 60} className="relative flex gap-4 pb-8 last:pb-0">
+              <span
+                className="z-10 grid h-11 w-11 shrink-0 place-items-center rounded-full font-display text-base font-semibold"
+                style={{ background: "var(--page)", border: `2px solid ${FASE_ACCENTS[i]}`, color: FASE_ACCENTS[i] }}
+              >
+                {f.n}
+              </span>
+              <div className="pt-1">
+                <div className="text-[11px] font-semibold uppercase tracking-wider" style={{ color: FASE_ACCENTS[i] }}>{f.kicker}</div>
+                <h3 className="font-display font-semibold text-[17px] text-paper" style={{ marginTop: 2 }}>{f.title}</h3>
+                <p className="mt-1.5 text-sm leading-relaxed" style={{ color: "var(--paper-dim)" }}>{f.body}</p>
+              </div>
+            </Reveal>
+          ))}
+        </ol>
+
+        {/* Desktop: 5 pasos en fila, cada uno con su color */}
+        <ol className="mt-14 hidden gap-5 lg:grid lg:grid-cols-5">
           {fases.map((f, i) => (
             <Spotlight as="li" key={f.n} tone="dark" className="step-card h-full p-6" style={{ transitionDelay: `${i * 70}ms` }}>
-              <span aria-hidden className="pointer-events-none absolute right-4 top-3 font-display font-semibold leading-none select-none" style={{ fontSize: 44, color: "rgba(143,176,255,0.10)" }}>{f.n}</span>
+              <span aria-hidden className="pointer-events-none absolute right-4 top-3 font-display font-semibold leading-none select-none" style={{ fontSize: 44, color: `${FASE_ACCENTS[i]}1f` }}>{f.n}</span>
               <div className="relative flex items-center gap-2.5">
-                <span className="grid h-8 w-8 place-items-center rounded-lg font-display text-sm font-semibold text-white" style={{ background: "var(--brand-accent)" }}>{f.n}</span>
-                <span className="text-[11px] font-semibold uppercase tracking-wider" style={{ color: "#8fb0ff" }}>{f.kicker}</span>
+                <span className="grid h-8 w-8 place-items-center rounded-lg font-display text-sm font-semibold" style={{ background: `${FASE_ACCENTS[i]}22`, color: FASE_ACCENTS[i], border: `1px solid ${FASE_ACCENTS[i]}55` }}>{f.n}</span>
+                <span className="text-[11px] font-semibold uppercase tracking-wider" style={{ color: FASE_ACCENTS[i] }}>{f.kicker}</span>
               </div>
               <h3 className="font-display font-semibold mt-4 text-base text-paper">{f.title}</h3>
               <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--paper-dim)" }}>{f.body}</p>
@@ -135,11 +157,29 @@ function Producto() {
         </Reveal>
 
         <div className="mt-6 grid gap-6 lg:grid-cols-[1.15fr_1fr] lg:items-start">
-          <Reveal className="rounded-2xl p-2" style={{ background: "var(--bg-2)" }}>
-            <NeuroPanelMock />
+          <Reveal>
+            <div className="flex items-baseline gap-2">
+              <span className="chip">El cerebro</span>
+              <h3 className="font-display font-semibold text-lg" style={{ color: "var(--brand)" }}>Tu panel de control</h3>
+            </div>
+            <p className="mt-2 text-sm" style={{ color: "var(--fg-muted)" }}>
+              Cada mañana te dice qué hacer: a qué clientes llamar primero, cuánta plata está en riesgo y cómo va cada área. Ejemplo con datos de muestra.
+            </p>
+            <div className="mt-4 rounded-2xl p-2" style={{ background: "var(--bg-2)" }}>
+              <NeuroPanelMock />
+            </div>
           </Reveal>
-          <Reveal className="rounded-2xl p-2" delay={120} style={{ background: "var(--bg-2)" }}>
-            <WhatsappMock />
+          <Reveal delay={120}>
+            <div className="flex items-baseline gap-2">
+              <span className="chip">El asistente</span>
+              <h3 className="font-display font-semibold text-lg" style={{ color: "var(--brand)" }}>Atiende por WhatsApp</h3>
+            </div>
+            <p className="mt-2 text-sm" style={{ color: "var(--fg-muted)" }}>
+              Responde 24/7, informa el stock y agenda test-drives solo. Deriva al vendedor cuando el cliente está listo para comprar.
+            </p>
+            <div className="mt-4 rounded-2xl p-2" style={{ background: "var(--bg-2)" }}>
+              <WhatsappMock />
+            </div>
           </Reveal>
         </div>
       </div>

@@ -4,11 +4,12 @@ export const dict = {
   es: {
     nav: { diagnostico: "Diagnóstico", servicios: "Servicios", metodo: "Método", preguntas: "Preguntas" },
     ctaHeader: "Agendar reunión",
+    ctaHeaderShort: "Agendar",
     hero: {
       chip: "Método Neuro Studio",
       title1: "Tu automotora pierde ventas todos los días.",
       title2: "Nosotros encontramos dónde.",
-      sub: "Diagnosticamos tu concesionaria, encontramos las fugas de ventas y construimos el sistema para cerrarlas.",
+      sub: "Encontramos dónde perdés ventas y construimos el sistema para recuperarlas.",
       cta1: "Hacer el diagnóstico gratis",
       cta2: "Ver el método",
     },
@@ -64,11 +65,12 @@ export const dict = {
   en: {
     nav: { diagnostico: "Diagnosis", servicios: "Services", metodo: "Method", preguntas: "FAQ" },
     ctaHeader: "Book a call",
+    ctaHeaderShort: "Book",
     hero: {
       chip: "Neuro Studio Method",
       title1: "Your dealership loses sales every single day.",
       title2: "We find exactly where.",
-      sub: "We diagnose your dealership, find where sales are leaking and build the system to close them.",
+      sub: "We find where you're losing sales and build the system to win them back.",
       cta1: "Get your free diagnosis",
       cta2: "See the method",
     },

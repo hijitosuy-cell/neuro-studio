@@ -351,8 +351,9 @@ a:hover .logo-hover,
   transition: border-color 300ms, box-shadow 300ms, transform 300ms;
 }
 .card-light:hover {
-  border-color: rgba(47,95,214,0.45);
+  border-color: rgba(120,160,255,0.55);
   transform: translateY(-4px);
+  box-shadow: 0 16px 40px -18px rgba(47,95,214,0.28), 0 0 26px -6px rgba(120,160,255,0.28);
 }
 @media (prefers-reduced-motion: reduce) { .card-light:hover { transform: none; } }
 

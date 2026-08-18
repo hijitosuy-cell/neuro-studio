@@ -29,8 +29,13 @@ export function SiteHeader() {
         </nav>
         <div className="flex items-center gap-3">
           <LangToggle onDark />
-          <a href="#agendar" className="btn btn-shiny" style={{ minHeight: "42px", padding: "0.55rem 1.2rem", fontSize: "0.88rem", borderRadius: "999px" }}>
-            {t.ctaHeader}
+          <a
+            href="#agendar"
+            className="btn btn-shiny text-[0.78rem] md:text-[0.88rem]"
+            style={{ minHeight: "34px", height: "34px", padding: "0 0.85rem", borderRadius: "999px" }}
+          >
+            <span className="sm:hidden">{t.ctaHeaderShort}</span>
+            <span className="hidden sm:inline">{t.ctaHeader}</span>
           </a>
         </div>
       </div>
