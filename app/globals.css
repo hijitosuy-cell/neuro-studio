@@ -68,9 +68,12 @@ body {
 ::-webkit-scrollbar-thumb:hover { background: var(--brand-accent); }
 
 /* Logo con animación al hover */
-.logo-hover { transition: transform 400ms cubic-bezier(0.22,1,0.36,1), filter 400ms; }
-.group:hover .logo-hover { transform: rotate(-6deg) scale(1.08); filter: drop-shadow(0 0 10px rgba(47,95,214,0.6)); }
-@media (prefers-reduced-motion: reduce) { .group:hover .logo-hover { transform: none; } }
+.logo-hover { transition: transform 450ms cubic-bezier(0.22,1,0.36,1), filter 450ms; }
+a:hover .logo-hover,
+.group:hover .logo-hover {
+  transform: rotate(-8deg) scale(1.12);
+  filter: brightness(0) invert(1) drop-shadow(0 0 12px rgba(120,160,255,0.8));
+}
 
 /* ═══ Transición tipo horizonte de planeta ═══
    Curva amplia con glow azul y puntos, no un corte recto. */
@@ -177,9 +180,12 @@ body {
 
 :focus-visible { outline: 2px solid var(--brand-accent); outline-offset: 3px; }
 
-.reveal { opacity: 0; transform: translateY(16px); transition: opacity 700ms cubic-bezier(0.22,1,0.36,1), transform 700ms cubic-bezier(0.22,1,0.36,1); }
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 800ms cubic-bezier(0.22,1,0.36,1), transform 800ms cubic-bezier(0.22,1,0.36,1); }
 .reveal.is-in { opacity: 1; transform: translateY(0); }
-@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+/* Con reduce-motion: mantiene el fade (accesible), sin el desplazamiento */
+@media (prefers-reduced-motion: reduce) {
+  .reveal { transform: none; transition: opacity 700ms ease; }
+}
 
 .score-bar-track { height: 6px; background: rgba(255,255,255,0.12); border-radius: 999px; overflow: hidden; }
 .score-bar-fill { height: 100%; background: var(--brand-accent); border-radius: 999px; width: 0; transition: width 1100ms cubic-bezier(0.22,1,0.36,1); }
@@ -319,16 +325,17 @@ body {
 .glass:hover::before { opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .glass:hover { transform: none; } }
 
-/* Spotlight: brillo que sigue al cursor */
-.spotlight { position: relative; }
+/* Spotlight: halo de luz que sigue al cursor (por encima del bloque) */
+.spotlight { position: relative; isolation: isolate; }
 .spotlight::after {
   content: ""; position: absolute; inset: 0;
   border-radius: inherit; pointer-events: none;
   background: var(--spot, transparent);
-  opacity: 0; transition: opacity 250ms;
+  opacity: 0; transition: opacity 200ms ease;
+  z-index: 1;
 }
 .spotlight:hover::after { opacity: 1; }
-@media (prefers-reduced-motion: reduce) { .spotlight::after { display: none; } }
+/* el halo se mantiene aunque haya reduce-motion: es feedback, no animación de entrada */
 
 /* Tarjeta clara con borde y glow al hover */
 .card-light {
@@ -346,12 +353,10 @@ body {
 @media (prefers-reduced-motion: reduce) { .card-light:hover { transform: none; } }
 
 /* Reveal con más variantes */
-.reveal-left { opacity: 0; transform: translateX(-24px); transition: opacity 800ms cubic-bezier(0.22,1,0.36,1), transform 800ms cubic-bezier(0.22,1,0.36,1); }
-.reveal-left.is-in { opacity: 1; transform: none; }
-.reveal-scale { opacity: 0; transform: scale(0.96); transition: opacity 700ms cubic-bezier(0.22,1,0.36,1), transform 700ms cubic-bezier(0.22,1,0.36,1); }
+.reveal-scale { opacity: 0; transform: scale(0.97); transition: opacity 800ms cubic-bezier(0.22,1,0.36,1), transform 800ms cubic-bezier(0.22,1,0.36,1); }
 .reveal-scale.is-in { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
-  .reveal-left, .reveal-scale { opacity: 1; transform: none; transition: none; }
+  .reveal-scale { transform: none; transition: opacity 700ms ease; }
 }
 
 .wa-bubble { max-width: 80%; padding: 0.55rem 0.75rem 0.4rem; border-radius: 10px; font-size: 0.85rem; line-height: 1.35; color: #eaf4ea; }

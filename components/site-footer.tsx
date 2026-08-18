@@ -3,7 +3,7 @@ import { site } from "@/lib/site";
 
 export function SiteFooter() {
   return (
-    <footer style={{ background: "var(--ink-2)" }}>
+    <footer style={{ background: "var(--page-2)", borderTop: "1px solid var(--rule-d)" }}>
       <div className="wrap grid gap-10 py-14 md:grid-cols-12">
         <div className="md:col-span-6">
           <div className="flex items-center gap-3">

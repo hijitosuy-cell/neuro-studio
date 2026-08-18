@@ -26,10 +26,6 @@ export function Spotlight({
   useEffect(() => {
     if (!reveal) return;
     if (typeof window === "undefined") return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setInView(true);
-      return;
-    }
     const el = ref.current;
     if (!el) return;
     const io = new IntersectionObserver(
@@ -58,8 +54,8 @@ export function Spotlight({
   const Component = Tag as React.ElementType;
   const glow =
     tone === "dark"
-      ? "radial-gradient(220px circle at var(--mx) var(--my), rgba(143,176,255,0.18), transparent 60%)"
-      : "radial-gradient(240px circle at var(--mx) var(--my), rgba(47,95,214,0.12), transparent 60%)";
+      ? "radial-gradient(260px circle at var(--mx) var(--my), rgba(143,176,255,0.4), rgba(120,160,255,0.12) 40%, transparent 65%)"
+      : "radial-gradient(280px circle at var(--mx) var(--my), rgba(47,95,214,0.22), rgba(47,95,214,0.08) 40%, transparent 65%)";
 
   return (
     <Component

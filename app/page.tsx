@@ -1,6 +1,6 @@
 import Script from "next/script";
 import { site, fases, serviciosWeb } from "@/lib/site";
-import { WhatsappMock, SaasMock } from "@/components/brand-mark";
+import { WhatsappMock, NeuroPanelMock } from "@/components/brand-mark";
 import { Reveal } from "@/components/reveal";
 import { Spotlight } from "@/components/spotlight";
 import { HeroVideo } from "@/components/hero-video";
@@ -106,37 +106,50 @@ function Metodo() {
 
         <ol className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {fases.map((f, i) => (
-            <Spotlight as="li" key={f.n} tone="dark" className="glass p-7" style={{ transitionDelay: `${i * 60}ms` }}>
-              <div className="grid h-11 w-11 place-items-center rounded-full font-display font-semibold text-lg text-white" style={{ background: "var(--brand-accent)", boxShadow: "0 0 22px -4px rgba(47,95,214,0.7)" }}>
-                {f.n}
+            <Spotlight as="li" key={f.n} tone="dark" className="glass relative overflow-hidden p-7" style={{ transitionDelay: `${i * 60}ms` }}>
+              <div aria-hidden className="absolute right-4 top-2 font-display font-bold leading-none" style={{ fontSize: "5rem", color: "rgba(143,176,255,0.1)" }}>{f.n}</div>
+              <div aria-hidden className="absolute left-0 top-0 h-1 w-full" style={{ background: "linear-gradient(90deg, var(--brand-accent), transparent)" }} />
+              <div className="relative">
+                <div className="label" style={{ color: "#8fb0ff" }}>Paso {f.n}</div>
+                <h3 className="font-display font-semibold mt-2 text-xl text-paper">{f.title}</h3>
+                <p className="mt-3 text-sm" style={{ color: "var(--paper-dim)" }}>{f.body}</p>
               </div>
-              <h3 className="font-display font-semibold mt-5 text-xl text-paper">{f.title}</h3>
-              <p className="mt-3 text-sm" style={{ color: "var(--paper-dim)" }}>{f.body}</p>
             </Spotlight>
           ))}
         </ol>
 
         {/* Producto en acción — lo que queda funcionando */}
-        <Reveal className="mt-16">
+        <Reveal className="mt-20 max-w-2xl">
           <div className="label" style={{ color: "#8fb0ff" }}>Lo que queda funcionando</div>
           <h3 className="font-display font-semibold mt-3 text-2xl md:text-3xl text-paper">
-            Tu automotora, corriendo sola todos los días.
+            Un sistema que gestiona tu negocio, no una app suelta.
           </h3>
+          <p className="mt-4 text-base" style={{ color: "var(--paper-dim)" }}>
+            El cerebro que te dice qué hacer cada día, el asistente que atiende por vos,
+            y todas las piezas conectadas trabajando juntas.
+          </p>
         </Reveal>
-        <div className="mt-8 grid gap-6 lg:grid-cols-2">
-          <Spotlight tone="dark" className="glass p-4" reveal>
-            <SaasMock />
-            <p className="mt-3 px-2 text-sm" style={{ color: "var(--paper-dim)" }}>
-              El panel donde ves stock, leads, ventas y ganancia en tiempo real.
-            </p>
+
+        <div className="mt-8 grid gap-6 lg:grid-cols-[1.15fr_1fr] lg:items-start">
+          <Spotlight tone="dark" className="glass p-3.5" reveal>
+            <NeuroPanelMock />
           </Spotlight>
-          <Spotlight tone="dark" className="glass p-4" reveal>
-            <WhatsappMock />
-            <p className="mt-3 px-2 text-sm" style={{ color: "var(--paper-dim)" }}>
-              El asistente que responde, califica y agenda mientras dormís.
-            </p>
-          </Spotlight>
+          <div className="grid gap-6">
+            <Spotlight tone="dark" className="glass p-3.5" reveal>
+              <WhatsappMock />
+            </Spotlight>
+          </div>
         </div>
+
+        {/* Todas las piezas conectadas */}
+        <Reveal className="mt-8 grid gap-3 sm:grid-cols-3 lg:grid-cols-5">
+          {serviciosWeb.map((s) => (
+            <div key={s.n} className="rounded-xl px-4 py-3.5 text-sm" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(143,176,255,0.14)" }}>
+              <span className="font-mono text-xs" style={{ color: "#8fb0ff" }}>{s.n}</span>
+              <div className="mt-1 font-medium text-paper">{s.name}</div>
+            </div>
+          ))}
+        </Reveal>
       </div>
     </section>
   );
@@ -236,9 +249,9 @@ function FAQ() {
 /* ─── 6. CTA (OSCURO, glow) ─── */
 function CTA() {
   return (
-    <section id="contacto" className="relative overflow-hidden" style={{ background: "var(--page-2)" }}>
-      <div aria-hidden className="bg-grid absolute inset-0" />
-      <div aria-hidden className="glow-blob glow-blob--brand animate-blob" style={{ width: 560, height: 380, top: -80, left: "50%", transform: "translateX(-50%)" }} />
+    <section id="contacto" className="relative overflow-hidden" style={{ background: "linear-gradient(to bottom, var(--page), var(--page-2))" }}>
+      <div aria-hidden className="bg-grid absolute inset-0" style={{ maskImage: "linear-gradient(to bottom, transparent, #000 30%, #000 70%, transparent)" }} />
+      <div aria-hidden className="glow-blob glow-blob--brand animate-blob" style={{ width: 560, height: 380, top: -40, left: "50%", transform: "translateX(-50%)" }} />
       <div className="wrap relative py-24 md:py-28 text-center">
         <Reveal>
           <h2 className="font-display font-semibold mx-auto max-w-3xl text-paper" style={{ fontSize: "clamp(2rem, 4.6vw, 3.5rem)" }}>

@@ -24,11 +24,6 @@ export function Reveal({
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) {
-      setInView(true);
-      return;
-    }
     const el = ref.current;
     if (!el) return;
     const io = new IntersectionObserver(

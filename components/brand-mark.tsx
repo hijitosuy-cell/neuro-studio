@@ -1,3 +1,84 @@
+/** Panel "Neuro Twin" — dashboard rico que representa el sistema completo. Datos de ejemplo. */
+export function NeuroPanelMock() {
+  const areas = [
+    { label: "Ventas", val: 72, color: "#8fb0ff" },
+    { label: "Marketing", val: 58, color: "#8fb0ff" },
+    { label: "Seguimiento", val: 43, color: "#ffbf47" },
+    { label: "Conversión", val: 88, color: "#7cff9e" },
+    { label: "Postventa", val: 64, color: "#8fb0ff" },
+    { label: "Stock", val: 51, color: "#ffbf47" },
+  ];
+  const recs = [
+    { n: 1, t: "Contactar 13 oportunidades calientes sin seguimiento", tone: "#ff6b6b" },
+    { n: 2, t: "Responder 4 conversaciones sin leer", tone: "#ffbf47" },
+    { n: 3, t: "Revisar 25 leads sin contacto hace +2 días", tone: "#8fb0ff" },
+  ];
+  return (
+    <div className="overflow-hidden rounded-xl text-left" style={{ background: "#0b1122", border: "1px solid rgba(143,176,255,0.18)" }}>
+      <div className="flex items-center justify-between border-b px-4 py-3" style={{ borderColor: "rgba(143,176,255,0.14)" }}>
+        <div className="flex items-center gap-2">
+          <span className="grid h-7 w-7 place-items-center rounded-lg text-[11px] font-semibold text-white" style={{ background: "linear-gradient(135deg,#2f5fd6,#7c4dff)" }}>◉</span>
+          <div>
+            <div className="text-[13px] font-semibold text-paper">Neuro Twin</div>
+            <div className="text-[10px]" style={{ color: "var(--paper-dim)" }}>El gemelo digital de tu automotora</div>
+          </div>
+        </div>
+        <div className="flex gap-1.5">
+          {["Modo CEO", "Embudo", "Salud"].map((t, i) => (
+            <span key={t} className="rounded-md px-2 py-1 text-[10px]" style={{ background: i === 0 ? "rgba(47,95,214,0.25)" : "rgba(255,255,255,0.04)", color: i === 0 ? "#8fb0ff" : "var(--paper-dim)" }}>{t}</span>
+          ))}
+        </div>
+      </div>
+
+      {/* Insight banner */}
+      <div className="m-3 rounded-lg p-3.5" style={{ background: "linear-gradient(120deg, rgba(47,95,214,0.14), rgba(124,77,255,0.1))", border: "1px solid rgba(143,176,255,0.16)" }}>
+        <div className="text-[13px] font-semibold text-paper">Buenas tardes, Gerencia.</div>
+        <p className="mt-1.5 text-[11.5px] leading-relaxed" style={{ color: "var(--paper-dim)" }}>
+          Hoy entraron <b className="text-paper">3</b> oportunidades nuevas. Tenés <b className="text-paper">35</b> leads activos, <b className="text-paper">17</b> calientes.
+        </p>
+        <p className="mt-1 text-[11.5px]" style={{ color: "#ff9b9b" }}>
+          13 calientes llevan +24 h sin seguimiento. Hay ~US$ 42.000 en riesgo.
+        </p>
+      </div>
+
+      {/* Salud del negocio */}
+      <div className="mx-3 rounded-lg p-3" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+        <div className="flex items-center justify-between">
+          <span className="text-[11px]" style={{ color: "var(--paper-dim)" }}>Salud del negocio</span>
+          <span className="font-display text-lg font-semibold" style={{ color: "#ffbf47" }}>63<span className="text-[11px]" style={{ color: "var(--paper-dim)" }}>/100</span></span>
+        </div>
+        <div className="mt-3 grid grid-cols-6 gap-2">
+          {areas.map((a) => (
+            <div key={a.label} className="flex flex-col items-center gap-1.5">
+              <svg viewBox="0 0 36 36" className="h-9 w-9">
+                <circle cx="18" cy="18" r="15" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="3" />
+                <circle cx="18" cy="18" r="15" fill="none" stroke={a.color} strokeWidth="3" strokeLinecap="round"
+                  strokeDasharray={`${(a.val / 100) * 94} 94`} transform="rotate(-90 18 18)" />
+                <text x="18" y="21" textAnchor="middle" fontSize="9" fill="#fff">{a.val}</text>
+              </svg>
+              <span className="text-[8.5px]" style={{ color: "var(--paper-dim)" }}>{a.label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Recomendaciones */}
+      <div className="p-3">
+        <div className="mb-2 text-[11px]" style={{ color: "var(--paper-dim)" }}>Neuro recomienda hoy</div>
+        <ul className="grid gap-1.5">
+          {recs.map((r) => (
+            <li key={r.n} className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-[11.5px]" style={{ background: "rgba(255,255,255,0.03)" }}>
+              <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full text-[10px] font-semibold text-white" style={{ background: r.tone }}>{r.n}</span>
+              <span className="text-paper">{r.t}</span>
+              <span className="ml-auto" style={{ color: "var(--paper-dim)" }}>›</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
 /** Mockup de panel SaaS (datos de ejemplo, no reales). Tema oscuro. */
 export function SaasMock() {
   const kpis = [
