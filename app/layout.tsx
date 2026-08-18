@@ -69,7 +69,6 @@ export const metadata: Metadata = {
     follow: true,
     googleBot: { index: true, follow: true, "max-image-preview": "large" },
   },
-  icons: { icon: "/neuro-studio-logo.png" },
 };
 
 export const viewport: Viewport = {
