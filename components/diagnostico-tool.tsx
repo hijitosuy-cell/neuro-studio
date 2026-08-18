@@ -20,7 +20,7 @@ import {
   CALENDAR_URL,
   type Campo,
 } from "@/lib/diagnostico";
-import { RadarAreas, DonutAreas, generarInformePNG } from "@/components/diagnostico-informe";
+import { DonutAreas, generarInformePNG } from "@/components/diagnostico-informe";
 
 type Modo = "express" | "completo";
 type Paso = "inicio" | "form" | "resultado";
@@ -143,9 +143,11 @@ export function DiagnosticoTool() {
     }
   }
 
-  /** Guarda la selección final del cliente y marca que pidió contacto. */
-  async function confirmarContacto() {
+  /** Guarda la selección final del cliente, marca contacto y abre la acción elegida. */
+  async function confirmarContacto(luego?: "calendar" | "whatsapp") {
     setEnviando(true);
+    // abrimos la pestaña ya (antes del await) para que no la bloquee el navegador
+    const w = luego ? window.open("about:blank", "_blank") : null;
     try {
       const ids = elegidos.length ? elegidos : recomendados.map((s) => s.id);
       const presupuesto = presupuestoInterno(r, ids, resultado.total);
@@ -159,9 +161,10 @@ export function DiagnosticoTool() {
       }
       setEnviado(true);
     } catch {
-      setEnviado(true); // igual mostramos confirmación; el lead ya se guardó al llegar
+      setEnviado(true); // el lead ya se guardó al llegar
     } finally {
       setEnviando(false);
+      if (w) w.location.href = luego === "whatsapp" ? `https://wa.me/${WHATSAPP}?text=${mensaje}` : CALENDAR_URL;
     }
   }
 
@@ -425,16 +428,21 @@ export function DiagnosticoTool() {
           </>
         ) : (
           <>
-            <h3 className="font-display font-semibold text-2xl text-paper">Guardá tu diagnóstico y te contactamos</h3>
+            <h3 className="font-display font-semibold text-2xl text-paper">Guardá tu diagnóstico y demos el próximo paso</h3>
             <p className="mx-auto mt-2 max-w-md text-sm" style={{ color: "var(--paper-dim)" }}>
-              Lo revisamos nosotros y te llegamos con el análisis y una propuesta concreta. No hace falta que hagas nada más.
+              Lo revisamos nosotros y te llegamos con el análisis y una propuesta concreta para tu automotora. No hace falta que hagas nada más.
             </p>
             <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <button onClick={confirmarContacto} disabled={enviando} className="btn btn-solid-on-dark">
-                {enviando ? "Guardando…" : "Guardar y que me contacten"}
+              <button onClick={() => confirmarContacto("calendar")} disabled={enviando} className="btn btn-solid-on-dark">
+                {enviando ? "Guardando…" : "Guardar y agendar reunión"}
               </button>
-              <a href={CALENDAR_URL} target="_blank" rel="noopener noreferrer" className="btn btn-on-dark">Prefiero agendar ahora</a>
+              <button onClick={() => confirmarContacto("whatsapp")} disabled={enviando} className="btn btn-on-dark">
+                Guardar y contactar por WhatsApp
+              </button>
             </div>
+            <button onClick={() => confirmarContacto()} disabled={enviando} className="mt-4 text-sm underline" style={{ color: "var(--paper-dim)" }}>
+              Solo guardar, después me contactan
+            </button>
           </>
         )}
         <button onClick={descargarInforme} disabled={descargando} className="mt-5 text-sm underline" style={{ color: "var(--paper-dim)" }}>

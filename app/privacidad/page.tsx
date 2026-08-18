@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -58,7 +59,7 @@ export default function Privacidad() {
         </div>
 
         <div className="mt-12">
-          <a href="/" className="text-sm underline" style={{ color: "#8fb0ff" }}>← Volver al inicio</a>
+          <Link href="/" className="text-sm underline" style={{ color: "#8fb0ff" }}>← Volver al inicio</Link>
         </div>
       </div>
     </main>

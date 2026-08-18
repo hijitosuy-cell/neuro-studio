@@ -32,7 +32,10 @@ type Diag = {
   };
 };
 
-const PASS = "neuro2026"; // gate simple; la seguridad real la dan las reglas de Firestore
+// Gate simple del lado del cliente. La seguridad REAL la dan las reglas de
+// Firestore (deben exigir auth para leer). La clave sale de una variable de
+// entorno para no quedar fija en el código.
+const PASS = process.env.NEXT_PUBLIC_PANEL_PASS || "neuro2026";
 
 export default function Panel() {
   const [ok, setOk] = useState(false);

@@ -15,7 +15,7 @@ export const dict = {
     diag: {
       kicker: "Antes de hablar con nosotros",
       title: "Mirá cuánto está dejando tu automotora sobre la mesa.",
-      sub: "Respondés unas preguntas sobre tu operación y nuestro sistema te arma un diagnóstico: en qué porcentaje trabajás por área, dónde perdés ventas y qué conviene resolver primero. Gratis, sin cuenta, en minutos.",
+      sub: "Es el mismo relevamiento que hacemos en una reunión de consultoría, pero gratis y en minutos. Respondés sobre tu operación y te armamos un diagnóstico real: en qué porcentaje trabajás por área, cuánto se te está escapando y qué conviene resolver primero.",
       f1a: "Análisis de tu caso concreto", f1b: "no un PDF genérico",
       f2a: "Lo revisa una persona", f2b: "antes de llegarte",
       f3a: "Gratis y sin compromiso", f3b: "vos decidís después",
@@ -75,7 +75,7 @@ export const dict = {
     diag: {
       kicker: "Before we even talk",
       title: "See how much your dealership is leaving on the table.",
-      sub: "Answer a few questions about your operation and our system builds your diagnosis: how well each area is running, where you lose sales and what to fix first. Free, no account, in minutes.",
+      sub: "It's the same assessment we run in a paid consulting session, but free and in minutes. You answer about your operation and we build a real diagnosis: how well each area runs, how much is slipping away and what to fix first.",
       f1a: "Analysis of your real case", f1b: "not a generic PDF",
       f2a: "A person reviews it", f2b: "before it reaches you",
       f3a: "Free, no commitment", f3b: "you decide afterwards",
