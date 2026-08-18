@@ -15,9 +15,9 @@ export const dict = {
     diag: {
       kicker: "Antes de hablar con nosotros",
       title: "Mirá cuánto está dejando tu automotora sobre la mesa.",
-      sub: "Es el mismo relevamiento que hacemos en una reunión de consultoría, pero gratis y en minutos. Respondés sobre tu operación y te armamos un diagnóstico real: en qué porcentaje trabajás por área, cuánto se te está escapando y qué conviene resolver primero.",
-      f1a: "Análisis de tu caso concreto", f1b: "no un PDF genérico",
-      f2a: "Lo revisa una persona", f2b: "antes de llegarte",
+      sub: "Contanos cómo trabajás hoy y te devolvemos un diagnóstico claro de tu automotora: qué áreas funcionan bien y por dónde se te está yendo la plata. Es lo mismo que veríamos juntos en una reunión, resuelto en cinco minutos y sin costo.",
+      f1a: "Hecho para tu automotora", f1b: "con los datos de tu operación",
+      f2a: "Lo revisa una persona", f2b: "antes de que te llegue",
       f3a: "Gratis y sin compromiso", f3b: "vos decidís después",
       start: "Empezar mi diagnóstico gratis →",
       prefer: "Prefiero agendar una reunión",
@@ -75,8 +75,8 @@ export const dict = {
     diag: {
       kicker: "Before we even talk",
       title: "See how much your dealership is leaving on the table.",
-      sub: "It's the same assessment we run in a paid consulting session, but free and in minutes. You answer about your operation and we build a real diagnosis: how well each area runs, how much is slipping away and what to fix first.",
-      f1a: "Analysis of your real case", f1b: "not a generic PDF",
+      sub: "Tell us how you work today and we send back a clear diagnosis of your dealership: which areas run well and where money is slipping away. It's the same thing we'd walk through in a meeting, done in five minutes and free.",
+      f1a: "Built for your dealership", f1b: "from your own operation's data",
       f2a: "A person reviews it", f2b: "before it reaches you",
       f3a: "Free, no commitment", f3b: "you decide afterwards",
       start: "Start my free diagnosis →",

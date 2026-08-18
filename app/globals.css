@@ -58,6 +58,11 @@ body {
   overflow-x: hidden;
 }
 
+/* Evita "viudas": nunca dejar una o dos palabras solas en la última línea.
+   pretty → párrafos (evita huérfanas al final); balance → titulares/frases cortas. */
+p, li, figcaption, .text-body, .wa-bubble { text-wrap: pretty; }
+h1, h2, h3, h4, .font-display, .chip, .label, summary, blockquote { text-wrap: balance; }
+
 ::selection { background: var(--brand-accent); color: white; }
 
 /* Scrollbar oscura */
@@ -75,19 +80,18 @@ a:hover .logo-hover,
   filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(120,160,255,0.6));
 }
 
-/* Tarjeta de paso conectada (método) */
+/* Tarjeta de paso (estilo Scalefy: sutil, a medida, no gigante) */
 .step-card {
   position: relative;
-  background: linear-gradient(180deg, rgba(47,95,214,0.09), rgba(255,255,255,0.015));
-  border: 1px solid rgba(143,176,255,0.16);
-  border-radius: 16px;
-  transition: border-color 300ms, transform 300ms, box-shadow 300ms;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  transition: border-color 300ms, background 300ms;
 }
 .step-card:hover {
-  border-color: rgba(143,176,255,0.45);
-  transform: translateY(-4px);
+  border-color: rgba(143,176,255,0.35);
+  background: rgba(255,255,255,0.045);
 }
-@media (prefers-reduced-motion: reduce) { .step-card:hover { transform: none; } }
 
 /* ═══ Transición tipo horizonte de planeta ═══
    Curva amplia con glow azul y puntos, no un corte recto. */

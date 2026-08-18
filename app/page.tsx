@@ -3,6 +3,7 @@
 import { site } from "@/lib/site";
 import { WhatsappMock, NeuroPanelMock } from "@/components/brand-mark";
 import { Reveal } from "@/components/reveal";
+import { Spotlight } from "@/components/spotlight";
 import { HeroVideo } from "@/components/hero-video";
 import { DiagnosticoLauncher } from "@/components/diagnostico-launcher";
 import { useLang } from "@/components/lang-provider";
@@ -86,29 +87,24 @@ function Metodo() {
   return (
     <section id="metodo" className="relative overflow-hidden" style={{ background: "var(--page)" }}>
       <div className="wrap relative py-24 md:py-28">
-        <Reveal className="max-w-2xl">
+        <Reveal className="mx-auto max-w-2xl text-center">
           <div className="label" style={{ color: "#8fb0ff" }}>{t.metodo.kicker}</div>
-          <h2 className="font-display font-semibold mt-4 text-paper" style={{ fontSize: "clamp(2rem, 4.2vw, 3.25rem)" }}>{t.metodo.title}</h2>
-          <p className="mt-5 text-lg" style={{ color: "var(--paper-dim)" }}>{t.metodo.sub}</p>
+          <h2 className="font-display font-semibold mt-4 text-paper" style={{ fontSize: "clamp(1.9rem, 3.4vw, 2.7rem)" }}>{t.metodo.title}</h2>
+          <p className="mt-4 text-base" style={{ color: "var(--paper-dim)" }}>{t.metodo.sub}</p>
         </Reveal>
 
-        {/* Bloques conectados */}
-        <ol className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        {/* Bloques a medida, con spotlight que sigue el cursor */}
+        <ol className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
           {fases.map((f, i) => (
-            <Reveal as="li" key={f.n} delay={i * 90} className="relative">
-              {/* Conector hacia el siguiente */}
-              {i < fases.length - 1 && (
-                <span aria-hidden className="absolute right-[-10px] top-16 z-10 hidden text-lg lg:block" style={{ color: "rgba(143,176,255,0.5)" }}>›</span>
-              )}
-              <div className="step-card h-full p-6">
-                <div className="flex items-center gap-3">
-                  <span className="grid h-9 w-9 place-items-center rounded-xl font-display font-semibold text-white" style={{ background: "var(--brand-accent)", boxShadow: "0 0 18px -4px rgba(47,95,214,0.8)" }}>{f.n}</span>
-                  <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#8fb0ff" }}>{f.kicker}</span>
-                </div>
-                <h3 className="font-display font-semibold mt-4 text-lg text-paper">{f.title}</h3>
-                <p className="mt-2 text-sm" style={{ color: "var(--paper-dim)" }}>{f.body}</p>
+            <Spotlight as="li" key={f.n} tone="dark" className="step-card h-full p-6" style={{ transitionDelay: `${i * 70}ms` }}>
+              <span aria-hidden className="pointer-events-none absolute right-4 top-3 font-display font-semibold leading-none select-none" style={{ fontSize: 44, color: "rgba(143,176,255,0.10)" }}>{f.n}</span>
+              <div className="relative flex items-center gap-2.5">
+                <span className="grid h-8 w-8 place-items-center rounded-lg font-display text-sm font-semibold text-white" style={{ background: "var(--brand-accent)" }}>{f.n}</span>
+                <span className="text-[11px] font-semibold uppercase tracking-wider" style={{ color: "#8fb0ff" }}>{f.kicker}</span>
               </div>
-            </Reveal>
+              <h3 className="font-display font-semibold mt-4 text-base text-paper">{f.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--paper-dim)" }}>{f.body}</p>
+            </Spotlight>
           ))}
         </ol>
       </div>

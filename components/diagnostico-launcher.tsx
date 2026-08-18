@@ -3,12 +3,14 @@
 import { useEffect, useState, useCallback } from "react";
 import { DiagnosticoTool } from "@/components/diagnostico-tool";
 import { site } from "@/lib/site";
+import { useLang } from "@/components/lang-provider";
 
 /**
  * Invitación + modal del diagnóstico.
  * Cualquier enlace a #diagnostico abre el modal. Cierra con Escape o clic fuera.
  */
 export function DiagnosticoLauncher() {
+  const { t } = useLang();
   const [open, setOpen] = useState(false);
 
   const abrir = useCallback(() => setOpen(true), []);
@@ -61,9 +63,9 @@ export function DiagnosticoLauncher() {
       <div className="mx-auto max-w-3xl rounded-3xl p-8 text-center md:p-12" style={{ background: "var(--bg)", boxShadow: "0 30px 90px -40px rgba(47,95,214,0.35)" }}>
         <div className="grid gap-2.5 sm:grid-cols-3">
           {[
-            ["Análisis de tu caso concreto", "no un PDF genérico"],
-            ["Lo revisa una persona", "antes de llegarte"],
-            ["Gratis y sin compromiso", "vos decidís después"],
+            [t.diag.f1a, t.diag.f1b],
+            [t.diag.f2a, t.diag.f2b],
+            [t.diag.f3a, t.diag.f3b],
           ].map(([a, b]) => (
             <div key={a} className="rounded-xl px-4 py-3 text-sm" style={{ background: "var(--bg-2)" }}>
               <div className="font-medium" style={{ color: "var(--brand)" }}>{a}</div>
@@ -73,14 +75,14 @@ export function DiagnosticoLauncher() {
         </div>
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <button onClick={abrir} className="btn btn-shiny" style={{ borderRadius: "999px", height: 54, padding: "0 2rem" }}>
-            Empezar mi diagnóstico gratis →
+            {t.diag.start}
           </button>
           <a href={site.bookingUrl} target="_blank" rel="noopener noreferrer" className="btn" style={{ borderRadius: "999px", height: 54 }}>
-            Prefiero agendar una reunión
+            {t.diag.prefer}
           </a>
         </div>
         <p className="mt-4 text-xs" style={{ color: "var(--fg-muted)" }}>
-          Son 5 minutos. Al final elegís si agendás o nos escribís por WhatsApp.
+          {t.diag.note}
         </p>
       </div>
 
