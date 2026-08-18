@@ -119,6 +119,112 @@ export function SaasMock() {
   );
 }
 
+/** Sitio web con catálogo: buscador + fichas de unidades. Datos de ejemplo. */
+export function CatalogoMock() {
+  const autos = [
+    { m: "Corolla XEI 2024", km: "0 km", p: "US$ 32.900", tag: "Nuevo" },
+    { m: "Hilux SRV 4x4 2022", km: "48.000 km", p: "US$ 41.500", tag: "Usado" },
+    { m: "Onix LT 2023", km: "19.500 km", p: "US$ 18.900", tag: "Usado" },
+  ];
+  return (
+    <div className="overflow-hidden rounded-xl" style={{ background: "#0b1122", border: "1px solid rgba(143,176,255,0.18)" }}>
+      <div className="flex items-center gap-2 border-b px-4 py-2.5" style={{ borderColor: "rgba(143,176,255,0.14)" }}>
+        <span className="flex gap-1.5">
+          {["#ff6b6b", "#ffbf47", "#7cff9e"].map((c) => (<span key={c} className="h-2 w-2 rounded-full" style={{ background: c, opacity: 0.7 }} />))}
+        </span>
+        <span className="ml-2 flex-1 truncate rounded-md px-2 py-1 text-[10.5px]" style={{ background: "rgba(255,255,255,0.05)", color: "var(--paper-dim)" }}>autosur.com.uy/catalogo</span>
+      </div>
+      <div className="flex gap-1.5 px-3 pt-3">
+        <span className="flex-1 rounded-md px-2.5 py-1.5 text-[11px]" style={{ background: "rgba(255,255,255,0.04)", color: "var(--paper-dim)" }}>Buscar marca, modelo…</span>
+        {["Marca", "Precio"].map((f) => (
+          <span key={f} className="rounded-md px-2.5 py-1.5 text-[11px]" style={{ background: "rgba(47,95,214,0.18)", color: "#8fb0ff" }}>{f}</span>
+        ))}
+      </div>
+      <div className="grid gap-2 p-3">
+        {autos.map((a) => (
+          <div key={a.m} className="flex items-center gap-2.5 rounded-lg p-2.5" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+            <span className="grid h-10 w-14 shrink-0 place-items-center rounded-md text-[9px]" style={{ background: "linear-gradient(135deg, rgba(47,95,214,0.35), rgba(143,176,255,0.12))", color: "var(--paper-dim)" }}>foto</span>
+            <div className="min-w-0 flex-1">
+              <div className="truncate text-[12px] font-medium text-paper">{a.m}</div>
+              <div className="text-[10.5px]" style={{ color: "var(--paper-dim)" }}>{a.km}</div>
+            </div>
+            <div className="text-right">
+              <div className="text-[12px] font-semibold" style={{ color: "#8fb0ff" }}>{a.p}</div>
+              <span className="text-[9.5px]" style={{ color: "var(--paper-dim)" }}>{a.tag}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="border-t px-3 py-2 text-[10.5px]" style={{ borderColor: "rgba(143,176,255,0.14)", color: "var(--paper-dim)" }}>
+        Cada consulta del formulario entra directo al sistema
+      </div>
+    </div>
+  );
+}
+
+/** Publicidad con seguimiento: qué anuncio trajo qué venta. Datos de ejemplo. */
+export function AdsMock() {
+  const filas = [
+    { c: "Hilux 4x4 · Meta", cli: "412", lead: "28", v: "3", top: true },
+    { c: "0 km · Google", cli: "306", lead: "19", v: "2", top: false },
+    { c: "Usados · Meta", cli: "255", lead: "11", v: "1", top: false },
+  ];
+  return (
+    <div className="overflow-hidden rounded-xl" style={{ background: "#0b1122", border: "1px solid rgba(143,176,255,0.18)" }}>
+      <div className="flex items-center justify-between border-b px-4 py-2.5" style={{ borderColor: "rgba(143,176,255,0.14)" }}>
+        <span className="text-[13px] text-paper">Campañas · septiembre</span>
+        <span className="rounded-md px-2 py-1 text-[10.5px]" style={{ background: "rgba(124,255,158,0.14)", color: "#7cff9e" }}>ROI 4,2x</span>
+      </div>
+      <div className="grid gap-2 px-3 pt-3 text-[10px] uppercase" style={{ gridTemplateColumns: "1.9fr .7fr .7fr .8fr", color: "var(--paper-dim)", letterSpacing: "0.08em" }}>
+        <span>Campaña</span><span className="text-right">Clics</span><span className="text-right">Leads</span><span className="text-right">Ventas</span>
+      </div>
+      <div className="grid gap-1.5 p-3 pt-2">
+        {filas.map((f) => (
+          <div key={f.c} className="grid items-center gap-2 rounded-lg px-2.5 py-2 text-[11.5px]"
+            style={{ gridTemplateColumns: "1.9fr .7fr .7fr .8fr", background: f.top ? "rgba(47,95,214,0.16)" : "rgba(255,255,255,0.03)", border: `1px solid ${f.top ? "rgba(143,176,255,0.28)" : "rgba(255,255,255,0.06)"}` }}>
+            <span className="truncate text-paper">{f.c}</span>
+            <span className="text-right" style={{ color: "var(--paper-dim)" }}>{f.cli}</span>
+            <span className="text-right" style={{ color: "var(--paper-dim)" }}>{f.lead}</span>
+            <span className="text-right font-semibold" style={{ color: f.top ? "#7cff9e" : "#8fb0ff" }}>{f.v}</span>
+          </div>
+        ))}
+      </div>
+      <div className="border-t px-3 py-2 text-[10.5px]" style={{ borderColor: "rgba(143,176,255,0.14)", color: "var(--paper-dim)" }}>
+        Sabés qué anuncio pagó el auto que vendiste
+      </div>
+    </div>
+  );
+}
+
+/** Contenido armado desde el stock a mover. Datos de ejemplo. */
+export function ContenidoMock() {
+  const posts = [
+    { t: "Reel · Hilux 4x4", e: "Publicado", c: "#7cff9e" },
+    { t: "Foto · Corolla 0 km", e: "Programado jue 10h", c: "#8fb0ff" },
+    { t: "Carrusel · Usados", e: "En edición", c: "#ffbf47" },
+  ];
+  return (
+    <div className="overflow-hidden rounded-xl" style={{ background: "#0b1122", border: "1px solid rgba(143,176,255,0.18)" }}>
+      <div className="flex items-center justify-between border-b px-4 py-2.5" style={{ borderColor: "rgba(143,176,255,0.14)" }}>
+        <span className="text-[13px] text-paper">Contenido de la semana</span>
+        <span className="text-[10.5px]" style={{ color: "var(--paper-dim)" }}>desde tu stock</span>
+      </div>
+      <div className="m-3 rounded-lg p-2.5 text-[11px]" style={{ background: "rgba(47,95,214,0.12)", border: "1px solid rgba(143,176,255,0.16)", color: "var(--paper-dim)" }}>
+        <b className="text-paper">3 Hilux</b> llevan +60 días en el predio. El contenido de esta semana apunta ahí.
+      </div>
+      <div className="grid gap-2 px-3 pb-3">
+        {posts.map((p) => (
+          <div key={p.t} className="flex items-center gap-2.5 rounded-lg p-2.5" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-md text-[9px]" style={{ background: "linear-gradient(135deg, rgba(47,95,214,0.35), rgba(143,176,255,0.12))", color: "var(--paper-dim)" }}>▶</span>
+            <span className="min-w-0 flex-1 truncate text-[12px] text-paper">{p.t}</span>
+            <span className="shrink-0 rounded-md px-2 py-1 text-[10px]" style={{ background: `${p.c}1f`, color: p.c }}>{p.e}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function WhatsappMock() {
   return (
     <div className="surface overflow-hidden">

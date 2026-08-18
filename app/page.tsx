@@ -1,8 +1,9 @@
 "use client";
 
 import { site } from "@/lib/site";
-import { WhatsappMock, NeuroPanelMock } from "@/components/brand-mark";
+import { WhatsappMock, NeuroPanelMock, CatalogoMock, AdsMock, ContenidoMock } from "@/components/brand-mark";
 import { Reveal } from "@/components/reveal";
+import { Spotlight } from "@/components/spotlight";
 import { HeroVideo } from "@/components/hero-video";
 import { DiagnosticoLauncher } from "@/components/diagnostico-launcher";
 import { useLang } from "@/components/lang-provider";
@@ -24,8 +25,7 @@ export default function Home() {
       <div className="horizon horizon-dark" aria-hidden />
       <Metodo />
       <div className="horizon horizon-light" aria-hidden />
-      <Producto />
-      <Servicios />
+      <Sistema />
       <div className="horizon horizon-dark" aria-hidden />
       <Agendar />
       <FAQ />
@@ -81,6 +81,20 @@ function Diagnostico() {
 }
 
 /* ─── 3. Método (OSCURO): proceso conectado, monocromo azul ─── */
+/** Íconos de cada fase (stroke, a medida) */
+const FASE_ICONS = [
+  // 1 Detectamos — lupa
+  <><circle cx="11" cy="11" r="6.5" /><path d="M20 20l-4.4-4.4" /></>,
+  // 2 Diseñamos — regla/escuadra
+  <><path d="M4 16.5L16.5 4l3.5 3.5L7.5 20z" /><path d="M9 9l2 2M12.5 5.5l2 2M6.5 11.5l2 2" /></>,
+  // 3 Construimos — bloques
+  <><rect x="3.5" y="3.5" width="7" height="7" rx="1.5" /><rect x="13.5" y="3.5" width="7" height="7" rx="1.5" /><rect x="3.5" y="13.5" width="7" height="7" rx="1.5" /><path d="M17 13.5v7M13.5 17h7" /></>,
+  // 4 Activamos — cohete
+  <><path d="M12 3c3.5 2 5.5 5.5 5.5 9.5L12 17l-5.5-4.5C6.5 8.5 8.5 5 12 3z" /><circle cx="12" cy="10" r="1.8" /><path d="M9 18.5c-1 1.5-1 3 -1 3s1.5 0 3-1M15 18.5c1 1.5 1 3 1 3s-1.5 0-3-1" /></>,
+  // 5 Escalamos — barras en alza
+  <><path d="M4 20h16" /><rect x="6" y="12" width="3.5" height="5" rx="1" /><rect x="11.5" y="8" width="3.5" height="9" rx="1" /><rect x="17" y="4.5" width="3.5" height="12.5" rx="1" /></>,
+];
+
 function Metodo() {
   const { t, fases } = useLang();
   return (
@@ -92,130 +106,82 @@ function Metodo() {
           <p className="mt-4 text-base" style={{ color: "var(--paper-dim)" }}>{t.metodo.sub}</p>
         </Reveal>
 
-        {/* Mobile/tablet: recorrido vertical conectado, monocromo */}
-        <ol className="relative mx-auto mt-12 max-w-md lg:hidden">
-          <span aria-hidden className="absolute left-[17px] top-2 bottom-2 w-px" style={{ background: "linear-gradient(180deg, rgba(143,176,255,0.55), rgba(143,176,255,0.06))" }} />
+        {/* Bloques con spotlight, ícono y contenido centrado */}
+        <ol className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
           {fases.map((f, i) => (
-            <Reveal as="li" key={f.n} delay={i * 60} className="relative flex gap-5 pb-9 last:pb-0">
-              <span
-                className="relative z-10 grid h-9 w-9 shrink-0 place-items-center rounded-full font-display text-[13px] font-semibold"
-                style={{ background: "rgba(47,95,214,0.16)", border: "1px solid rgba(143,176,255,0.45)", color: "#8fb0ff", boxShadow: "0 0 0 5px var(--page)" }}
+            <Spotlight as="li" key={f.n} tone="dark" className="step-card h-full p-6 text-center" style={{ transitionDelay: `${i * 70}ms` }}>
+              <span aria-hidden className="pointer-events-none absolute right-4 top-3 font-display font-semibold leading-none select-none" style={{ fontSize: 44, color: "rgba(143,176,255,0.10)" }}>{f.n}</span>
+              <div
+                className="relative mx-auto grid h-12 w-12 place-items-center rounded-xl"
+                style={{ background: "rgba(47,95,214,0.18)", border: "1px solid rgba(143,176,255,0.28)", boxShadow: "0 8px 24px -12px rgba(47,95,214,0.8)" }}
               >
-                {f.n}
-              </span>
-              <div>
-                <div className="text-[11px] font-semibold uppercase" style={{ color: "#8fb0ff", letterSpacing: "0.14em" }}>{f.kicker}</div>
-                <h3 className="font-display font-semibold text-lg text-paper" style={{ marginTop: 3 }}>{f.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--paper-dim)" }}>{f.body}</p>
+                <svg viewBox="0 0 24 24" className="h-[22px] w-[22px]" fill="none" stroke="#8fb0ff" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                  {FASE_ICONS[i]}
+                </svg>
               </div>
-            </Reveal>
+              <div className="relative mt-4 text-[11px] font-semibold uppercase" style={{ color: "#8fb0ff", letterSpacing: "0.14em" }}>{f.kicker}</div>
+              <h3 className="font-display font-semibold mt-1.5 text-base text-paper">{f.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--paper-dim)" }}>{f.body}</p>
+            </Spotlight>
           ))}
         </ol>
-
-        {/* Desktop: 5 pasos en fila unidos por una línea, monocromo */}
-        <div className="relative mt-16 hidden lg:block">
-          <span aria-hidden className="absolute left-0 right-0" style={{ top: 17, height: 1, background: "linear-gradient(90deg, transparent, rgba(143,176,255,0.35) 12%, rgba(143,176,255,0.35) 88%, transparent)" }} />
-          <ol className="grid grid-cols-5 gap-6">
-            {fases.map((f, i) => (
-              <Reveal as="li" key={f.n} delay={i * 70} className="group relative">
-                <span
-                  className="relative z-10 grid h-9 w-9 place-items-center rounded-full font-display text-[13px] font-semibold transition-colors"
-                  style={{ background: "#0b1122", border: "1px solid rgba(143,176,255,0.45)", color: "#8fb0ff", boxShadow: "0 0 0 6px var(--page)" }}
-                >
-                  {f.n}
-                </span>
-                <div className="mt-6 text-[11px] font-semibold uppercase" style={{ color: "#8fb0ff", letterSpacing: "0.14em" }}>{f.kicker}</div>
-                <h3 className="font-display font-semibold mt-1.5 text-base text-paper">{f.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--paper-dim)" }}>{f.body}</p>
-              </Reveal>
-            ))}
-          </ol>
-        </div>
       </div>
     </section>
   );
 }
 
-/* ─── 4. Producto (CLARO): el software real ─── */
-function Producto() {
-  const { t } = useLang();
+/* ─── 4. Sistema (CLARO): las piezas, cada una con su ejemplo real ─── */
+function Sistema() {
+  const { t, servicios } = useLang();
+  const mocks = [<NeuroPanelMock key="p" />, <WhatsappMock key="w" />, <CatalogoMock key="c" />, <AdsMock key="a" />, <ContenidoMock key="n" />];
+
   return (
-    <section id="producto" style={{ background: "#fff" }}>
+    <section id="producto" className="scroll-mt-20" style={{ background: "#fff" }}>
       <div className="wrap py-24 md:py-28">
-        <Reveal className="max-w-2xl">
+        <Reveal className="mx-auto max-w-2xl text-center">
           <div className="label" style={{ color: "var(--brand-accent)" }}>{t.metodo.showKicker}</div>
           <h2 className="font-display font-semibold mt-4" style={{ fontSize: "clamp(1.55rem, 5vw, 3rem)", color: "var(--brand)" }}>{t.metodo.showTitle}</h2>
-          <p className="mt-5 text-lg" style={{ color: "var(--fg-muted)" }}>{t.metodo.showSub}</p>
+          <p className="mx-auto mt-5 max-w-xl text-lg" style={{ color: "var(--fg-muted)" }}>{t.servicios.sub}</p>
         </Reveal>
 
-        <div className="mt-10 grid gap-6 lg:grid-cols-[1.15fr_1fr] lg:items-start">
-          <Reveal>
-            <div className="flex items-baseline gap-2">
-              <span className="chip">El cerebro</span>
-              <h3 className="font-display font-semibold text-lg" style={{ color: "var(--brand)" }}>Tu panel de control</h3>
-            </div>
-            <p className="mt-2 text-sm" style={{ color: "var(--fg-muted)" }}>
-              Cada mañana te dice qué hacer: a qué clientes llamar primero, cuánta plata está en riesgo y cómo va cada área. Ejemplo con datos de muestra.
-            </p>
-            <div className="mt-4 rounded-2xl p-2" style={{ background: "var(--bg-2)" }}>
-              <NeuroPanelMock />
-            </div>
-          </Reveal>
-          <Reveal delay={120}>
-            <div className="flex items-baseline gap-2">
-              <span className="chip">El asistente</span>
-              <h3 className="font-display font-semibold text-lg" style={{ color: "var(--brand)" }}>Atiende por WhatsApp</h3>
-            </div>
-            <p className="mt-2 text-sm" style={{ color: "var(--fg-muted)" }}>
-              Responde 24/7, informa el stock y agenda test-drives solo. Deriva al vendedor cuando el cliente está listo para comprar.
-            </p>
-            <div className="mt-4 rounded-2xl p-2" style={{ background: "var(--bg-2)" }}>
-              <WhatsappMock />
-            </div>
-          </Reveal>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ─── 5. Servicios (CLARO): las piezas ─── */
-function Servicios() {
-  const { t, servicios } = useLang();
-  return (
-    <section id="servicios" className="border-t rule" style={{ background: "var(--bg-2)" }}>
-      <div className="wrap py-24 md:py-28">
-        <Reveal className="max-w-2xl">
-          <div className="label" style={{ color: "var(--brand-accent)" }}>{t.servicios.kicker}</div>
-          <h2 className="font-display font-semibold mt-4" style={{ fontSize: "clamp(1.55rem, 5vw, 3rem)", color: "var(--brand)" }}>{t.servicios.title}</h2>
-          <p className="mt-5 text-lg" style={{ color: "var(--fg-muted)" }}>{t.servicios.sub}</p>
-        </Reveal>
-
-        <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div id="servicios" className="mt-16 grid gap-14 scroll-mt-20 md:gap-20">
           {servicios.map((s, i) => (
-            <Reveal as="article" key={s.n} delay={i * 60} className="card-light p-7">
-              <div className="num-xl" style={{ color: "rgba(47,95,214,0.16)" }}>{s.n}</div>
-              <h3 className="font-display font-semibold mt-3 text-xl" style={{ color: "var(--brand)" }}>{s.name}</h3>
-              <p className="mt-3 text-sm" style={{ color: "var(--fg-muted)" }}>{s.body}</p>
-              <div className="mt-5 flex flex-wrap gap-2">
-                {s.canales.map((c) => (<span key={c} className="chip">{c}</span>))}
+            <Reveal key={s.n} as="article" className="grid items-center gap-7 lg:grid-cols-2 lg:gap-12">
+              {/* Texto — alterna de lado en desktop */}
+              <div className={i % 2 === 1 ? "lg:order-2" : ""}>
+                <div className="flex items-center gap-3">
+                  <span className="font-display text-3xl font-bold" style={{ color: "rgba(47,95,214,0.22)" }}>{s.n}</span>
+                  <h3 className="font-display font-semibold text-xl md:text-2xl" style={{ color: "var(--brand)" }}>{s.name}</h3>
+                </div>
+                <p className="mt-3 text-[0.95rem] md:text-base" style={{ color: "var(--fg-muted)" }}>{s.body}</p>
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {s.canales.map((c) => (<span key={c} className="chip">{c}</span>))}
+                </div>
+              </div>
+              {/* Ejemplo real del sistema */}
+              <div className={`rounded-2xl p-2.5 ${i % 2 === 1 ? "lg:order-1" : ""}`} style={{ background: "var(--bg-2)", border: "1px solid var(--rule)" }}>
+                {mocks[i]}
               </div>
             </Reveal>
           ))}
-
-          <Reveal as="article" delay={servicios.length * 60} className="flex flex-col justify-between rounded-2xl p-7" style={{ background: "linear-gradient(150deg, var(--brand-accent), #16306b)", boxShadow: "0 20px 60px -20px rgba(47,95,214,0.5)" }}>
-            <div>
-              <span className="chip" style={{ background: "rgba(255,255,255,0.15)", color: "#fff", borderColor: "rgba(255,255,255,0.25)" }}>{t.servicios.planChip}</span>
-              <h3 className="font-display font-semibold mt-4 text-xl text-white">{t.servicios.planTitle}</h3>
-              <p className="mt-3 text-sm" style={{ color: "rgba(255,255,255,0.9)" }}>{t.servicios.planBody}</p>
-            </div>
-            <a href="#diagnostico" className="mt-6 inline-flex text-sm font-medium text-white underline underline-offset-4">{t.servicios.planCta}</a>
-          </Reveal>
         </div>
+
+        <Reveal className="mt-16 flex flex-col items-start justify-between gap-6 rounded-2xl p-8 md:flex-row md:items-center md:p-10"
+          style={{ background: "linear-gradient(150deg, var(--brand-accent), #16306b)", boxShadow: "0 20px 60px -20px rgba(47,95,214,0.5)" }}>
+          <div>
+            <span className="chip" style={{ background: "rgba(255,255,255,0.15)", color: "#fff", borderColor: "rgba(255,255,255,0.25)" }}>{t.servicios.planChip}</span>
+            <h3 className="font-display font-semibold mt-4 text-xl text-white md:text-2xl">{t.servicios.planTitle}</h3>
+            <p className="mt-3 max-w-xl text-sm" style={{ color: "rgba(255,255,255,0.9)" }}>{t.servicios.planBody}</p>
+          </div>
+          <a href="#diagnostico" className="btn shrink-0" style={{ background: "#fff", borderColor: "#fff", color: "var(--brand)", borderRadius: "999px" }}>
+            {t.servicios.planCta}
+          </a>
+        </Reveal>
       </div>
     </section>
   );
 }
+
 
 /* ─── Agendar (OSCURO, embed cal.com) ─── */
 function Agendar() {
