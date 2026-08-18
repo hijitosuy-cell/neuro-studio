@@ -333,6 +333,30 @@ export const secciones: Seccion[] = [
         ],
       },
       {
+        tipo: "select", id: "inversion_inicial", express: true,
+        label: "Para poner en marcha el sistema, ¿qué inversión inicial les cerraría?",
+        ayuda: "Es un pago único de arranque. Un rango aproximado nos alcanza para saber por dónde ir.",
+        opciones: [
+          { label: "Hasta USD 1.000" },
+          { label: "Entre USD 1.000 y 3.000" },
+          { label: "Entre USD 3.000 y 6.000" },
+          { label: "Más de USD 6.000" },
+          { label: "Depende de lo que incluya" },
+        ],
+      },
+      {
+        tipo: "select", id: "inversion_mensual", express: true,
+        label: "¿Y cuánto por mes para mantenerlo y seguir mejorándolo?",
+        ayuda: "Soporte, mejoras y marketing. Ayuda a saber qué plan tiene sentido para ustedes.",
+        opciones: [
+          { label: "Hasta USD 150 / mes" },
+          { label: "Entre USD 150 y 400 / mes" },
+          { label: "Entre USD 400 y 800 / mes" },
+          { label: "Más de USD 800 / mes" },
+          { label: "Prefiero definirlo en la reunión" },
+        ],
+      },
+      {
         tipo: "select", id: "como_definen",
         label: "¿Cómo definen cuánto invertir en algo así?",
         opciones: [

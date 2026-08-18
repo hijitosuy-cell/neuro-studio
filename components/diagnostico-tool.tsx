@@ -103,6 +103,8 @@ export function DiagnosticoTool() {
         costoEstimado: r.dolor_costo ?? "",
         prioridad: r.prioridad ?? "",
         presupuesto: r.presupuesto ?? "",
+        inversionInicial: r.inversion_inicial ?? "",
+        inversionMensual: r.inversion_mensual ?? "",
         quienDecide: r.quien_decide ?? "",
         plazo: r.plazo ?? "",
         compromiso: r.compromiso ?? "",
@@ -135,6 +137,10 @@ export function DiagnosticoTool() {
     ];
     if (r.dolor_principal) l.push("", `🎯 *Principal problema:*`, String(r.dolor_principal));
     if (r.dolor_costo) l.push("", `💸 Costo estimado por mes: ${r.dolor_costo}`);
+    const inv: string[] = [];
+    if (r.inversion_inicial) inv.push(`Inicial: ${r.inversion_inicial}`);
+    if (r.inversion_mensual) inv.push(`Mensual: ${r.inversion_mensual}`);
+    if (inv.length) l.push("", `💰 *Inversión que maneja:* ${inv.join(" · ")}`);
     if (elegidosNombres.length) l.push("", "*Me interesa:*", ...elegidosNombres.map((n) => `✅ ${n}`));
     l.push("", "Quiero coordinar una reunión. 🗓️");
     return encodeURIComponent(l.join("\n"));
