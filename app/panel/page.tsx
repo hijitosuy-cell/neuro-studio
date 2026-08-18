@@ -2,8 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { collection, getDocs, query, orderBy, limit, doc, updateDoc } from "firebase/firestore";
-import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { db, auth } from "@/lib/firebase";
+import { db } from "@/lib/firebase";
 
 type Diag = {
   id: string;
@@ -36,70 +35,48 @@ type Diag = {
 // Gate simple del lado del cliente. La seguridad REAL la dan las reglas de
 // Firestore (deben exigir auth para leer). La clave sale de una variable de
 // entorno para no quedar fija en el código.
+// Credenciales del panel (gate simple del lado del cliente).
+// La seguridad real de los datos la deben dar las reglas de Firestore.
+const USUARIO = "neuro";
+const CLAVE = "neuro2026";
+
 export default function Panel() {
-  const [user, setUser] = useState<string | null>(null);
-  const [checking, setChecking] = useState(true);
-  const [email, setEmail] = useState("");
+  const [ok, setOk] = useState(false);
+  const [user, setUser] = useState("");
   const [pass, setPass] = useState("");
   const [err, setErr] = useState("");
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (u) => {
-      setUser(u ? u.email : null);
-      setChecking(false);
-    });
-    return () => unsub();
+    if (typeof window !== "undefined" && sessionStorage.getItem("ns-panel") === "1") setOk(true);
   }, []);
 
-  async function entrar() {
-    setErr("");
-    setLoading(true);
-    try {
-      await signInWithEmailAndPassword(auth, email.trim(), pass);
-    } catch (e: unknown) {
-      const code = (e as { code?: string })?.code || "";
-      const msg =
-        code === "auth/operation-not-allowed"
-          ? "El proveedor Email/Contraseña no está activado en Firebase. Activalo en Authentication → Sign-in method."
-          : code === "auth/invalid-email"
-          ? "El email no tiene un formato válido."
-          : code === "auth/user-not-found"
-          ? "No existe un usuario con ese email. Crealo en Firebase → Authentication → Users."
-          : code === "auth/wrong-password" || code === "auth/invalid-credential"
-          ? "Email o contraseña incorrectos."
-          : code === "auth/too-many-requests"
-          ? "Demasiados intentos. Esperá unos minutos y probá de nuevo."
-          : `Error: ${code || "no se pudo iniciar sesión"}`;
-      setErr(msg);
-    } finally {
-      setLoading(false);
+  function entrar() {
+    if (user.trim() === USUARIO && pass === CLAVE) {
+      sessionStorage.setItem("ns-panel", "1");
+      setOk(true);
+    } else {
+      setErr("Usuario o contraseña incorrectos.");
     }
   }
 
-  if (checking) {
-    return <main style={{ background: "var(--page)", minHeight: "80vh" }} />;
-  }
-
-  if (!user) {
+  if (!ok) {
     return (
       <main style={{ background: "var(--page)", minHeight: "80vh" }}>
         <div className="wrap flex min-h-[70vh] items-center justify-center">
           <div className="w-full max-w-sm rounded-2xl p-8" style={{ background: "var(--bg)" }}>
             <h1 className="font-display text-2xl font-semibold" style={{ color: "var(--brand)" }}>Panel interno</h1>
-            <p className="mt-2 text-sm" style={{ color: "var(--fg-muted)" }}>Acceso solo para el equipo de Neuro Studio.</p>
+            <p className="mt-2 text-sm" style={{ color: "var(--fg-muted)" }}>Diagnósticos guardados de la web.</p>
             <input
-              type="email"
-              autoComplete="username"
-              value={email}
-              onChange={(e) => { setEmail(e.target.value); setErr(""); }}
-              placeholder="Email"
+              type="text"
+              value={user}
+              onChange={(e) => { setUser(e.target.value); setErr(""); }}
+              onKeyDown={(e) => e.key === "Enter" && entrar()}
+              placeholder="Usuario"
               className="mt-6 h-12 w-full rounded-lg border px-4"
               style={{ borderColor: "var(--rule-strong)", background: "#fff", color: "var(--fg)" }}
             />
             <input
               type="password"
-              autoComplete="current-password"
               value={pass}
               onChange={(e) => { setPass(e.target.value); setErr(""); }}
               onKeyDown={(e) => e.key === "Enter" && entrar()}
@@ -108,19 +85,17 @@ export default function Panel() {
               style={{ borderColor: "var(--rule-strong)", background: "#fff", color: "var(--fg)" }}
             />
             {err && <p className="mt-2 text-sm" style={{ color: "#dc2626" }}>{err}</p>}
-            <button onClick={entrar} disabled={loading} className="btn btn-brand mt-4 w-full">
-              {loading ? "Entrando…" : "Entrar"}
-            </button>
+            <button onClick={entrar} className="btn btn-brand mt-4 w-full">Entrar</button>
           </div>
         </div>
       </main>
     );
   }
 
-  return <PanelContent email={user} onSalir={() => signOut(auth)} />;
+  return <PanelContent onSalir={() => { sessionStorage.removeItem("ns-panel"); setOk(false); }} />;
 }
 
-function PanelContent({ email, onSalir }: { email: string; onSalir: () => void }) {
+function PanelContent({ onSalir }: { onSalir: () => void }) {
   const [items, setItems] = useState<Diag[]>([]);
   const [loading, setLoading] = useState(true);
   const [sel, setSel] = useState<Diag | null>(null);
@@ -171,7 +146,6 @@ function PanelContent({ email, onSalir }: { email: string; onSalir: () => void }
             <p className="text-sm" style={{ color: "var(--paper-dim)" }}>{filtrados.length} de {items.length} · sin ver: {items.filter((i) => !i.visto).length}</p>
           </div>
           <div className="flex items-center gap-3">
-            <span className="hidden text-xs sm:inline" style={{ color: "var(--paper-dim)" }}>{email}</span>
             <button onClick={cargar} className="btn btn-on-dark" style={{ height: 40 }}>Actualizar</button>
             <button onClick={onSalir} className="btn btn-on-dark" style={{ height: 40 }}>Salir</button>
           </div>
