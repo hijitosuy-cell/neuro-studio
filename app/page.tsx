@@ -104,49 +104,57 @@ function Metodo() {
           </p>
         </Reveal>
 
-        <ol className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {fases.map((f, i) => (
-            <Spotlight as="li" key={f.n} tone="dark" className="glass relative overflow-hidden p-7" style={{ transitionDelay: `${i * 60}ms` }}>
-              <div aria-hidden className="absolute right-4 top-2 font-display font-bold leading-none" style={{ fontSize: "5rem", color: "rgba(143,176,255,0.1)" }}>{f.n}</div>
-              <div aria-hidden className="absolute left-0 top-0 h-1 w-full" style={{ background: "linear-gradient(90deg, var(--brand-accent), transparent)" }} />
-              <div className="relative">
-                <div className="label" style={{ color: "#8fb0ff" }}>Paso {f.n}</div>
-                <h3 className="font-display font-semibold mt-2 text-xl text-paper">{f.title}</h3>
-                <p className="mt-3 text-sm" style={{ color: "var(--paper-dim)" }}>{f.body}</p>
-              </div>
-            </Spotlight>
-          ))}
-        </ol>
+        {/* Timeline conectado */}
+        <div className="relative mt-16">
+          <div aria-hidden className="absolute left-0 right-0 top-6 hidden h-px lg:block" style={{ background: "linear-gradient(90deg, transparent, rgba(47,95,214,0.6) 12%, rgba(47,95,214,0.6) 88%, transparent)" }} />
+          <ol className="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-5">
+            {fases.map((f, i) => (
+              <Reveal as="li" key={f.n} delay={i * 90} className="relative">
+                <div className="relative z-10 grid h-12 w-12 place-items-center rounded-full font-display font-semibold text-base text-white" style={{ background: "var(--brand-accent)", boxShadow: "0 0 0 4px var(--page), 0 0 24px -4px rgba(47,95,214,0.8)" }}>
+                  {f.n}
+                </div>
+                <div className="mt-5">
+                  <div className="text-xs font-semibold uppercase tracking-wider" style={{ color: "#8fb0ff" }}>{f.kicker}</div>
+                  <h3 className="font-display font-semibold mt-1.5 text-lg text-paper">{f.title}</h3>
+                  <p className="mt-2 text-sm" style={{ color: "var(--paper-dim)" }}>{f.body}</p>
+                </div>
+              </Reveal>
+            ))}
+          </ol>
+        </div>
 
-        {/* Producto en acción — lo que queda funcionando */}
-        <Reveal className="mt-20 max-w-2xl">
-          <div className="label" style={{ color: "#8fb0ff" }}>Lo que queda funcionando</div>
+        {/* Producto real */}
+        <Reveal className="mt-24 max-w-2xl">
+          <div className="label" style={{ color: "#8fb0ff" }}>El sistema, por dentro</div>
           <h3 className="font-display font-semibold mt-3 text-2xl md:text-3xl text-paper">
-            Un sistema que gestiona tu negocio, no una app suelta.
+            Tu automotora gestionada desde un solo lugar.
           </h3>
           <p className="mt-4 text-base" style={{ color: "var(--paper-dim)" }}>
-            El cerebro que te dice qué hacer cada día, el asistente que atiende por vos,
+            El cerebro que cada mañana te dice qué hacer, el asistente que atiende por vos
             y todas las piezas conectadas trabajando juntas.
           </p>
         </Reveal>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-[1.15fr_1fr] lg:items-start">
-          <Spotlight tone="dark" className="glass p-3.5" reveal>
+          <Reveal className="glass p-3.5">
             <NeuroPanelMock />
-          </Spotlight>
-          <div className="grid gap-6">
-            <Spotlight tone="dark" className="glass p-3.5" reveal>
-              <WhatsappMock />
-            </Spotlight>
-          </div>
+          </Reveal>
+          <Reveal className="glass p-3.5" delay={120}>
+            <WhatsappMock />
+          </Reveal>
         </div>
 
         {/* Todas las piezas conectadas */}
-        <Reveal className="mt-8 grid gap-3 sm:grid-cols-3 lg:grid-cols-5">
+        <Reveal className="mt-6 grid gap-3 sm:grid-cols-3 lg:grid-cols-5">
           {serviciosWeb.map((s) => (
-            <div key={s.n} className="rounded-xl px-4 py-3.5 text-sm" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(143,176,255,0.14)" }}>
+            <div key={s.n} className="rounded-xl px-4 py-4" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(143,176,255,0.14)" }}>
               <span className="font-mono text-xs" style={{ color: "#8fb0ff" }}>{s.n}</span>
-              <div className="mt-1 font-medium text-paper">{s.name}</div>
+              <div className="mt-1.5 text-sm font-medium text-paper">{s.name}</div>
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {s.canales.slice(0, 2).map((c) => (
+                  <span key={c} className="rounded-full px-2 py-0.5 text-[10px]" style={{ background: "rgba(47,95,214,0.14)", color: "#8fb0ff" }}>{c}</span>
+                ))}
+              </div>
             </div>
           ))}
         </Reveal>
@@ -205,10 +213,11 @@ function Servicios() {
 
 /* ─── 5. FAQ (OSCURO) ─── */
 const faqs = [
-  { q: "¿Cuánto sale?", a: "El diagnóstico es gratis. Lo que se construye después se cotiza a medida según lo que necesites y el tamaño de tu operación. En la reunión te damos un precio cerrado, sin sorpresas." },
-  { q: "¿Cuánto tarda?", a: "El diagnóstico lo hacés en minutos desde la web. Lo que se construye muestra resultados cada 2 semanas; los primeros números comerciales se ven al segundo o tercer mes." },
-  { q: "¿Se integra con lo que ya uso?", a: "Sí. WhatsApp Business, MercadoLibre, Instagram, Google Calendar, Meta Ads y los CRM más usados. Si tenés algo distinto, lo evaluamos en el diagnóstico." },
-  { q: "¿De quién son los datos?", a: "Tuyos. El código y la información quedan en tu concesionaria. Si dejás de trabajar con nosotros, te queda todo funcionando." },
+  { q: "Ya tenemos un CRM / un sistema, ¿para qué los necesito?", a: "Perfecto, no venimos a reemplazar lo que funciona. El diagnóstico muestra qué partes de tu operación ese sistema ya resuelve y cuáles siguen dependiendo de WhatsApp, Excel o la memoria de alguien. Sobre eso trabajamos." },
+  { q: "¿Cuánto cuesta?", a: "El diagnóstico es gratis. Lo que se construye después se cotiza a medida según lo que necesites y el tamaño de tu operación. En la reunión te damos un precio cerrado, sin sorpresas ni letra chica." },
+  { q: "No tengo mucho tiempo para implementar algo nuevo. ¿Cómo es?", a: "Justamente por eso lo hacemos por sprints: cada 2 semanas te mostramos una parte andando y la migración de datos y la capacitación las hacemos nosotros. Tu equipo lo va usando de a poco, no de golpe." },
+  { q: "¿Se integra con lo que ya uso?", a: "Sí. WhatsApp Business, MercadoLibre, Instagram, Google Calendar, Meta Ads y los CRM más usados. Si tenés algo distinto, lo evaluamos en el diagnóstico y te decimos con honestidad si conviene integrar o migrar." },
+  { q: "¿De quién son los datos y el sistema?", a: "Tuyos. El código y la información quedan en tu concesionaria. Si dejás de trabajar con nosotros, te queda todo funcionando." },
   { q: "¿Trabajan fuera de Uruguay?", a: "Nuestra base está en Salto, Uruguay, y ahí damos soporte cercano. Si estás en la región, escribinos igual y lo evaluamos." },
 ];
 
@@ -255,16 +264,20 @@ function CTA() {
       <div className="wrap relative py-24 md:py-28 text-center">
         <Reveal>
           <h2 className="font-display font-semibold mx-auto max-w-3xl text-paper" style={{ fontSize: "clamp(2rem, 4.6vw, 3.5rem)" }}>
-            Empezá por el diagnóstico.
+            Cada día que pasa igual,
             <br />
-            <span className="accent-gradient">Es gratis y no te compromete a nada.</span>
+            <span className="accent-gradient">tu automotora deja plata sobre la mesa.</span>
           </h2>
+          <p className="mx-auto mt-6 max-w-xl text-base md:text-lg" style={{ color: "var(--paper-dim)" }}>
+            El diagnóstico te muestra exactamente cuánta. En minutos, gratis, y sin que
+            te llamemos si no querés. Después decidís vos.
+          </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <a href="#diagnostico" className="btn btn-shiny" style={{ borderRadius: "999px", height: 52, padding: "0 1.9rem" }}>
-              Hacer el diagnóstico
+              Ver cuánto estoy perdiendo
             </a>
             <a href={site.whatsappUrl} target="_blank" rel="noopener noreferrer" className="btn btn-on-dark" style={{ borderRadius: "999px", height: 52 }}>
-              Escribinos por WhatsApp
+              Hablar por WhatsApp
             </a>
           </div>
           <p className="mt-6 text-sm" style={{ color: "var(--paper-dim)" }}>

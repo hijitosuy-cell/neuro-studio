@@ -15,30 +15,35 @@ export const site = {
   ],
 };
 
-/** 5 fases — nombres en español, copy corto */
+/** 5 fases — timeline conectado, con kicker corto */
 export const fases = [
   {
     n: "1",
+    kicker: "Detectamos",
     title: "Diagnóstico",
     body: "Auditamos 10 áreas de tu concesionaria y te damos un puntaje del 0 al 100. Salís sabiendo exactamente dónde se te va la plata.",
   },
   {
     n: "2",
-    title: "Plan",
+    kicker: "Diseñamos",
+    title: "Plan a medida",
     body: "Definimos qué construir primero, con qué presupuesto y en qué orden. Alcance cerrado, sin sorpresas.",
   },
   {
     n: "3",
-    title: "Construcción",
-    body: "Armamos el sistema: CRM, chatbot, web, integraciones y automatizaciones. Cada 2 semanas ves una versión real andando.",
+    kicker: "Construimos",
+    title: "El sistema",
+    body: "Armamos CRM, chatbot, web, integraciones y automatizaciones. Cada 2 semanas ves una versión real andando.",
   },
   {
     n: "4",
+    kicker: "Activamos",
     title: "Puesta en marcha",
     body: "Migramos tus datos, capacitamos al equipo y acompañamos las primeras semanas hasta que todos lo usen.",
   },
   {
     n: "5",
+    kicker: "Escalamos",
     title: "Optimización",
     body: "Todos los meses medimos, corregimos y automatizamos más. El sistema mejora con tu negocio.",
   },

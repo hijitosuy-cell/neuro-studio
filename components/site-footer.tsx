@@ -27,16 +27,23 @@ export function SiteFooter() {
           <ul className="space-y-2.5 text-sm">
             <li><a href={`mailto:${site.email}`} className="text-paper hover:text-white">{site.email}</a></li>
             <li>
-              <a href={site.bookingUrl} target="_blank" rel="noopener noreferrer" className="text-paper hover:text-white">
-                Agendar diagnóstico
+              <a href={site.whatsappUrl} target="_blank" rel="noopener noreferrer" className="text-paper hover:text-white">
+                WhatsApp
               </a>
             </li>
+            <li>
+              <a href={site.bookingUrl} target="_blank" rel="noopener noreferrer" className="text-paper hover:text-white">
+                Agendar reunión
+              </a>
+            </li>
+            <li><a href="/privacidad" className="text-paper hover:text-white">Política de privacidad</a></li>
           </ul>
         </div>
       </div>
       <div className="border-t" style={{ borderColor: "rgba(255,255,255,0.1)" }}>
-        <div className="wrap py-5 text-xs" style={{ color: "rgba(255,255,255,0.45)" }}>
-          © {new Date().getFullYear()} Neuro Studio
+        <div className="wrap flex flex-col justify-between gap-2 py-5 text-xs md:flex-row" style={{ color: "rgba(255,255,255,0.45)" }}>
+          <span>© {new Date().getFullYear()} Neuro Studio · {site.location}</span>
+          <span><a href="/privacidad" className="hover:text-white">Privacidad</a></span>
         </div>
       </div>
     </footer>
