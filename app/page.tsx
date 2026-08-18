@@ -4,7 +4,7 @@ import { WhatsappMock, NeuroPanelMock } from "@/components/brand-mark";
 import { Reveal } from "@/components/reveal";
 import { Spotlight } from "@/components/spotlight";
 import { HeroVideo } from "@/components/hero-video";
-import { DiagnosticoTool } from "@/components/diagnostico-tool";
+import { DiagnosticoLauncher } from "@/components/diagnostico-launcher";
 
 export default function Home() {
   return (
@@ -63,23 +63,24 @@ function Hero() {
   );
 }
 
-/* ─── 2. Diagnóstico (CLARO) ─── */
+/* ─── 2. Diagnóstico (CLARO, abre modal) ─── */
 function Diagnostico() {
   return (
-    <section id="diagnostico" className="scroll-mt-20" style={{ background: "#fff" }}>
+    <section id="ver-diagnostico" className="scroll-mt-20" style={{ background: "#fff" }}>
       <div className="wrap py-24 md:py-28">
         <Reveal className="mx-auto max-w-3xl text-center">
-          <div className="label" style={{ color: "var(--brand-accent)" }}>Paso 1 · Gratis</div>
+          <div className="label" style={{ color: "var(--brand-accent)" }}>Antes de hablar con nosotros</div>
           <h2 className="font-display font-semibold mt-4" style={{ fontSize: "clamp(2rem, 4.4vw, 3.25rem)", color: "var(--brand)" }}>
-            ¿En qué porcentaje trabaja tu automotora?
+            Mirá cuánto está dejando tu automotora sobre la mesa.
           </h2>
           <p className="mx-auto mt-5 max-w-2xl text-lg" style={{ color: "var(--fg-muted)" }}>
-            Respondé unas preguntas y te damos un puntaje por área y uno general, con el
-            detalle de dónde estás perdiendo ventas. Sin costo, sin cuenta, en minutos.
+            Respondés unas preguntas sobre tu operación y nuestro sistema te arma un
+            diagnóstico: en qué porcentaje trabajás por área, dónde perdés ventas y qué
+            conviene resolver primero. Gratis, sin cuenta, en minutos.
           </p>
         </Reveal>
         <div className="mt-12">
-          <DiagnosticoTool />
+          <DiagnosticoLauncher />
         </div>
       </div>
     </section>
