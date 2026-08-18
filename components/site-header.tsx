@@ -4,25 +4,24 @@ import { site } from "@/lib/site";
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 border-b rule" style={{ background: "rgba(255,255,255,0.92)", backdropFilter: "blur(10px)" }}>
+    <header
+      className="sticky top-0 z-40 border-b"
+      style={{ background: "rgba(6,10,22,0.75)", backdropFilter: "blur(12px)", borderColor: "var(--rule-d)" }}
+    >
       <div className="wrap flex h-20 items-center justify-between">
-        <Link href="/" className="flex items-center gap-2.5" aria-label="Neuro Studio, inicio">
-          <Image src="/neuro-studio-logo.png" alt="" width={44} height={44} priority />
-          <span className="font-display text-xl font-semibold hidden sm:inline" style={{ color: "var(--brand)" }}>
-            Neuro Studio
-          </span>
+        <Link href="/" className="flex items-center gap-2.5 group" aria-label="Neuro Studio, inicio">
+          <Image src="/neuro-studio-logo.png" alt="" width={44} height={44} priority style={{ filter: "brightness(0) invert(1)" }} />
+          <span className="font-display text-xl font-semibold hidden sm:inline text-paper">Neuro Studio</span>
         </Link>
-        <nav className="hidden items-center gap-8 text-sm md:flex" style={{ color: "var(--fg-muted)" }}>
+        <nav className="hidden items-center gap-8 text-sm md:flex" style={{ color: "var(--paper-dim)" }}>
           {site.nav.map((l) => (
-            <a key={l.href} href={l.href} className="hover:opacity-70 transition">{l.label}</a>
+            <a key={l.href} href={l.href} className="transition-colors hover:text-white">{l.label}</a>
           ))}
         </nav>
         <a
-          href={site.bookingUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn btn-brand"
-          style={{ minHeight: "42px", padding: "0.6rem 1.2rem", fontSize: "0.88rem" }}
+          href="#diagnostico"
+          className="btn btn-shiny"
+          style={{ minHeight: "42px", padding: "0.55rem 1.2rem", fontSize: "0.88rem", borderRadius: "999px" }}
         >
           Diagnóstico gratis
         </a>
