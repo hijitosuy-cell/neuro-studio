@@ -227,13 +227,20 @@ function Agendar() {
 
           <div className="reveal-scale mt-5 overflow-hidden rounded-2xl" style={{ border: "1px solid var(--rule-d)", background: "#0b1122" }}>
             <iframe
-              src={`${site.bookingUrl}?embed=true&theme=dark&hideEventTypeDetails=false`}
+              src={`${site.bookingUrl}/embed?theme=dark`}
               title="Elegir día y hora para la reunión"
-              className="h-[620px] w-full md:h-[760px]"
+              className="h-[560px] w-full md:h-[720px]"
               style={{ border: "0" }}
-              loading="lazy"
             />
           </div>
+
+          {/* Plan B: si el calendario no carga (bloqueadores, datos, navegador viejo) igual se puede reservar */}
+          <p className="mt-4 text-center text-[13px]" style={{ color: "var(--paper-dim)" }}>
+            {t.agendar.calFallback}{" "}
+            <a href={site.bookingUrl} target="_blank" rel="noopener noreferrer" className="underline text-white underline-offset-4">
+              {t.agendar.calFallbackLink}
+            </a>
+          </p>
         </Reveal>
       </div>
     </section>
