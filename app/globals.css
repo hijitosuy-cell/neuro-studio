@@ -96,13 +96,14 @@ a:hover .logo-hover,
 /* ═══ Transición tipo horizonte de planeta ═══
    Curva amplia con glow azul y puntos, no un corte recto. */
 
+/* Sin trama de puntos (firma tipica de UI generada): la transicion la hace
+   sola la curva del domo. Al no haber puntos que disimulen el borde, la
+   banda es mas alta y la caida del halo mucho mas larga y escalonada. */
 .horizon {
   position: relative;
-  height: 240px;
+  height: clamp(280px, 34vw, 420px);
   overflow: hidden;
 }
-/* Sin trama de puntos: es una firma tipica de UI generada. La transicion
-   la hace sola la curva del domo con su halo. */
 
 /* Oscuro (arriba) → claro (abajo): domo blanco que sube con halo azul */
 .horizon-light { background: var(--page); }
@@ -110,9 +111,16 @@ a:hover .logo-hover,
   content: "";
   position: absolute; inset: 0;
   background:
-    radial-gradient(150% 92% at 50% 128%, #ffffff 44%, rgba(120,160,255,0.55) 55%, rgba(47,95,214,0.22) 64%, transparent 78%);
+    radial-gradient(155% 100% at 50% 140%,
+      #ffffff 34%,
+      rgba(226,236,255,0.94) 43%,
+      rgba(160,190,250,0.62) 52%,
+      rgba(95,140,228,0.38) 61%,
+      rgba(55,105,215,0.22) 70%,
+      rgba(40,85,190,0.11) 80%,
+      rgba(30,65,150,0.04) 89%,
+      transparent 97%);
 }
-/* Puntos: se ocultan arriba (se funden con el home) y siguen la curva del domo (no rectos) */
 
 /* Claro (arriba) → oscuro (abajo): domo oscuro que sube con rim azul */
 .horizon-dark { background: #ffffff; }
@@ -120,7 +128,15 @@ a:hover .logo-hover,
   content: "";
   position: absolute; inset: 0;
   background:
-    radial-gradient(150% 92% at 50% 128%, var(--page) 44%, rgba(47,95,214,0.5) 55%, rgba(120,160,255,0.18) 64%, transparent 80%);
+    radial-gradient(155% 100% at 50% 140%,
+      var(--page) 34%,
+      rgba(16,32,74,0.96) 43%,
+      rgba(40,85,190,0.55) 52%,
+      rgba(80,130,225,0.32) 61%,
+      rgba(120,160,255,0.18) 70%,
+      rgba(140,175,255,0.09) 80%,
+      rgba(160,190,255,0.035) 89%,
+      transparent 97%);
 }
 
 /* Two fonts only: Poppins (display) + Inter Tight (everything else) */
@@ -279,11 +295,16 @@ a:hover .logo-hover,
   color: #fff;
   border: 1px solid rgba(143,176,255,0.4);
   box-shadow: 0 0 0 rgba(47,95,214,0), 0 8px 30px -8px rgba(47,95,214,0.5);
-  transition: box-shadow 300ms, transform 300ms, filter 300ms;
+  transition: box-shadow 300ms, transform 300ms, filter 300ms, background 200ms;
 }
-.btn-shiny:hover {
+/* El fondo se repite en :hover a proposito: `.btn:hover` (clase + pseudo-clase)
+   le gana en especificidad a `.btn-shiny` y borraba el degradado, dejando el
+   boton casi blanco con texto blanco sobre las secciones claras. */
+.btn-shiny:hover,
+.btn-shiny:focus-visible {
+  background: linear-gradient(135deg, #3a6ce0, #24488c);
+  color: #fff;
   box-shadow: 0 0 22px -4px rgba(47,95,214,0.6), 0 10px 34px -8px rgba(47,95,214,0.55);
-  filter: brightness(1.06);
   transform: translateY(-2px);
 }
 /* Sin brillo que barre: en mobile el :hover queda pegado al tocar y molesta */
