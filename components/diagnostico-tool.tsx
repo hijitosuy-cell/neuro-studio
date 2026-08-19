@@ -19,6 +19,7 @@ import {
   detalleRespuestas,
   WHATSAPP,
   CALENDAR_URL,
+  SIN_DATO,
   type Campo,
 } from "@/lib/diagnostico";
 import { DonutAreas, generarInformePNG } from "@/components/diagnostico-informe";
@@ -516,6 +517,16 @@ function CampoInput({ campo, valor, error, onChange }: {
   };
   const extra = auto[campo.id] ?? {};
 
+  // Solo en las preguntas que puntúan un área: si alguien no lo sabe, que lo
+  // diga en vez de inventar un dato o abandonar el diagnóstico.
+  const puntuada = "area" in campo && !!campo.area;
+  const opciones =
+    (campo.tipo === "select" || campo.tipo === "multi") && puntuada
+      ? [...campo.opciones, { label: SIN_DATO }]
+      : campo.tipo === "select" || campo.tipo === "multi"
+        ? campo.opciones
+        : [];
+
   return (
     <div className="grid gap-1.5" data-campo={campo.id}>
       <label htmlFor={campo.id} className="text-sm font-medium">
@@ -538,12 +549,20 @@ function CampoInput({ campo, valor, error, onChange }: {
       )}
       {campo.tipo === "select" && (
         <div className="grid gap-2 sm:grid-cols-2">
-          {campo.opciones.map((o) => {
+          {opciones.map((o) => {
             const activo = valor === o.label;
+            const sinDato = o.label === SIN_DATO;
             return (
               <button key={o.label} type="button" onClick={() => onChange(o.label)} aria-pressed={activo}
-                className="rounded-lg border px-4 py-3 text-left text-sm transition"
-                style={{ borderColor: activo ? "var(--brand)" : error ? "#dc2626" : "var(--rule-strong)", borderWidth: activo ? 2 : 1, background: activo ? "rgba(20,42,82,0.04)" : "white", fontWeight: activo ? 500 : 400 }}>
+                className={`rounded-lg border px-4 py-3 text-left text-sm transition ${sinDato ? "sm:col-span-2" : ""}`}
+                style={{
+                  borderColor: activo ? "var(--brand)" : error ? "#dc2626" : "var(--rule-strong)",
+                  borderWidth: activo ? 2 : 1,
+                  background: activo ? "rgba(20,42,82,0.04)" : "white",
+                  fontWeight: activo ? 500 : 400,
+                  color: sinDato && !activo ? "var(--fg-muted)" : undefined,
+                  borderStyle: sinDato ? "dashed" : "solid",
+                }}>
                 {o.label}
               </button>
             );
@@ -552,14 +571,26 @@ function CampoInput({ campo, valor, error, onChange }: {
       )}
       {campo.tipo === "multi" && (
         <div className="flex flex-wrap gap-2">
-          {campo.opciones.map((o) => {
+          {opciones.map((o) => {
             const arr = (valor as string[]) ?? [];
             const activo = arr.includes(o.label);
             return (
               <button key={o.label} type="button" aria-pressed={activo}
-                onClick={() => onChange(activo ? arr.filter((x) => x !== o.label) : [...arr, o.label])}
+                onClick={() => {
+                  // "No sé" es excluyente: marcarlo limpia el resto y viceversa
+                  if (o.label === SIN_DATO) return onChange(activo ? [] : [SIN_DATO]);
+                  const limpio = arr.filter((x) => x !== SIN_DATO);
+                  onChange(activo ? limpio.filter((x) => x !== o.label) : [...limpio, o.label]);
+                }}
                 className="rounded-full border px-4 py-2 text-sm transition"
-                style={{ borderColor: activo ? "var(--brand)" : "var(--rule-strong)", borderWidth: activo ? 2 : 1, background: activo ? "rgba(20,42,82,0.04)" : "white", fontWeight: activo ? 500 : 400 }}>
+                style={{
+                  borderColor: activo ? "var(--brand)" : error ? "#dc2626" : "var(--rule-strong)",
+                  borderWidth: activo ? 2 : 1,
+                  background: activo ? "rgba(20,42,82,0.04)" : "white",
+                  fontWeight: activo ? 500 : 400,
+                  color: o.label === SIN_DATO && !activo ? "var(--fg-muted)" : undefined,
+                  borderStyle: o.label === SIN_DATO ? "dashed" : "solid",
+                }}>
                 {o.label}
               </button>
             );

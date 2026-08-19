@@ -17,6 +17,13 @@ export const AREAS: { id: AreaId; nombre: string; corto: string }[] = [
 
 export type Opcion = { label: string; score?: number };
 
+/**
+ * Salida honesta para las preguntas puntuadas. No lleva score a proposito:
+ * scoreDeCampo la devuelve como null y calcular() la saltea, asi que no baja
+ * el puntaje del area — simplemente esa pregunta no cuenta.
+ */
+export const SIN_DATO = "No sé / No aplica";
+
 export type Campo =
   | { tipo: "texto"; id: string; label: string; ayuda?: string; placeholder?: string; requerido?: boolean; express?: boolean }
   | { tipo: "numero"; id: string; label: string; ayuda?: string; placeholder?: string; express?: boolean }
@@ -596,11 +603,16 @@ export function contarCampos(modo: "express" | "completo") {
 }
 
 function scoreDeCampo(campo: Campo, valor: unknown): number | null {
-  if (campo.tipo === "select") return campo.opciones.find((o) => o.label === valor)?.score ?? null;
+  if (campo.tipo === "select") {
+    if (valor === SIN_DATO) return null;
+    return campo.opciones.find((o) => o.label === valor)?.score ?? null;
+  }
   if (campo.tipo === "multi") {
     if (!Array.isArray(valor) || valor.length === 0) return null;
+    const marcadas = (valor as string[]).filter((v) => v !== SIN_DATO);
+    if (marcadas.length === 0) return null; // solo marcaron "no se": no puntua
     const suma = campo.opciones
-      .filter((o) => (valor as string[]).includes(o.label))
+      .filter((o) => marcadas.includes(o.label))
       .reduce((s, o) => s + (o.score ?? 0), 0);
     return Math.min(100, suma);
   }
