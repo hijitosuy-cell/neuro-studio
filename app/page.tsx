@@ -141,7 +141,7 @@ function Sistema() {
         <Reveal className="mx-auto max-w-2xl text-center">
           <div className="label" style={{ color: "var(--brand-accent)" }}>{t.metodo.showKicker}</div>
           <h2 className="font-display font-semibold mt-4" style={{ fontSize: "clamp(1.55rem, 5vw, 3rem)", color: "var(--brand)" }}>{t.metodo.showTitle}</h2>
-          <p className="mx-auto mt-5 max-w-xl text-lg" style={{ color: "var(--fg-muted)" }}>{t.servicios.sub}</p>
+          <p className="mx-auto mt-5 max-w-md text-base md:max-w-xl md:text-lg" style={{ color: "var(--fg-muted)" }}>{t.servicios.sub}</p>
         </Reveal>
 
         <div id="servicios" className="mt-16 grid gap-14 scroll-mt-20 md:gap-20">
@@ -193,44 +193,47 @@ function Agendar() {
   ];
   return (
     <section id="agendar" className="relative overflow-hidden" style={{ background: "var(--page)" }}>
-      <div className="wrap relative py-24 md:py-28">
-        <div className="grid items-center gap-10 lg:grid-cols-[1fr_0.85fr]">
-          <Reveal>
-            <span className="chip chip-on-dark">{t.agendar.kicker}</span>
-            <h2 className="font-display font-semibold mt-5 text-paper" style={{ fontSize: "clamp(1.6rem, 5vw, 3.25rem)" }}>{t.agendar.title}</h2>
-            <p className="mt-5 max-w-2xl text-lg" style={{ color: "var(--paper-dim)" }}>{t.agendar.sub}</p>
-          </Reveal>
-          <Reveal delay={120} className="reveal-scale overflow-hidden rounded-2xl" style={{ border: "1px solid var(--rule-d)" }}>
-            <img
-              src="/asesor.jpg"
-              alt="Un asesor repasa un auto junto a una clienta en el showroom"
-              className="h-[240px] w-full object-cover lg:h-[300px]"
-              loading="lazy"
-              decoding="async"
-            />
-          </Reveal>
-        </div>
+      <div className="wrap relative py-20 md:py-28">
+        <Reveal className="mx-auto max-w-2xl text-center">
+          <span className="chip chip-on-dark">{t.agendar.kicker}</span>
+          <h2 className="font-display font-semibold mt-5 text-paper" style={{ fontSize: "clamp(1.6rem, 5vw, 3.25rem)" }}>{t.agendar.title}</h2>
+          <p className="mx-auto mt-4 max-w-xl text-base md:text-lg" style={{ color: "var(--paper-dim)" }}>{t.agendar.sub}</p>
+        </Reveal>
 
-        <div className="mt-12 grid gap-4 md:grid-cols-3">
+        {/* Qué pasa en la llamada: compacto en celular, tarjetas en desktop */}
+        <div className="mx-auto mt-9 grid max-w-3xl gap-3 md:mt-12 md:grid-cols-3 md:gap-4">
           {cards.map((c, i) => (
-            <Reveal as="article" key={c.n} delay={i * 80} className="step-card p-6">
-              <div className="flex items-center gap-3">
-                <span className="font-display text-2xl font-bold" style={{ color: "rgba(143,176,255,0.4)" }}>{c.n}</span>
-                <h3 className="font-display font-semibold text-lg text-paper">{c.ti}</h3>
+            <Reveal as="article" key={c.n} delay={i * 80} className="step-card flex gap-3 p-4 md:block md:p-6">
+              <span className="font-display text-lg font-bold leading-none md:text-2xl" style={{ color: "rgba(143,176,255,0.4)" }}>{c.n}</span>
+              <div className="md:mt-3">
+                <h3 className="font-display font-semibold text-[15px] text-paper md:text-lg">{c.ti}</h3>
+                <p className="mt-1.5 text-[13px] leading-relaxed md:mt-2.5 md:text-sm" style={{ color: "var(--paper-dim)" }}>{c.bo}</p>
               </div>
-              <p className="mt-2.5 text-sm" style={{ color: "var(--paper-dim)" }}>{c.bo}</p>
             </Reveal>
           ))}
         </div>
 
-        <Reveal className="reveal-scale mt-10 overflow-hidden rounded-2xl" style={{ border: "1px solid var(--rule-d)", background: "#0b1122" }}>
-          <iframe
-            src={`${site.bookingUrl}?embed=true&theme=dark&hideEventTypeDetails=false`}
-            title="Agendar reunión"
-            className="w-full"
-            style={{ height: "760px", border: "0" }}
-            loading="lazy"
-          />
+        {/* Calendario, con rótulo explícito de que es para reservar el horario */}
+        <Reveal className="mx-auto mt-12 max-w-4xl">
+          <div className="text-center">
+            <h3 className="font-display font-semibold inline-flex items-center gap-2 text-lg text-paper md:text-xl">
+              <svg viewBox="0 0 24 24" className="h-[18px] w-[18px] shrink-0" fill="none" stroke="#8fb0ff" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <rect x="3.5" y="5" width="17" height="15.5" rx="2.5" /><path d="M3.5 9.5h17M8 3.5v3M16 3.5v3" />
+              </svg>
+              {t.agendar.calTitle}
+            </h3>
+            <p className="mt-1.5 text-[13px]" style={{ color: "var(--paper-dim)" }}>{t.agendar.calNote}</p>
+          </div>
+
+          <div className="reveal-scale mt-5 overflow-hidden rounded-2xl" style={{ border: "1px solid var(--rule-d)", background: "#0b1122" }}>
+            <iframe
+              src={`${site.bookingUrl}?embed=true&theme=dark&hideEventTypeDetails=false`}
+              title="Elegir día y hora para la reunión"
+              className="h-[620px] w-full md:h-[760px]"
+              style={{ border: "0" }}
+              loading="lazy"
+            />
+          </div>
         </Reveal>
       </div>
     </section>
@@ -270,6 +273,11 @@ function CTA() {
   const { t } = useLang();
   return (
     <section id="contacto" className="relative overflow-hidden" style={{ background: "var(--page-2)" }}>
+      {/* Showroom como textura de fondo, muy opaca: cierra el relato sin distraer */}
+      <div aria-hidden className="absolute inset-0">
+        <img src="/showroom.jpg" alt="" className="h-full w-full object-cover" style={{ opacity: 0.14 }} loading="lazy" decoding="async" />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, var(--page-2) 0%, rgba(10,17,34,0.82) 45%, var(--page-2) 100%)" }} />
+      </div>
       <div aria-hidden className="glow-blob glow-blob--brand" style={{ width: 620, height: 320, bottom: -140, left: "50%", transform: "translateX(-50%)" }} />
       <div className="wrap relative border-t py-20 text-center" style={{ borderColor: "var(--rule-d)" }}>
         <Reveal>
@@ -277,7 +285,7 @@ function CTA() {
             {t.cta.title2}
           </p>
           <div className="mt-8">
-            <a href="#agendar" className="btn btn-shiny" style={{ borderRadius: "999px", height: 54, padding: "0 2.2rem" }}>{t.cta.cta1}</a>
+            <a href="#diagnostico" className="btn btn-shiny" style={{ borderRadius: "999px", height: 54, padding: "0 2.2rem" }}>{t.cta.cta1}</a>
           </div>
           <p className="mt-5 text-sm" style={{ color: "var(--paper-dim)" }}>
             {t.cta.agenda}{" "}

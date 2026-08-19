@@ -2,7 +2,7 @@ export type Lang = "es" | "en";
 
 export const dict = {
   es: {
-    nav: { diagnostico: "Diagnóstico", servicios: "Servicios", metodo: "Método", preguntas: "Preguntas" },
+    nav: { diagnostico: "Diagnóstico", servicios: "El sistema", metodo: "Método", preguntas: "Preguntas" },
     ctaHeader: "Agendar reunión",
     ctaHeaderShort: "Agendar",
     hero: {
@@ -35,7 +35,7 @@ export const dict = {
     servicios: {
       kicker: "Las piezas",
       title: "Qué construimos, según lo que necesites.",
-      sub: "El diagnóstico decide cuáles de estas piezas van en tu sistema. Capaz una, capaz las cinco.",
+      sub: "Construimos solo las piezas que tu automotora necesita hoy.",
       planChip: "Precio a medida",
       planTitle: "No vendemos paquetes cerrados.",
       planBody: "Armamos el plan según tu diagnóstico y tu presupuesto. Pagás por lo que necesitás. El diagnóstico es gratis.",
@@ -48,6 +48,8 @@ export const dict = {
       c1t: "Revisamos tu operación", c1b: "Miramos juntos cómo entran tus consultas, cómo se venden los autos y dónde se te está escapando plata.",
       c2t: "Te decimos la verdad", c2b: "Si no te podemos ayudar, o todavía no es el momento para invertir en esto, te lo decimos en esa misma llamada.",
       c3t: "Salís con un plan", c3b: "Si tiene sentido avanzar, te llevás una propuesta concreta: qué haríamos, en cuánto tiempo y con qué inversión.",
+      calTitle: "Elegí día y hora",
+      calNote: "Reunión por videollamada · 30 minutos · sin costo",
     },
     faqKicker: "Preguntas",
     faqTitle: "Lo que nos preguntan.",
@@ -57,13 +59,13 @@ export const dict = {
       sub: "El diagnóstico te muestra exactamente cuánta. En minutos, gratis, y sin que te llamemos si no querés. Después decidís vos.",
       cta1: "Ver cuánto estoy perdiendo",
       cta2: "Hablar por WhatsApp",
-      agenda: "o agendá una reunión en",
+      agenda: "o escribinos por",
       agendaLink: "nuestra agenda",
     },
     footer: { navegar: "Navegar", nav: "Navegar", priv: "Política de privacidad", made: "Salto · Uruguay" },
   },
   en: {
-    nav: { diagnostico: "Diagnosis", servicios: "Services", metodo: "Method", preguntas: "FAQ" },
+    nav: { diagnostico: "Diagnosis", servicios: "The system", metodo: "Method", preguntas: "FAQ" },
     ctaHeader: "Book a call",
     ctaHeaderShort: "Book",
     hero: {
@@ -96,7 +98,7 @@ export const dict = {
     servicios: {
       kicker: "The pieces",
       title: "What we build, based on what you need.",
-      sub: "The diagnosis decides which of these pieces go into your system. Maybe one, maybe all five.",
+      sub: "We build only the pieces your dealership actually needs.",
       planChip: "Custom pricing",
       planTitle: "We don't sell fixed packages.",
       planBody: "We build the plan around your diagnosis and your budget. You pay for what you need. The diagnosis is free.",
@@ -109,6 +111,8 @@ export const dict = {
       c1t: "We review your operation", c1b: "We look together at how inquiries come in, how cars get sold and where money is slipping away.",
       c2t: "We tell you the truth", c2b: "If we can't help, or it's not the right time to invest in this, we tell you on that same call.",
       c3t: "You leave with a plan", c3b: "If it makes sense to move forward, you leave with a concrete proposal: what we'd do, in what timeframe and at what investment.",
+      calTitle: "Pick a day and time",
+      calNote: "Video call · 30 minutes · free",
     },
     faqKicker: "FAQ",
     faqTitle: "What people ask us.",
@@ -118,7 +122,7 @@ export const dict = {
       sub: "The diagnosis shows you exactly how much. In minutes, free, and we won't call you unless you want. Then it's your call.",
       cta1: "See how much I'm losing",
       cta2: "Chat on WhatsApp",
-      agenda: "or book a call on",
+      agenda: "or message us on",
       agendaLink: "our calendar",
     },
     footer: { navegar: "Navigate", nav: "Navigate", priv: "Privacy policy", made: "Salto · Uruguay" },
