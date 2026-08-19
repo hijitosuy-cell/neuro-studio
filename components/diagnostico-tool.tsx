@@ -69,10 +69,19 @@ export function DiagnosticoTool() {
   function avanzar() {
     const faltan: Record<string, string> = {};
     for (const c of bloque.campos) {
-      const req = "requerido" in c && c.requerido;
       const v = r[c.id];
-      const vacio = v === undefined || v === "" || (Array.isArray(v) && v.length === 0);
-      if (req && vacio) faltan[c.id] = "Completá este campo para seguir.";
+      const vacio =
+        v === undefined ||
+        (typeof v === "string" && v.trim() === "") ||
+        (Array.isArray(v) && v.length === 0);
+      if (vacio) {
+        faltan[c.id] =
+          c.tipo === "select"
+            ? "Elegí una opción para seguir."
+            : c.tipo === "multi"
+              ? "Marcá al menos una opción para seguir."
+              : "Completá este campo para seguir.";
+      }
     }
     if (Object.keys(faltan).length) {
       setErrores(faltan);
@@ -495,7 +504,6 @@ function barra(score: number) {
 function CampoInput({ campo, valor, error, onChange }: {
   campo: Campo; valor: Valor; error?: string; onChange: (v: Valor) => void;
 }) {
-  const req = "requerido" in campo && campo.requerido;
   const base = { borderColor: error ? "#dc2626" : "var(--rule-strong)", background: "white" };
 
   // Teclado y autocompletado correctos segun la pregunta: en el celular esto
@@ -512,7 +520,6 @@ function CampoInput({ campo, valor, error, onChange }: {
     <div className="grid gap-1.5" data-campo={campo.id}>
       <label htmlFor={campo.id} className="text-sm font-medium">
         {campo.label}
-        {!req && campo.tipo !== "multi" && <span style={{ color: "var(--fg-muted)", fontWeight: 400 }}> (opcional)</span>}
       </label>
       {"ayuda" in campo && campo.ayuda && <p className="text-xs" style={{ color: "var(--fg-muted)" }}>{campo.ayuda}</p>}
 
