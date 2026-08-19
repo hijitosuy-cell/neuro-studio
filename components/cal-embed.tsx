@@ -21,7 +21,9 @@ export function CalEmbed() {
         const cal = await getCalApi({ namespace: "diagnostico" });
         cal("ui", {
           theme: "dark",
-          hideEventTypeDetails: false,
+          // La ficha del evento (titulo, descripcion larga, duracion) ya esta
+          // arriba en la pagina: repetirla hacia la seccion muchisimo mas larga
+          hideEventTypeDetails: true,
           cssVarsPerTheme: {
             light: { "cal-brand": "#2f5fd6" },
             dark: { "cal-brand": "#8fb0ff" },
