@@ -9,6 +9,7 @@ import { LangProvider } from "@/components/lang-provider";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ScrollTracker } from "@/components/scroll-tracker";
+import { PwaRegister } from "@/components/pwa-register";
 
 const display = Poppins({
   variable: "--font-display",
@@ -61,6 +62,11 @@ export const metadata: Metadata = {
     description: "Método de transformación comercial para automotoras.",
     images: ["/og.png"],
   },
+  appleWebApp: {
+    capable: true,
+    title: "Neuro Studio",
+    statusBarStyle: "black-translucent",
+  },
   alternates: { canonical: SITE_URL },
   robots: {
     index: true,
@@ -110,6 +116,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </LangProvider>
         {/* Métricas: visitas, origen del tráfico y rendimiento real de carga */}
         <ScrollTracker />
+        <PwaRegister />
         <Analytics />
         <SpeedInsights />
       </body>
