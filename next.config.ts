@@ -4,8 +4,8 @@ const isDev = process.env.NODE_ENV !== "production";
 
 const csp = [
   "default-src 'self'",
-  // app.cal.com sirve embed.js, necesario para que el calendario se muestre embebido
-  `script-src 'self' 'unsafe-inline' https://app.cal.com https://cal.com${isDev ? " 'unsafe-eval'" : ""}`,
+  // app.cal.com sirve embed.js (calendario embebido); va.vercel-scripts.com, las metricas
+  `script-src 'self' 'unsafe-inline' https://app.cal.com https://cal.com https://va.vercel-scripts.com${isDev ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "font-src 'self' https://fonts.gstatic.com data:",
   "img-src 'self' data: https:",

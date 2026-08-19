@@ -101,13 +101,8 @@ a:hover .logo-hover,
   height: 240px;
   overflow: hidden;
 }
-.horizon::before {
-  content: "";
-  position: absolute; inset: 0;
-  background-image: radial-gradient(rgba(143,176,255,0.32) 1px, transparent 1px);
-  background-size: 22px 22px;
-  opacity: 0.5;
-}
+/* Sin trama de puntos: es una firma tipica de UI generada. La transicion
+   la hace sola la curva del domo con su halo. */
 
 /* Oscuro (arriba) → claro (abajo): domo blanco que sube con halo azul */
 .horizon-light { background: var(--page); }
@@ -118,16 +113,6 @@ a:hover .logo-hover,
     radial-gradient(150% 92% at 50% 128%, #ffffff 44%, rgba(120,160,255,0.55) 55%, rgba(47,95,214,0.22) 64%, transparent 78%);
 }
 /* Puntos: se ocultan arriba (se funden con el home) y siguen la curva del domo (no rectos) */
-.horizon-light::before {
-  mask-image:
-    radial-gradient(150% 92% at 50% 128%, transparent 52%, #000 66%),
-    linear-gradient(to bottom, transparent 4%, #000 42%);
-  -webkit-mask-image:
-    radial-gradient(150% 92% at 50% 128%, transparent 52%, #000 66%),
-    linear-gradient(to bottom, transparent 4%, #000 42%);
-  mask-composite: intersect;
-  -webkit-mask-composite: source-in;
-}
 
 /* Claro (arriba) → oscuro (abajo): domo oscuro que sube con rim azul */
 .horizon-dark { background: #ffffff; }
@@ -136,17 +121,6 @@ a:hover .logo-hover,
   position: absolute; inset: 0;
   background:
     radial-gradient(150% 92% at 50% 128%, var(--page) 44%, rgba(47,95,214,0.5) 55%, rgba(120,160,255,0.18) 64%, transparent 80%);
-}
-.horizon-dark::before {
-  background-image: radial-gradient(rgba(47,95,214,0.3) 1px, transparent 1px);
-  mask-image:
-    radial-gradient(150% 92% at 50% 128%, transparent 52%, #000 66%),
-    linear-gradient(to top, transparent 4%, #000 42%);
-  -webkit-mask-image:
-    radial-gradient(150% 92% at 50% 128%, transparent 52%, #000 66%),
-    linear-gradient(to top, transparent 4%, #000 42%);
-  mask-composite: intersect;
-  -webkit-mask-composite: source-in;
 }
 
 /* Two fonts only: Poppins (display) + Inter Tight (everything else) */
@@ -222,10 +196,16 @@ a:hover .logo-hover,
   .reveal { transform: none; transition: opacity 700ms ease; }
 }
 
+/* Barra de puntaje: se anima con transform (no width) para no forzar relayout */
 .score-bar-track { height: 6px; background: rgba(255,255,255,0.12); border-radius: 999px; overflow: hidden; }
-.score-bar-fill { height: 100%; background: var(--brand-accent); border-radius: 999px; width: 0; transition: width 1100ms cubic-bezier(0.22,1,0.36,1); }
-.is-in .score-bar-fill { width: var(--score, 0%); }
-@media (prefers-reduced-motion: reduce) { .score-bar-fill { transition: none; width: var(--score, 0%); } }
+.score-bar-fill {
+  height: 100%; width: var(--score, 0%);
+  background: var(--brand-accent); border-radius: 999px;
+  transform: scaleX(0); transform-origin: left center;
+  transition: transform 1100ms cubic-bezier(0.22,1,0.36,1);
+}
+.is-in .score-bar-fill { transform: scaleX(1); }
+@media (prefers-reduced-motion: reduce) { .score-bar-fill { transition: none; transform: scaleX(1); } }
 
 .prose-link { color: var(--brand-accent); text-decoration: underline; text-underline-offset: 3px; }
 

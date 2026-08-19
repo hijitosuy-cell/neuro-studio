@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useLang, LangToggle } from "@/components/lang-provider";
+import { track } from "@/lib/track";
 
 export function SiteHeader() {
   const { t } = useLang();
@@ -31,6 +32,7 @@ export function SiteHeader() {
           <LangToggle onDark />
           <a
             href="#agendar"
+            onClick={() => track("agendar_click", { lugar: "header" })}
             className="btn btn-shiny text-[0.78rem] md:text-[0.88rem]"
             style={{ minHeight: "34px", height: "34px", padding: "0 0.85rem", borderRadius: "999px" }}
           >

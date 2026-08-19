@@ -1,4 +1,7 @@
+"use client";
+
 import { site } from "@/lib/site";
+import { track } from "@/lib/track";
 
 export function WhatsappFab() {
   return (
@@ -6,6 +9,7 @@ export function WhatsappFab() {
       href={site.whatsappUrl}
       target="_blank"
       rel="noopener noreferrer"
+      onClick={() => track("whatsapp_click", { lugar: "boton_flotante" })}
       aria-label="Escribinos por WhatsApp"
       className="fixed bottom-5 right-5 z-50 grid h-14 w-14 place-items-center rounded-full shadow-lg transition hover:scale-105"
       style={{ background: "#25D366" }}

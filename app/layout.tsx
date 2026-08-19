@@ -6,6 +6,9 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { WhatsappFab } from "@/components/whatsapp-fab";
 import { LangProvider } from "@/components/lang-provider";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { ScrollTracker } from "@/components/scroll-tracker";
 
 const display = Poppins({
   variable: "--font-display",
@@ -105,6 +108,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <SiteFooter />
           <WhatsappFab />
         </LangProvider>
+        {/* Métricas: visitas, origen del tráfico y rendimiento real de carga */}
+        <ScrollTracker />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

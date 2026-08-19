@@ -17,7 +17,11 @@ export function NeuroPanelMock() {
     <div className="overflow-hidden rounded-xl text-left" style={{ background: "#0b1122", border: "1px solid rgba(143,176,255,0.18)" }}>
       <div className="flex items-center justify-between border-b px-4 py-3" style={{ borderColor: "rgba(143,176,255,0.14)" }}>
         <div className="flex items-center gap-2">
-          <span className="grid h-7 w-7 place-items-center rounded-lg text-[11px] font-semibold text-white" style={{ background: "linear-gradient(135deg,#2f5fd6,#7c4dff)" }}>◉</span>
+          <span className="grid h-7 w-7 place-items-center rounded-lg" style={{ background: "var(--brand-accent)" }}>
+            <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <circle cx="12" cy="12" r="8" /><circle cx="12" cy="12" r="3" fill="#fff" stroke="none" />
+            </svg>
+          </span>
           <div>
             <div className="text-[13px] font-semibold text-paper">Neuro Twin</div>
             <div className="text-[11px]" style={{ color: "var(--paper-dim)" }}>El gemelo digital de tu automotora</div>
@@ -70,7 +74,9 @@ export function NeuroPanelMock() {
             <li key={r.n} className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-[11.5px]" style={{ background: "rgba(255,255,255,0.03)" }}>
               <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full text-[11px] font-semibold text-white" style={{ background: r.tone }}>{r.n}</span>
               <span className="text-paper">{r.t}</span>
-              <span className="ml-auto" style={{ color: "var(--paper-dim)" }}>›</span>
+              <svg viewBox="0 0 24 24" className="ml-auto h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: "var(--paper-dim)" }} aria-hidden>
+                <path d="M9 5l7 7-7 7" />
+              </svg>
             </li>
           ))}
         </ul>
@@ -215,7 +221,11 @@ export function ContenidoMock() {
       <div className="grid gap-2 px-3 pb-3">
         {posts.map((p) => (
           <div key={p.t} className="flex items-center gap-2.5 rounded-lg p-2.5" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-md text-[9px]" style={{ background: "linear-gradient(135deg, rgba(47,95,214,0.35), rgba(143,176,255,0.12))", color: "var(--paper-dim)" }}>▶</span>
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-md" style={{ background: "linear-gradient(135deg, rgba(47,95,214,0.35), rgba(143,176,255,0.12))" }}>
+              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="#8fb0ff" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <path d="M9 7.5l7 4.5-7 4.5z" />
+              </svg>
+            </span>
             <span className="min-w-0 flex-1 truncate text-[12px] text-paper">{p.t}</span>
             <span className="shrink-0 rounded-md px-2 py-1 text-[10px]" style={{ background: `${p.c}1f`, color: p.c }}>{p.e}</span>
           </div>

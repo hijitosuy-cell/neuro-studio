@@ -45,8 +45,7 @@ function Hero() {
       <div aria-hidden className="glow-blob glow-blob--hi animate-blob" style={{ width: 360, height: 360, top: 280, right: -110, opacity: 0.3, animationDelay: "3s" }} />
       <div className="wrap relative flex min-h-[calc(100svh-5rem)] flex-col items-center justify-center py-14 text-center md:min-h-[86vh] md:py-24">
         <Reveal className="max-w-4xl">
-          <span className="chip chip-on-dark">{t.hero.chip}</span>
-          <h1 className="font-display font-semibold mt-5 text-paper md:mt-6" style={{ fontSize: "clamp(1.45rem, 5.4vw, 3.4rem)", lineHeight: 1.1 }}>
+          <h1 className="font-display font-semibold text-paper" style={{ fontSize: "clamp(1.45rem, 5.4vw, 3.4rem)", lineHeight: 1.1 }}>
             {t.hero.title1}
             <br />
             <span className="accent-gradient whitespace-nowrap">{t.hero.title2}</span>
@@ -69,8 +68,7 @@ function Diagnostico() {
     <section id="ver-diagnostico" className="scroll-mt-20" style={{ background: "#fff" }}>
       <div className="wrap py-24 md:py-28">
         <Reveal className="mx-auto max-w-3xl text-center">
-          <div className="label" style={{ color: "var(--brand-accent)" }}>{t.diag.kicker}</div>
-          <h2 className="font-display font-semibold mt-4" style={{ fontSize: "clamp(1.6rem, 5vw, 3.25rem)", color: "var(--brand)" }}>{t.diag.title}</h2>
+          <h2 className="font-display font-semibold" style={{ fontSize: "clamp(1.6rem, 5vw, 3.25rem)", color: "var(--brand)" }}>{t.diag.title}</h2>
           <p className="mx-auto mt-5 max-w-2xl text-lg" style={{ color: "var(--fg-muted)" }}>{t.diag.sub}</p>
         </Reveal>
         <div className="mt-12">
@@ -102,8 +100,7 @@ function Metodo() {
     <section id="metodo" className="relative overflow-hidden" style={{ background: "var(--page)" }}>
       <div className="wrap relative py-20 md:py-28">
         <Reveal className="mx-auto max-w-2xl text-center">
-          <div className="label" style={{ color: "#8fb0ff" }}>{t.metodo.kicker}</div>
-          <h2 className="font-display font-semibold mt-4 text-paper" style={{ fontSize: "clamp(1.55rem, 5vw, 2.7rem)" }}>{t.metodo.title}</h2>
+          <h2 className="font-display font-semibold text-paper" style={{ fontSize: "clamp(1.55rem, 5vw, 2.7rem)" }}>{t.metodo.title}</h2>
           <p className="mt-4 text-base" style={{ color: "var(--paper-dim)" }}>{t.metodo.sub}</p>
         </Reveal>
 
@@ -120,8 +117,7 @@ function Metodo() {
                   {FASE_ICONS[i]}
                 </svg>
               </div>
-              <div className="relative mt-4 text-[11px] font-semibold uppercase" style={{ color: "#8fb0ff", letterSpacing: "0.14em" }}>{f.kicker}</div>
-              <h3 className="font-display font-semibold mt-1.5 text-base text-paper">{f.title}</h3>
+              <h3 className="font-display font-semibold relative mt-5 text-base text-paper">{f.title}</h3>
               <p className="mt-2 text-sm leading-relaxed" style={{ color: "var(--paper-dim)" }}>{f.body}</p>
             </Spotlight>
           ))}
@@ -140,8 +136,7 @@ function Sistema() {
     <section id="producto" className="scroll-mt-20" style={{ background: "#fff" }}>
       <div className="wrap py-24 md:py-28">
         <Reveal className="mx-auto max-w-2xl text-center">
-          <div className="label" style={{ color: "var(--brand-accent)" }}>{t.metodo.showKicker}</div>
-          <h2 className="font-display font-semibold mt-4" style={{ fontSize: "clamp(1.55rem, 5vw, 3rem)", color: "var(--brand)" }}>{t.metodo.showTitle}</h2>
+          <h2 className="font-display font-semibold" style={{ fontSize: "clamp(1.55rem, 5vw, 3rem)", color: "var(--brand)" }}>{t.metodo.showTitle}</h2>
           <p className="mx-auto mt-5 max-w-md text-base md:max-w-xl md:text-lg" style={{ color: "var(--fg-muted)" }}>{t.servicios.sub}</p>
         </Reveal>
 
@@ -150,10 +145,7 @@ function Sistema() {
             <Reveal key={s.n} as="article" className="grid items-center gap-7 lg:grid-cols-2 lg:gap-12">
               {/* Texto — alterna de lado en desktop */}
               <div className={i % 2 === 1 ? "lg:order-2" : ""}>
-                <div className="flex items-center gap-3">
-                  <span className="font-display text-3xl font-bold" style={{ color: "rgba(47,95,214,0.22)" }}>{s.n}</span>
-                  <h3 className="font-display font-semibold text-xl md:text-2xl" style={{ color: "var(--brand)" }}>{s.name}</h3>
-                </div>
+                <h3 className="font-display font-semibold text-xl md:text-2xl" style={{ color: "var(--brand)" }}>{s.name}</h3>
                 <p className="mt-3 text-[0.95rem] md:text-base" style={{ color: "var(--fg-muted)" }}>{s.body}</p>
                 <div className="mt-5 flex flex-wrap gap-2">
                   {s.canales.map((c) => (<span key={c} className="chip">{c}</span>))}
@@ -170,8 +162,7 @@ function Sistema() {
         <Reveal className="mt-16 flex flex-col items-start justify-between gap-6 rounded-2xl p-8 md:flex-row md:items-center md:p-10"
           style={{ background: "linear-gradient(150deg, var(--brand-accent), #16306b)", boxShadow: "0 20px 60px -20px rgba(47,95,214,0.5)" }}>
           <div>
-            <span className="chip" style={{ background: "rgba(255,255,255,0.15)", color: "#fff", borderColor: "rgba(255,255,255,0.25)" }}>{t.servicios.planChip}</span>
-            <h3 className="font-display font-semibold mt-4 text-xl text-white md:text-2xl">{t.servicios.planTitle}</h3>
+            <h3 className="font-display font-semibold text-xl text-white md:text-2xl">{t.servicios.planTitle}</h3>
             <p className="mt-3 max-w-xl text-sm" style={{ color: "rgba(255,255,255,0.9)" }}>{t.servicios.planBody}</p>
           </div>
           <a href="#diagnostico" className="btn shrink-0" style={{ background: "#fff", borderColor: "#fff", color: "var(--brand)", borderRadius: "999px" }}>
@@ -196,8 +187,7 @@ function Agendar() {
     <section id="agendar" className="relative overflow-hidden" style={{ background: "var(--page)" }}>
       <div className="wrap relative py-20 md:py-28">
         <Reveal className="mx-auto max-w-2xl text-center">
-          <span className="chip chip-on-dark">{t.agendar.kicker}</span>
-          <h2 className="font-display font-semibold mt-5 text-paper" style={{ fontSize: "clamp(1.6rem, 5vw, 3.25rem)" }}>{t.agendar.title}</h2>
+          <h2 className="font-display font-semibold text-paper" style={{ fontSize: "clamp(1.6rem, 5vw, 3.25rem)" }}>{t.agendar.title}</h2>
           <p className="mx-auto mt-4 max-w-xl text-base md:text-lg" style={{ color: "var(--paper-dim)" }}>{t.agendar.sub}</p>
         </Reveal>
 
@@ -251,15 +241,16 @@ function FAQ() {
       <div className="wrap py-24 md:py-28">
         <Reveal className="grid gap-12 md:grid-cols-[320px_1fr]">
           <div>
-            <div className="label" style={{ color: "#8fb0ff" }}>{t.faqKicker}</div>
-            <h2 className="font-display font-semibold mt-4 text-paper" style={{ fontSize: "clamp(1.55rem, 5vw, 2.75rem)" }}>{t.faqTitle}</h2>
+            <h2 className="font-display font-semibold text-paper" style={{ fontSize: "clamp(1.55rem, 5vw, 2.75rem)" }}>{t.faqTitle}</h2>
           </div>
           <div className="border-t border-b" style={{ borderColor: "var(--rule-d)" }}>
             {faqs.map((f) => (
               <details key={f.q} className="group border-b py-6" style={{ borderColor: "var(--rule-d)" }}>
                 <summary className="flex cursor-pointer list-none items-baseline justify-between gap-6">
                   <span className="font-display font-semibold text-lg md:text-xl text-paper">{f.q}</span>
-                  <span aria-hidden className="shrink-0 text-xl transition group-open:rotate-45" style={{ color: "#8fb0ff" }}>+</span>
+                  <svg viewBox="0 0 24 24" aria-hidden className="mt-1 h-4 w-4 shrink-0 transition-transform duration-300 group-open:rotate-45" fill="none" stroke="#8fb0ff" strokeWidth="2" strokeLinecap="round">
+                    <path d="M12 5v14M5 12h14" />
+                  </svg>
                 </summary>
                 <p className="mt-3 text-body" style={{ color: "var(--paper-dim)" }}>{f.a}</p>
               </details>

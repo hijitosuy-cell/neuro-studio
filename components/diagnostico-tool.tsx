@@ -2,6 +2,7 @@
 
 import { useMemo, useRef, useState } from "react";
 import { collection, addDoc, doc, updateDoc } from "firebase/firestore";
+import { track } from "@/lib/track";
 import { db } from "@/lib/firebase";
 import {
   camposDe,
@@ -164,6 +165,8 @@ export function DiagnosticoTool() {
       setEnviado(true); // el lead ya se guardó al llegar
     } finally {
       setEnviando(false);
+      track("diagnostico_enviado", { puntaje: resultado.total, servicios: elegidos.length, cierre: luego || "sin_contacto" });
+      if (luego) track(luego === "whatsapp" ? "whatsapp_click" : "agendar_click", { lugar: "fin_diagnostico" });
       if (w) w.location.href = luego === "whatsapp" ? `https://wa.me/${WHATSAPP}?text=${mensaje}` : CALENDAR_URL;
     }
   }
@@ -321,7 +324,7 @@ export function DiagnosticoTool() {
                 <span style={{ color: "var(--paper-dim)" }}>{a.respondidas ? a.score : "—"}</span>
               </div>
               <div className="score-bar-track mt-1.5">
-                <div className="score-bar-fill" style={{ width: `${a.score}%`, transition: "width 900ms cubic-bezier(0.22,1,0.36,1)" }} />
+                <div className="score-bar-fill" style={{ width: `${a.score}%`, transform: "scaleX(1)" }} />
               </div>
             </li>
           ))}
@@ -375,7 +378,11 @@ export function DiagnosticoTool() {
                       </div>
                       <span aria-hidden className="mt-1 grid h-6 w-6 shrink-0 place-items-center rounded-md text-xs text-white"
                         style={{ background: activo ? "var(--brand)" : "transparent", border: activo ? "none" : "1.5px solid var(--rule-strong)" }}>
-                        {activo ? "✓" : ""}
+                        {activo && (
+                          <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M5 12.5l4.5 4.5L19 7" />
+                          </svg>
+                        )}
                       </span>
                     </div>
                     <div className="mt-4 border-t rule pt-3">
@@ -416,7 +423,11 @@ export function DiagnosticoTool() {
       <div className="mt-10 rounded-2xl p-8 text-center" style={{ background: "var(--ink)" }}>
         {enviado ? (
           <>
-            <div className="mx-auto grid h-14 w-14 place-items-center rounded-full text-2xl" style={{ background: "rgba(16,185,129,0.15)", color: "#7cff9e" }}>✓</div>
+            <div className="mx-auto grid h-14 w-14 place-items-center rounded-full" style={{ background: "rgba(16,185,129,0.15)" }}>
+              <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="#7cff9e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <path d="M5 12.5l4.5 4.5L19 7" />
+              </svg>
+            </div>
             <h3 className="font-display font-semibold mt-5 text-2xl text-paper">Listo, ya lo tenemos.</h3>
             <p className="mx-auto mt-2 max-w-md text-sm" style={{ color: "var(--paper-dim)" }}>
               Tu diagnóstico nos llegó. Te contactamos en menos de 24 horas hábiles con el análisis y una propuesta para tu automotora. Si querés adelantar, agendá o escribinos:
