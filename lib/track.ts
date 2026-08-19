@@ -12,6 +12,7 @@ export type EventoNombre =
   | "agendar_click"
   | "whatsapp_click"
   | "email_click"
+  | "red_social_click"
   | "seccion_vista"
   | "scroll_profundidad"
   | "idioma_cambiado";

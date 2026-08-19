@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { site } from "@/lib/site";
 import { useLang } from "@/components/lang-provider";
+import { SocialLinks } from "@/components/social-links";
 
 export function SiteFooter() {
   const { t } = useLang();
@@ -21,6 +22,9 @@ export function SiteFooter() {
             <span className="font-display text-2xl font-semibold text-paper">Neuro Studio</span>
           </div>
           <p className="mt-4 text-sm" style={{ color: "var(--paper-dim)" }}>{site.location}</p>
+          <div className="mt-5">
+            <SocialLinks />
+          </div>
         </div>
         <div className="md:col-span-3">
           <div className="mb-3 text-xs font-semibold uppercase tracking-wider" style={{ color: "rgba(255,255,255,0.5)" }}>{t.footer.nav}</div>

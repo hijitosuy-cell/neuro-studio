@@ -7,6 +7,8 @@ export const site = {
   whatsappUrl:
     "https://wa.me/59898169358?text=" +
     encodeURIComponent("Hola, quiero coordinar una reunión para mi automotora."),
+  instagram: "https://www.instagram.com/neurostudioagencia/",
+  linkedin: "https://www.linkedin.com/in/neurostudioautomotoras/",
   nav: [
     { href: "#diagnostico", label: "Diagnóstico" },
     { href: "#servicios", label: "Servicios" },

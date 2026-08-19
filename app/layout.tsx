@@ -90,6 +90,10 @@ const jsonLd = {
   logo: `${SITE_URL}/neuro-studio-logo.png`,
   description: "Estudio uruguayo de software con IA especializado en automotoras. Método propio de transformación comercial.",
   areaServed: { "@type": "Country", name: "Uruguay" },
+  sameAs: [
+    "https://www.instagram.com/neurostudioagencia/",
+    "https://www.linkedin.com/in/neurostudioautomotoras/",
+  ],
   contactPoint: [{
     "@type": "ContactPoint",
     email: "neurovidstudioia@gmail.com",

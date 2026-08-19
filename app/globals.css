@@ -381,3 +381,18 @@ a:hover .logo-hover,
 .wa-bubble--in { background: #202c33; border-top-left-radius: 4px; align-self: flex-start; }
 .wa-bubble--out { background: #005c4b; border-top-right-radius: 4px; align-self: flex-end; }
 .wa-meta { font-size: 0.65rem; color: rgba(255,255,255,0.55); margin-top: 2px; text-align: right; }
+
+/* Redes del footer */
+.social-link {
+  color: var(--paper-dim);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--rule-d);
+  transition: color 200ms, background 200ms, border-color 200ms, transform 200ms;
+}
+.social-link:hover {
+  color: #fff;
+  background: rgba(47,95,214,0.22);
+  border-color: rgba(143,176,255,0.45);
+  transform: translateY(-2px);
+}
+@media (prefers-reduced-motion: reduce) { .social-link:hover { transform: none; } }
