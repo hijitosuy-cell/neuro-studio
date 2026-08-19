@@ -68,7 +68,7 @@ export function DiagnosticoLauncher() {
   return (
     <>
       {/* Invitación */}
-      <div className="mx-auto max-w-3xl rounded-3xl p-8 text-center md:p-12" style={{ background: "var(--bg)", boxShadow: "0 30px 90px -40px rgba(47,95,214,0.35)" }}>
+      <div className="on-light mx-auto max-w-3xl rounded-3xl p-8 text-center md:p-12" style={{ background: "var(--bg)", boxShadow: "0 30px 90px -40px rgba(47,95,214,0.35)" }}>
         <div className="grid gap-2.5 sm:grid-cols-3">
           {[
             [t.diag.f1a, t.diag.f1b],
@@ -104,7 +104,7 @@ export function DiagnosticoLauncher() {
           style={{ background: "rgba(6,10,22,0.8)", backdropFilter: "blur(6px)" }}
           onClick={(e) => e.target === e.currentTarget && cerrar()}
         >
-          <div className="relative my-auto w-full max-w-4xl rounded-3xl p-4 md:p-6" style={{ background: "var(--bg)", boxShadow: "0 40px 120px -30px rgba(0,0,0,0.6)" }}>
+          <div className="on-light relative my-auto w-full max-w-4xl rounded-3xl p-4 md:p-6" style={{ background: "var(--bg)", boxShadow: "0 40px 120px -30px rgba(0,0,0,0.6)" }}>
             <button
               onClick={cerrar}
               aria-label="Cerrar"

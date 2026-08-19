@@ -189,11 +189,15 @@ a:hover .logo-hover,
 .btn-solid-on-dark { background: white; color: var(--brand); border-color: white; }
 .btn-solid-on-dark:hover { background: #e8ecf5; border-color: #e8ecf5; }
 
+/* Superficies claras: fijan su color de texto. Sin esto heredan el blanco de
+   html{color:var(--paper)} y el contenido queda blanco sobre blanco. */
 .surface {
   background: var(--bg);
   border: 1px solid var(--rule);
   border-radius: 14px;
+  color: var(--fg);
 }
+.on-light { color: var(--fg); }
 
 @keyframes marquee-x { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 .marquee-track { display: flex; gap: 3rem; animation: marquee-x 45s linear infinite; width: max-content; }
@@ -358,6 +362,7 @@ a:hover .logo-hover,
 /* Tarjeta clara con borde y glow al hover */
 .card-light {
   position: relative;
+  color: var(--fg);
   background: #fff;
   border: 1px solid var(--rule);
   border-radius: 16px;

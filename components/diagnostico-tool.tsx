@@ -76,6 +76,15 @@ export function DiagnosticoTool() {
     }
     if (Object.keys(faltan).length) {
       setErrores(faltan);
+      // Llevar a la primera pregunta sin responder: si no, el error queda fuera de pantalla
+      const primero = bloque.campos.find((c) => faltan[c.id]);
+      if (primero && typeof document !== "undefined") {
+        requestAnimationFrame(() => {
+          const el = document.getElementById(primero.id) ?? document.querySelector('[data-campo="' + primero.id + '"]');
+          el?.scrollIntoView({ behavior: "smooth", block: "center" });
+          if (el instanceof HTMLElement && el.tagName !== "DIV") el.focus({ preventScroll: true });
+        });
+      }
       return;
     }
     if (seccionIdx + 1 < bloques.length) {
@@ -250,16 +259,18 @@ export function DiagnosticoTool() {
   if (paso === "form" && bloque) {
     return (
       <div className="mx-auto max-w-3xl">
-        <div className="mb-3 flex items-center justify-between text-sm">
+        <div className="mb-3 flex items-center gap-3 pr-12 text-sm">
           <span className="label" style={{ color: "var(--brand-accent)" }}>
-            Sección {seccionIdx + 1} de {bloques.length}
+            Paso {seccionIdx + 1} de {bloques.length}
           </span>
-          <span style={{ color: "var(--fg-muted)" }}>{bloque.seccion.nombre}</span>
+          <span className="ml-auto text-xs" style={{ color: "var(--fg-muted)" }}>
+            {Math.round(((seccionIdx + 1) / bloques.length) * 100)}%
+          </span>
         </div>
         <div className="h-1.5 overflow-hidden rounded-full" style={{ background: "rgba(11,28,63,0.08)" }}>
           <div
             className="h-full rounded-full transition-all duration-300"
-            style={{ width: `${(seccionIdx / bloques.length) * 100}%`, background: "var(--brand-accent)" }}
+            style={{ width: `${((seccionIdx + 1) / bloques.length) * 100}%`, background: "var(--brand-accent)" }}
           />
         </div>
 
@@ -277,12 +288,12 @@ export function DiagnosticoTool() {
             ))}
           </div>
 
-          <div className="mt-9 flex flex-wrap items-center gap-3">
-            <button onClick={avanzar} className="btn btn-brand">
-              {seccionIdx + 1 < bloques.length ? "Siguiente" : "Ver mi resultado"}
-            </button>
-            <button onClick={() => (seccionIdx > 0 ? (setSeccionIdx(seccionIdx - 1), scrollTop()) : setPaso("inicio"))} className="btn">
+          <div className="mt-9 flex flex-col-reverse gap-3 sm:flex-row sm:items-center">
+            <button onClick={() => (seccionIdx > 0 ? (setSeccionIdx(seccionIdx - 1), scrollTop()) : setPaso("inicio"))} className="btn justify-center sm:w-auto">
               Anterior
+            </button>
+            <button onClick={avanzar} className="btn btn-brand justify-center sm:w-auto">
+              {seccionIdx + 1 < bloques.length ? "Siguiente" : "Ver mi resultado"}
             </button>
           </div>
         </div>
@@ -487,8 +498,18 @@ function CampoInput({ campo, valor, error, onChange }: {
   const req = "requerido" in campo && campo.requerido;
   const base = { borderColor: error ? "#dc2626" : "var(--rule-strong)", background: "white" };
 
+  // Teclado y autocompletado correctos segun la pregunta: en el celular esto
+  // es la diferencia entre responder rapido o abandonar.
+  const auto: Record<string, { type?: string; inputMode?: "numeric" | "tel" | "text"; autoComplete?: string }> = {
+    empresa: { autoComplete: "organization" },
+    contacto: { autoComplete: "name" },
+    telefono: { type: "tel", inputMode: "tel", autoComplete: "tel" },
+    ciudad: { autoComplete: "address-level2" },
+  };
+  const extra = auto[campo.id] ?? {};
+
   return (
-    <div className="grid gap-1.5">
+    <div className="grid gap-1.5" data-campo={campo.id}>
       <label htmlFor={campo.id} className="text-sm font-medium">
         {campo.label}
         {!req && campo.tipo !== "multi" && <span style={{ color: "var(--fg-muted)", fontWeight: 400 }}> (opcional)</span>}
@@ -497,6 +518,7 @@ function CampoInput({ campo, valor, error, onChange }: {
 
       {campo.tipo === "texto" && (
         <input id={campo.id} value={(valor as string) ?? ""} placeholder={campo.placeholder}
+          type={extra.type ?? "text"} inputMode={extra.inputMode} autoComplete={extra.autoComplete}
           onChange={(e) => onChange(e.target.value)} className="h-12 rounded-lg border px-4" style={base} />
       )}
       {campo.tipo === "numero" && (
