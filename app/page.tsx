@@ -6,6 +6,7 @@ import { Reveal } from "@/components/reveal";
 import { Spotlight } from "@/components/spotlight";
 import { HeroVideo } from "@/components/hero-video";
 import { DiagnosticoLauncher } from "@/components/diagnostico-launcher";
+import { CalEmbed } from "@/components/cal-embed";
 import { useLang } from "@/components/lang-provider";
 import { faqsI18n } from "@/lib/i18n";
 
@@ -225,13 +226,8 @@ function Agendar() {
             <p className="mt-1.5 text-[13px]" style={{ color: "var(--paper-dim)" }}>{t.agendar.calNote}</p>
           </div>
 
-          <div className="reveal-scale mt-5 overflow-hidden rounded-2xl" style={{ border: "1px solid var(--rule-d)", background: "#0b1122" }}>
-            <iframe
-              src={`${site.bookingUrl}/embed?theme=dark`}
-              title="Elegir día y hora para la reunión"
-              className="h-[560px] w-full md:h-[720px]"
-              style={{ border: "0" }}
-            />
+          <div className="mt-5">
+            <CalEmbed />
           </div>
 
           {/* Plan B: si el calendario no carga (bloqueadores, datos, navegador viejo) igual se puede reservar */}
